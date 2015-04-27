@@ -1,0 +1,28 @@
+User Stories
+
+1. As a user I want to create a new game
+		- create and display a empty game board
+		
+2. As a user I want to add a token to the game board
+		- token is added to the game board and displayed in the corresponding position
+
+3. As a user I want to be able to play with either the mouse or the keyboard
+		- use the mouse cursor to choose the column and click to select, 
+		or use the left and right arrow keys on the keyboard to choose a colum and spacebar to select column
+		
+4. As a user I want to have a visual representation of which column is currently being chosen
+		- highlight the column that the mouse is hovering over, or the column being chosen with the arrow keys
+
+5. As a user I want to have a visual indication of the previous move that was played
+		- highlight the last played moved with a coloured outline
+		
+6. As a user I want to play with another person on the same computer
+
+7. As a user I want to play against an AI
+
+8. As a user I want to select the AI difficulty
+		- easy, medium, hard
+		
+9. As a user I want to have a visual indication of whose turn it is
+
+10. As a user I want to know when I have won, lost or drew.
