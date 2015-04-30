@@ -2,15 +2,13 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
-### Week 1 Sprints:
+# Week 1 Sprints:#
 * Create UML draft & Skeleton
 * Create a list of User Stories
 * Add a token to the board
 * Print out the board
 
-### Setup ###
-
-# Cloning #
+# Cloning # 
 1. git clone git clone https://*username*@bitbucket.org/2911group/connect4.git
 2. cd sengproject
 3. git help to read up on git options
