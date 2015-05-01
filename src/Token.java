@@ -1,9 +1,10 @@
 
 public class Token {
+	
     private int playerID;
 
-    Token(int pID) {
-        playerID = pID;
+    public Token(int ID) {
+        playerID = ID;
     }
 
     public int getPlayerID() {
