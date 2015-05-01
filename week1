@@ -1,0 +1,19 @@
+Classes we are considering at the moment
+
+    Game.java
+    Board.java
+    Token.java
+
+Planning
+Our goal for this week is to setup the general frame work for connect 4 and be able to drop in a counter and know when the board is full. For the next few days we will go away and brain storm design ideas, approaches and to properly understand the spec. Hopefully by Wednesday we’ll be able to meetup again, draw up the design together and allocate what needs to be written. We hope to finish checking for four in a row by the end of next week.
+
+Possible uses and what functions we may need.
+
+dropCounter() // action for dropping in counter
+isBoardFull() // checking when all spots have been taken
+gameWon() // checks if there is 4 in a row anywhere
+isColFull() // check if column is full
+isLegalMove() // confirms a move is legal
+getTopCounter() // returns counter at top of column
+whoIsAt() // reveals which counter/player is at (col n, row m)
+getTokenType() // says if red or yellow token
