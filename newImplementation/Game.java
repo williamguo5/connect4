@@ -20,23 +20,33 @@ public class Game {
     public static void main(String[] args) {
     	
     	Game c4 = new Game();
-
+    	Player AI = new NoviceAI(1);
 		c4.board.printBoard();
     	while (!c4.gameOver()) {
     		
     		Scanner reader = new Scanner(System.in);
     		int currPlayer = c4.getPlayer();		
     		System.out.println(">>>>>>>>>>>>");
-    		
-    		
-    		//if (columnNumber < NUM_COLUMNS);
     		boolean success = false;
-    		while(!success) {
-    			System.out.println("Player " + currPlayer + "'s turn. Choose a column: ");
-        		int columnNumber = reader.nextInt();
-    			success = c4.makeMove(columnNumber, currPlayer);
-    			c4.board.printBoard();
-    		}
+    		
+    		//uncomment if statement and bracket below to test AI instead of another human player
+    		/*if (currPlayer == 1) {
+    			int move = AI.bestMove(c4.board);
+    			while (!success) {
+    				System.out.println("AI Player " + currPlayer + "'s turn. Chose column: " + move);
+    				success = c4.makeMove(move, currPlayer);
+    				c4.board.printBoard();
+    			}    			
+    		} else {*/
+    		//if (columnNumber < NUM_COLUMNS);
+    		
+	    		while(!success) {
+	    			System.out.println("Player " + currPlayer + "'s turn. Choose a column: ");
+	        		int columnNumber = reader.nextInt();
+	    			success = c4.makeMove(columnNumber, currPlayer);
+	    			c4.board.printBoard();
+	    		}
+    		//}
     		c4.nextTurn();
     	}
     	System.out.println("GAME OVER.");
