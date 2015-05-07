@@ -20,7 +20,7 @@ public class Game {
     public static void main(String[] args) {
     	
     	Game c4 = new Game();
-    	Player AI = new NoviceAI(1);
+    	//Player AI = new NoviceAI(1);
 		c4.board.printBoard();
     	while (!c4.gameOver()) {
     		
