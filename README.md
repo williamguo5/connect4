@@ -8,6 +8,15 @@ This README would normally document whatever steps are necessary to get your app
 * Add a token to the board
 * Print out the board
 
+# Week 2 Sprints:#
+* Create basic GUI
+	- Create empty board
+	- Click on columns
+	- Add and show token
+* Check for 4 in a row
+* Create basic AI
+
+
 # Cloning # 
 1. git clone git clone https://*username*@bitbucket.org/2911group/connect4.git
 2. cd sengproject
