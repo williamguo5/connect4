@@ -1,4 +1,7 @@
+import java.io.IOException;
 import java.util.Scanner;
+
+import javax.swing.SwingUtilities;
 
 public class Connect4 {
 	private int lastMove[];
@@ -17,8 +20,15 @@ public class Connect4 {
 		lastMove[1] = Board.EMPTY;
 	}
 	
-    public static void main(String[] args) {
-    	
+    public static void main(String[] args) throws IOException {
+		final MainWindow mw = new MainWindow();
+		
+		// display the main window in a different thread.
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	mw.display();
+            }
+        });
     	Connect4 c4 = new Connect4();
 
 		c4.board.printBoard();
