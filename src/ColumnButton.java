@@ -18,7 +18,6 @@ public class ColumnButton extends JLayeredPane{
 	private ImageIcon player0;
 	private ArrayList<JLabel> tokens;
 	private int top;
-	private boolean full = false;
 	
 	public ColumnButton(){
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -53,21 +52,12 @@ public class ColumnButton extends JLayeredPane{
 		if(top == 6){
 			top = 0;
 		}
-		if(!full){
-			if(playerID == 1){
-				tokens.get(top).setIcon(player1);
-			}else{
-				tokens.get(top).setIcon(player2);
-			}
-		}
-		if(top == 0){
-			full = true;
+		if(playerID == 1){
+			tokens.get(top).setIcon(player1);
+		}else{
+			tokens.get(top).setIcon(player2);
 		}
 		top++;
-	}
-	
-	public boolean isFull(){
-		return full;
 	}
 	
 	public void resetTokens(){
@@ -76,7 +66,6 @@ public class ColumnButton extends JLayeredPane{
 			repaint();
 		}
 		top = 1;
-		full = false;
 //		for(int i = 0; i < 6; i ++){
 //			tokens.get(i).setIcon(player0);
 //		}

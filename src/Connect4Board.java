@@ -37,7 +37,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 	private ColumnButton col5Button;
 	private ColumnButton col6Button;
 
-	private int playerID = 0;
+	private Board board;
 	
 	/**
 	 * Constructor for a soduku panel
@@ -45,11 +45,11 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 	 */
 	public Connect4Board() throws IOException {
         setBorder(BorderFactory.createLineBorder(Color.black));
-        
+        board = new Board();
         colBlank = "colBlank.png";
         colMouseOver = "colMouseOver.png";
         colClick = "colClick.png";
-        
+        setBackgroundImg("background2.png");
 		setLayout(new GridLayout(1, 7));
         col0Button = new ColumnButton();
 		col1Button = new ColumnButton();
@@ -58,7 +58,9 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 		col4Button = new ColumnButton();
 		col5Button = new ColumnButton();
 		col6Button = new ColumnButton();
-
+		
+//		for(int i = 0; i < NUM_COLS;)
+		
 		generateBoard();
     }
 
@@ -87,15 +89,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 		createListeners();
 	}
     
-    public int getPlayerID(){
-    	int id = playerID;
-    	if(playerID == 0){
-    		playerID = 1;
-    	}else{
-    		playerID = 0;
-    	}
-    	return id;
-    }
     
     public void createListeners(){
     	col0Button.addMouseListener(new MouseListener() {
@@ -111,9 +104,18 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
           }
           @Override
           public void mousePressed(MouseEvent e) {
-        	  if(!col0Button.isFull()){
-        		  col0Button.addToken(getPlayerID());
+//        	  if(!col0Button.isFull()){
+//        		  col0Button.addToken(getPlayerID());
+//        	  }
+        	  if(board.isColumnFull(0)){
+        		  System.out.println("COL FULL");
+        		  return;
         	  }
+        	  if(board.dropToken(0, board.getCurrentPlayer())){
+        		  col0Button.addToken(board.getCurrentPlayer());
+        	  }
+        	  
+        	  
 				try {
 					col0Button.setBackgroundImg(colClick);
 					col0Button.repaint();
@@ -164,8 +166,12 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
             }
             @Override
             public void mousePressed(MouseEvent e) {
-            	if(!col1Button.isFull()){
-            		col1Button.addToken(getPlayerID());
+            	if(board.isColumnFull(1)){
+          		  System.out.println("COL FULL");
+          		  return;
+          	  	}
+          	  	if(board.dropToken(1, board.getCurrentPlayer())){
+          	  		col1Button.addToken(board.getCurrentPlayer());
             	}
             	try {
   					col1Button.setBackgroundImg(colClick);
@@ -181,7 +187,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 //  					col0Button.repaint();
 //  					connect4Board.repaint();
 //  				} catch (IOException e1) {
-//  					// TODO Auto-generated catch block
 //  					e1.printStackTrace();
 //  				}
             }
@@ -191,7 +196,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col1Button.setBackgroundImg(colMouseOver);
   					col1Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
   					e1.printStackTrace();
   				}
   			}
@@ -201,7 +205,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col1Button.setBackgroundImg(colBlank);
   					col1Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
   					e1.printStackTrace();
   				}
   			}
@@ -215,20 +218,23 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col2Button.setBackgroundImg(colMouseOver);
   					col2Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
   					e1.printStackTrace();
   				}
             }
             @Override
             public void mousePressed(MouseEvent e) {
-            	if(!col2Button.isFull()){
-            		col2Button.addToken(getPlayerID());
+            	if(board.isColumnFull(2)){
+            		System.out.println("COL FULL");
+	          		return;
+	          	}
+	          	if(board.dropToken(2, board.getCurrentPlayer())){
+	          		col2Button.addToken(board.getCurrentPlayer());
             	}
                 try {
   					col2Button.setBackgroundImg(colClick);
   					col2Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
             }
@@ -239,7 +245,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 //  					col0Button.repaint();
 //  					connect4Board.repaint();
 //  				} catch (IOException e1) {
-//  					// TODO Auto-generated catch block
+
 //  					e1.printStackTrace();
 //  				}
             }
@@ -249,7 +255,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col2Button.setBackgroundImg(colMouseOver);
   					col2Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -259,7 +265,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col2Button.setBackgroundImg(colBlank);
   					col2Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -272,20 +278,23 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col3Button.setBackgroundImg(colMouseOver);
   					col3Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
   					e1.printStackTrace();
   				}
             }
             @Override
             public void mousePressed(MouseEvent e) {
-            	if(!col3Button.isFull()){
-            		col3Button.addToken(getPlayerID());
-            	}
+            	if(board.isColumnFull(3)){
+            		System.out.println("COL FULL");
+	          		return;
+	          	}
+	          	if(board.dropToken(3, board.getCurrentPlayer())){
+	          		col3Button.addToken(board.getCurrentPlayer());
+	          	}
                 try {
   					col3Button.setBackgroundImg(colClick);
   					col3Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
             }
@@ -296,7 +305,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 //  					col0Button.repaint();
 //  					connect4Board.repaint();
 //  				} catch (IOException e1) {
-//  					// TODO Auto-generated catch block
+
 //  					e1.printStackTrace();
 //  				}
             }
@@ -306,7 +315,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col3Button.setBackgroundImg(colMouseOver);
   					col3Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -334,9 +343,13 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
             }
             @Override
             public void mousePressed(MouseEvent e) {
-            	if(!col4Button.isFull()){
-            		col4Button.addToken(getPlayerID());
-            	}
+            	if(board.isColumnFull(4)){
+            		System.out.println("COL FULL");
+	          		return;
+	          	}
+	          	if(board.dropToken(4, board.getCurrentPlayer())){
+	          		col4Button.addToken(board.getCurrentPlayer());
+	          	}
                 try {
   					col4Button.setBackgroundImg(colClick);
   					col4Button.repaint();
@@ -351,7 +364,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 //  					col0Button.repaint();
 //  					connect4Board.repaint();
 //  				} catch (IOException e1) {
-//  					// TODO Auto-generated catch block
+
 //  					e1.printStackTrace();
 //  				}
             }
@@ -361,7 +374,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col4Button.setBackgroundImg(colMouseOver);
   					col4Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -371,7 +384,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col4Button.setBackgroundImg(colBlank);
   					col4Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -390,9 +403,13 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
             }
             @Override
             public void mousePressed(MouseEvent e) {
-            	if(!col5Button.isFull()){
-            		col5Button.addToken(getPlayerID());
-            	}
+            	if(board.isColumnFull(5)){
+            		System.out.println("COL FULL");
+	          		return;
+	          	}
+	          	if(board.dropToken(5, board.getCurrentPlayer())){
+	          		col5Button.addToken(board.getCurrentPlayer());
+	          	}
                 try {
   					col5Button.setBackgroundImg(colClick);
   					col5Button.repaint();
@@ -408,7 +425,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 //  					col0Button.repaint();
 //  					connect4Board.repaint();
 //  				} catch (IOException e1) {
-//  					// TODO Auto-generated catch block
+
 //  					e1.printStackTrace();
 //  				}
             }
@@ -418,7 +435,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col5Button.setBackgroundImg(colMouseOver);
   					col5Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -428,7 +445,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col5Button.setBackgroundImg(colBlank);
   					col5Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -447,9 +464,13 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
             }
             @Override
             public void mousePressed(MouseEvent e) {
-            	if(!col6Button.isFull()){
-            		col6Button.addToken(getPlayerID());
-            	}
+            	if(board.isColumnFull(6)){
+            		System.out.println("COL FULL");
+	          		return;
+	          	}
+	          	if(board.dropToken(6, board.getCurrentPlayer())){
+	          		col6Button.addToken(board.getCurrentPlayer());
+	          	}
                 try {
   					col6Button.setBackgroundImg(colClick);
   					col6Button.repaint();
@@ -465,7 +486,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 //  					col0Button.repaint();
 //  					connect4Board.repaint();
 //  				} catch (IOException e1) {
-//  					// TODO Auto-generated catch block
+
 //  					e1.printStackTrace();
 //  				}
             }
@@ -475,7 +496,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col6Button.setBackgroundImg(colMouseOver);
   					col6Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -485,7 +506,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
   					col6Button.setBackgroundImg(colBlank);
   					col6Button.repaint();
   				} catch (IOException e1) {
-  					// TODO Auto-generated catch block
+
   					e1.printStackTrace();
   				}
   			}
@@ -502,7 +523,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
     	col4Button.resetTokens();
     	col5Button.resetTokens();
     	col6Button.resetTokens();
-    	playerID = 0;
     }
 
     /**
@@ -528,7 +548,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		board.resetBoard();
 		clearBoard();
 	}  
 

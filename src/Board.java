@@ -1,12 +1,49 @@
-public class Board {
+import java.awt.*;
+import java.io.IOException;
+
+public class Board{
 	public static final int NUM_ROWS = 6;
 	public static final int NUM_COLS = 7;
 	public static final int EMPTY = -1;
 	
 	private int[][] board;
+	private int lastMove[];
+	private int currentPlayer;
+	private int previousPlayer;
+	private int turnNumber;
+	private boolean gameOver;
+//	private Connect4Board connect4Board;
 	
 	// initialise board to be EMPTY
-	public Board() {
+	public Board() throws IOException {
+		gameOver = false;
+		turnNumber = 0;
+		currentPlayer = 0;
+		previousPlayer = 1;
+		lastMove = new int[2];
+		lastMove[0] = Board.EMPTY;
+		lastMove[1] = Board.EMPTY;
+		
+		board = new int[NUM_ROWS][NUM_COLS];
+		for(int i = 0; i < NUM_ROWS; i++) {
+			for(int j = 0; j < NUM_COLS; j++) {
+				board[i][j] = EMPTY;
+			}
+		}
+	}
+	
+	/**
+	 * Resets the board to initial state
+	 */
+	public void resetBoard(){
+		gameOver = false;
+		turnNumber = 0;
+		currentPlayer = 0;
+		previousPlayer = 1;
+		lastMove = new int[2];
+		lastMove[0] = Board.EMPTY;
+		lastMove[1] = Board.EMPTY;
+		
 		board = new int[NUM_ROWS][NUM_COLS];
 		for(int i = 0; i < NUM_ROWS; i++) {
 			for(int j = 0; j < NUM_COLS; j++) {
@@ -48,11 +85,25 @@ public class Board {
 		return size;
 	}
 	
-	// DROP COUNTER. NEED TO UPDATE LAST MOVE
-	// Doesn't account for if column is full
-	public void dropToken(int colNum, int id) {
+	/**
+     * Drops the token in given col for the given player
+     * 
+     * @param columnNumber
+     * @param currPlayer
+     * @return true if a token is placed in board, false otherwise
+     */
+	public boolean dropToken(int colNum, int id) {
+		if(gameOver) return false;
 		int pos = getColumnSize(colNum);
 		board[pos][colNum] = id;
+		updateLast(pos, colNum);
+		if(checkFour(lastMove, currentPlayer)){
+			gameOver = true;
+			System.out.println("GAME OVER");
+		}
+		nextTurn();
+		printBoard();
+		return true;
 	}
 	
 	/**
@@ -76,7 +127,9 @@ public class Board {
 	 * @param player
 	 * @return
 	 */
+	// TODO bugs on diagonal checking
 	public boolean checkFour(int[] lastMove, int player) {
+		System.out.println("row: " + lastMove[0] + " " + "col: " + lastMove[1]);
 		int currentRow = lastMove[0];
 		int currentColumn = lastMove[1];
 		
@@ -150,5 +203,27 @@ public class Board {
 			System.out.println("|");
 		}
 		System.out.println();
+	}
+	
+	/**
+     * Increments the turn number and updates the previous and current player
+     */
+	public void nextTurn() {
+		turnNumber++;
+		if(isFull()){
+			gameOver = true;
+			return;
+		}
+		previousPlayer = currentPlayer;
+		currentPlayer = turnNumber % 2;
+	}
+	
+	public int getCurrentPlayer(){
+		return currentPlayer;
+	}
+	
+	private void updateLast (int rowNum, int colNum) {
+		lastMove[0] = rowNum;
+		lastMove[1] = colNum;
 	}
 }
