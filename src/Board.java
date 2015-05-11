@@ -102,8 +102,8 @@ public class Board {
 		}
 		
 		//Check vertical
-		for (int i = startRow, count = 0; i <= endRow; i++) {
-			if (board[i][currentRow] == player) {
+		for (int i = startRow, count = 0; i <= currentRow; i++) {
+			if (board[i][currentColumn] == player) {
 				count++;
 			} else {
 				count = 0;

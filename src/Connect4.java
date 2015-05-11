@@ -95,4 +95,3 @@ public class Connect4 {
 		lastMove[1] = colNum;
 	}
 }
-
