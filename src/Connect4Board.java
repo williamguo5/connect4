@@ -49,7 +49,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 		
 		columnButtons = new ArrayList<ColumnButton>();
 		for(int i = 0; i < board.NUM_COLS; i++){
-			columnButtons.add(new ColumnButton(i));
+			columnButtons.add(new ColumnButton());
 		}
 		generateBoard();
     }
