@@ -237,6 +237,15 @@ public class Board{
 	public int getCurrentPlayer(){
 		return currentPlayer;
 	}
+	
+	/**
+	 * Allows AIs to see more of the board, ensure this is called on a cloned Board class, not the original
+	 * @return the board with player tokens on it
+	 */
+	public int[][] getBoard() {
+		return this.board;
+	}
+	
 	/**
 	 * Updates the last move made
 	 * @param rowNum	row number of new move

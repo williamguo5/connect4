@@ -1,6 +1,6 @@
 
 public class ExpertAI implements Player {
-    public int getMove(Connect4System state) {
+	public int getMove(Board state) {
         return 0;
     }
 }
