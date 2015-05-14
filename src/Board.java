@@ -1,5 +1,3 @@
-import java.awt.*;
-import java.io.IOException;
 
 public class Board{
 	public static final int NUM_ROWS = 6;
@@ -12,26 +10,21 @@ public class Board{
 	private int previousPlayer;
 	private int turnNumber;
 	private boolean gameOver;
-//	private Connect4Board connect4Board;
+	private Connect4Board connect4Board;
+	private Player ai1;
+	
 	
 	// initialise board to be EMPTY
-	public Board() throws IOException {
-		gameOver = false;
-		turnNumber = 0;
-		currentPlayer = 0;
-		previousPlayer = 1;
-		lastMove = new int[2];
-		lastMove[0] = Board.EMPTY;
-		lastMove[1] = Board.EMPTY;
-		
-		board = new int[NUM_ROWS][NUM_COLS];
-		for(int i = 0; i < NUM_ROWS; i++) {
-			for(int j = 0; j < NUM_COLS; j++) {
-				board[i][j] = EMPTY;
-			}
-		}
+	public Board(Connect4Board connect4Board){
+		this.connect4Board = connect4Board;
+		ai1 = null;
+//		ai1 = new IntermediateAI();
+		resetBoard();
 	}
 	
+	public int getTurnNumber() {
+		return turnNumber;
+	}
 	/**
 	 * Resets the board to initial state
 	 */
@@ -86,24 +79,29 @@ public class Board{
 	}
 	
 	/**
-     * Drops the token in given col for the given player
+     * Drops the token in the given column for the given player
+     * <p>
+     * Breaks early and does not add token to board if the column is full, or when the game is over.
      * 
      * @param columnNumber
      * @param currPlayer
-     * @return true if a token is placed in board, false otherwise
      */
-	public boolean dropToken(int colNum, int id) {
-		if(gameOver) return false;
+	public void dropToken(int colNum) {
+		if(gameOver) return;
+		if(isColumnFull(colNum)){
+			System.out.println("COL FULL");
+			return;
+		}
 		int pos = getColumnSize(colNum);
-		board[pos][colNum] = id;
+		board[pos][colNum] = currentPlayer;
 		updateLast(pos, colNum);
 		if(checkFour(lastMove, currentPlayer)){
 			gameOver = true;
 			System.out.println("GAME OVER");
 		}
-		nextTurn();
+		connect4Board.displayToken(currentPlayer, lastMove);
 		printBoard();
-		return true;
+		nextTurn();
 	}
 	
 	/**
@@ -216,14 +214,60 @@ public class Board{
 		}
 		previousPlayer = currentPlayer;
 		currentPlayer = turnNumber % 2;
+		aiMove();
 	}
 	
+	public void aiMove(){
+		if(currentPlayer == 1 && ai1 != null){
+			System.out.println(turnNumber);
+			int col = ai1.getMove(this.clone());
+//			updateLast(getColumnSize(col), col);
+			dropToken(col);
+//			nextTurn();
+		}
+	}
+	
+	public int[] getLastMove(){
+		return lastMove;
+	}
+	
+	/**
+	 * @return the id of the current player
+	 */
 	public int getCurrentPlayer(){
 		return currentPlayer;
 	}
-	
+	/**
+	 * Updates the last move made
+	 * @param rowNum	row number of new move
+	 * @param colNum	col number of new move
+	 */
 	private void updateLast (int rowNum, int colNum) {
 		lastMove[0] = rowNum;
 		lastMove[1] = colNum;
+	}
+	/**
+	 * 
+	 * @return true if either player wins, or is a draw
+	 */
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	
+	public Board clone(){
+		Board boardClone = new Board(connect4Board);
+		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
+		for(int j = 0; j < 7; j++){
+			for(int i = 0; i < 6; i++){
+				newBoard[i][j] = board[i][j];
+			}
+		}
+		boardClone.board = newBoard;
+		boardClone.lastMove = this.lastMove;
+		boardClone.currentPlayer = this.currentPlayer;
+		boardClone.previousPlayer = this.previousPlayer;
+		boardClone.turnNumber = this.turnNumber;
+		boardClone.gameOver = this.gameOver;
+		return boardClone;
 	}
 }

@@ -1,18 +1,17 @@
 import java.awt.*;
 import java.io.IOException;
-import java.util.Scanner;
 
 import javax.swing.*;
 
 public class Connect4 {
 
 	private Connect4Board connect4Board;
-	
+//	private Board board;
 	private JFrame mainFrame;
 	private JButton newGameButton;
 	private SideBar sideBar;
 	
-	 public static void main(String[] args) throws IOException {
+	 public static void main(String[] args) throws IOException{
     	final Connect4 c4 = new Connect4();
 		
 		// display the main window in a different thread.
@@ -27,7 +26,9 @@ public class Connect4 {
 		mainFrame = new JFrame("Connect4 Board Demo");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+//		board = new Board();
 		connect4Board = new Connect4Board();
+		
 		sideBar = new SideBar();
 		
 		newGameButton = new JButton("New Game");

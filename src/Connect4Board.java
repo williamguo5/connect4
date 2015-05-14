@@ -1,30 +1,15 @@
+import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.*;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 
 
-public class Connect4Board extends JLayeredPane implements ActionListener {
+public class Connect4Board extends JLayeredPane implements ActionListener{
 	
 	private Image backgroundImage;
 	private String colBlank;
@@ -35,12 +20,13 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 	private Board board;
 	
 	/**
-	 * Constructor for a soduku panel
+	 * Constructor for a connect4 GUI
 	 * @throws IOException 
 	 */
 	public Connect4Board() throws IOException {
         setBorder(BorderFactory.createLineBorder(Color.black));
-        board = new Board();
+        board = new Board(this);
+//        this.board = board;
         colBlank = "colBlank.png";
         colMouseOver = "colMouseOver.png";
         colClick = "colClick.png";
@@ -48,19 +34,19 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 		setLayout(new GridLayout(1, 7));
 		
 		columnButtons = new ArrayList<ColumnButton>();
-		for(int i = 0; i < board.NUM_COLS; i++){
+		for(int i = 0; i < 7; i++){
 			columnButtons.add(new ColumnButton());
 		}
 		generateBoard();
     }
 
 	/**
-	 * Method to generate a new board
-	 * NOTE: this isn't a real/valid soduku board.
+	 * Method to generate a new board with mouse listeners for columns
+
 	 * @throws IOException 
 	 */
     public void generateBoard() throws IOException {    	
-    	for(int i = 0; i < board.NUM_COLS; i++){
+    	for(int i = 0; i < 7; i++){
     		add(columnButtons.get(i));
     		columnButtons.get(i).setBackgroundImg(colBlank);
     		final int colNum = i;
@@ -76,7 +62,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 		        }
 		        @Override
 		        public void mousePressed(MouseEvent e) {
-		        	dropToken(colNum);
+		        	board.dropToken(colNum);
 		    		try {
 		    			columnButtons.get(colNum).setBackgroundImg(colClick);
 		    			columnButtons.get(colNum).repaint();
@@ -110,18 +96,20 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
     	}
 	}
     
-    public void dropToken(int colNum){
-    	if(board.isColumnFull(colNum)){
-  		  	System.out.println("COL FULL");
-  		  	return;
-  	  	}
-	  	if(board.dropToken(colNum, board.getCurrentPlayer())){
-	  		columnButtons.get(colNum).addToken(board.getCurrentPlayer());
-	  	}  
+    /**
+     * Displays the given move onto the GUI board
+     * @param currentPlayer
+     * @param move
+     */
+    public void displayToken(int currentPlayer, int[] move){
+	  	columnButtons.get(move[1]).displayToken(currentPlayer, move[0]);
     }
     
+    /**
+     * Clears the board
+     */
     public void clearBoard(){
-    	for(int i = 0; i < board.NUM_COLS; i++){
+    	for(int i = 0; i < 7; i++){
     		columnButtons.get(i).resetTokens();
     	}
     }
@@ -151,6 +139,5 @@ public class Connect4Board extends JLayeredPane implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		board.resetBoard();
 		clearBoard();
-	}  
-
+	}
 }

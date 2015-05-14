@@ -1,9 +1,4 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +12,7 @@ public class ColumnButton extends JLayeredPane{
 	private ImageIcon player2;
 	private ImageIcon player0;
 	private ArrayList<JLabel> tokens;
-	private int top;
+	
 	
 	public ColumnButton(){
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -35,37 +30,42 @@ public class ColumnButton extends JLayeredPane{
         player2 = new ImageIcon("token2.png");
         player0 = new ImageIcon("tokenBlank.png");
         
-        top = 1;
         generateTokens();
 //		repaint();
 	}
 	
-	
+	/**
+	 * Adds and sets the initial states of all tokens
+	 */
 	public void generateTokens(){
 		for(JLabel t : tokens){
 			add(t, 1);
 			t.setIcon(player0);
 		}
 	}
-	
-	public void addToken(int playerID){
-		if(top == 6){
-			top = 0;
-		}
+	/**
+	 * Display the token at the given row, with the token of playerID
+	 * @param playerID	ID of current player
+	 * @param rowNum
+	 */
+	public void displayToken(int playerID, int rowNum){
+		rowNum++;
+		if(rowNum == 6) rowNum = 0;
 		if(playerID == 1){
-			tokens.get(top).setIcon(player1);
+			tokens.get(rowNum).setIcon(player1);
 		}else{
-			tokens.get(top).setIcon(player2);
+			tokens.get(rowNum).setIcon(player2);
 		}
-		top++;
 	}
 	
+	/**
+	 * Resets all tokens
+	 */
 	public void resetTokens(){
 		for(JLabel t : tokens){
 			t.setIcon(player0);
 			repaint();
 		}
-		top = 1;
 //		for(int i = 0; i < 6; i ++){
 //			tokens.get(i).setIcon(player0);
 //		}
