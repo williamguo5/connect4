@@ -4,43 +4,51 @@ public class IntermediateAI implements Player {
 
     //Remember to pass in a clone of the state
     public int getMove(Board state) {
+        System.out.println("SIMULATION");
+        return maxMove(state);
+    }
+
+    public int maxMove(Board state) {
+        int bestMove = 0;
         int move = 0;
-        if (state.getTurnNumber() == 1) return 4; 
+        int bestCol = 0;
+        if (state.isGameOver()) {
+            return 1;
+        }
         for (int col = 0; col < Board.NUM_COLS; col++) {
             if (!state.isColumnFull(col)) {
-                //Board clone = (Board) state.clone();
-                	//state.dropToken(col);
-//                    move = AI(state); //Calls the AI to determine whether or not it is game over
-                    //Otherwise it will recurse further into the state tree
-
-                    return col;
-                //move = AI(new Board(state));
+                state.dropToken(col);
+                move = minMove(state);
+                if (move > bestMove) {
+                    bestMove = move;
+                    bestCol = col;
+                }
             }
-            //if (state.isGameOver()) return col;
         }
-        return move;
+        return bestCol;
     }
 
-    /**
-     * Takes in a state and checks if it reaches gameOver
-     * Otherwise it calls getMove again and creates more states
-     * @param state
-     * @return
-     */
-    public int AI(Board state) {
+    public int minMove(Board state) {
+        int bestMove = 0;
         int move = 0;
+        int bestCol = 0;
         if (state.isGameOver()) {
-            return state.getLastMove()[1];
+            return -1;
         } else {
-            move = getMove(state);
+            for (int col = 0; col < Board.NUM_COLS; col++) {
+                if (!state.isColumnFull(col)) {
+                    state.dropToken(col);
+                    move = maxMove(state);
+                    if (move > bestMove) {
+                        bestMove = move;
+                        bestCol = col;
+                    }
+                }
+            }
         }
-        return move;
-
-
+        return bestCol;
     }
-
-
-    //Remember to pass in a clone of the state
+            //Remember to pass in a clone of the state
 
 
     //check if move is valid
