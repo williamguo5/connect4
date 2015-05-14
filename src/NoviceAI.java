@@ -14,25 +14,29 @@ public class NoviceAI implements Player {
 		} else {
 			opponent = 1;
 		}
-		
-		if (state.getTurnNumber() != 0) {
+		if (state.isGameOver()) {
+			return 1;
+		}
+		if (state.getTurnNumber() > 0) {
 			int lastMove[] = state.getLastMove();
 			//Check the row across where last move was made for 3 in a row
-			for (int i = 0, count = 0; i <= Board.NUM_COLS; i++) {
+			for (int i = 0, count = 0; i < Board.NUM_COLS; i++) {
 				if (state.getBoard()[lastMove[0]][i] == opponent) {
 					count++;
+					System.out.print("Hi");
 				} else {
 					count = 0;
+					System.out.print("Bye");
 				}
-				if (count == 3 && i < Board.NUM_COLS && state.isColumnFull(i+1)) {
+				if (count == 3 && i < Board.NUM_COLS && !state.isColumnFull(i+1)) {
 					return i+1; //block horizontal win
 				} else if (count == 3 && i == Board.NUM_COLS && state.isColumnFull(i-3)) {
 					return i-3; //|_|_|_|here|x|x|x|
 				}
 			}
-					
+
 			//Check the column where last move was made for 3 in a row
-			for (int i = 0, count = 0; i <= Board.NUM_ROWS; i++) {
+			for (int i = 0, count = 0; i < Board.NUM_ROWS; i++) {
 				if (state.isColumnFull(lastMove[1])) break;
 				if (state.getBoard()[i][lastMove[1]] == opponent) {
 					count++;

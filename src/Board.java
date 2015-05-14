@@ -19,6 +19,7 @@ public class Board{
 		this.connect4Board = connect4Board;
 		ai1 = null;
 //		ai1 = new IntermediateAI();
+//		ai1 = new NoviceAI();
 		resetBoard();
 	}
 	
@@ -163,6 +164,10 @@ public class Board{
 		
 		//Check diagonal with positive gradient
 		for (int i = startRow, j = startColumn, count = 0; i <= endRow; i++, j++) {
+			//diagonal checking seemed to pull up errors without this line added
+			//only breaks when the column number j goes beyond the size of the board
+			//so diagonal checking should be unaffected
+			if (j > Board.NUM_COLS - 1) break; 
 			if (board[i][j] == player) {
 				count++;
 			} else {
@@ -173,6 +178,7 @@ public class Board{
 		
 		//Check diagonal with negative gradient
 		for (int i = endRow, j = startColumn, count = 0; i >= startRow; i--, j++) {
+			if (j > Board.NUM_COLS - 1) break;
 			if (board[i][j] == player) {
 				count++;
 			} else {
