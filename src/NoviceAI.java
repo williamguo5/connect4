@@ -18,17 +18,21 @@ public class NoviceAI implements Player {
 		if (state.getTurnNumber() != 0) {
 			int lastMove[] = state.getLastMove();
 			//Check the row across where last move was made for 3 in a row
-			for (int i = 0, count = 0; i <= 7; i++) {
+			for (int i = 0, count = 0; i <= Board.NUM_COLS; i++) {
 				if (state.getBoard()[lastMove[0]][i] == opponent) {
 					count++;
 				} else {
 					count = 0;
 				}
-				if (count >= 3 && !state.isColumnFull(i)) return i; //block horizontal win
+				if (count == 3 && i < Board.NUM_COLS && state.isColumnFull(i+1)) {
+					return i+1; //block horizontal win
+				} else if (count == 3 && i == Board.NUM_COLS && state.isColumnFull(i-3)) {
+					return i-3; //|_|_|_|here|x|x|x|
+				}
 			}
 					
 			//Check the column where last move was made for 3 in a row
-			for (int i = 0, count = 0; i <= 7; i++) {
+			for (int i = 0, count = 0; i <= Board.NUM_ROWS; i++) {
 				if (state.isColumnFull(lastMove[1])) break;
 				if (state.getBoard()[i][lastMove[1]] == opponent) {
 					count++;
