@@ -17,7 +17,8 @@ public class Board{
 	// initialise board to be EMPTY
 	public Board(Connect4Board connect4Board){
 		this.connect4Board = connect4Board;
-		ai1 = null;
+		//ai1 = null;
+		ai1 = new ExpertAI();
 //		ai1 = new IntermediateAI();
 //		ai1 = new NoviceAI();
 		resetBoard();
@@ -101,6 +102,25 @@ public class Board{
 			System.out.println("GAME OVER");
 		}
 		connect4Board.displayToken(currentPlayer, lastMove);
+		printBoard();
+		nextTurn();
+	}
+	
+	public void simDropToken(int colNum) { 
+		//used when AI is simulating game states
+		//won't update GUI
+		if(gameOver) return;
+		if(isColumnFull(colNum)){
+			System.out.println("COL FULL");
+			return;
+		}
+		int pos = getColumnSize(colNum);
+		board[pos][colNum] = currentPlayer;
+		updateLast(pos, colNum);
+		if(checkFour(lastMove, currentPlayer)){
+			gameOver = true;
+			System.out.println("GAME OVER");
+		}
 		printBoard();
 		nextTurn();
 	}
@@ -221,6 +241,10 @@ public class Board{
 		previousPlayer = currentPlayer;
 		currentPlayer = turnNumber % 2;
 		aiMove();
+	}
+	
+	public void setAI(Player ai) {
+		ai1 = ai;
 	}
 	
 	public void aiMove(){
