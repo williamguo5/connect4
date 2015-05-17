@@ -138,25 +138,19 @@ public class Board{
 		}
 		return true;
 	}
-	
-	/**
+
+   /**
 	 * Checks for if a player has won the game
 	 * 
 	 * @param lastMove
 	 * @param player
 	 * @return
-	 */
-	// TODO bugs on diagonal checking
+	 */	
 	public boolean checkFour(int[] lastMove, int player) {
-		System.out.println("row: " + lastMove[0] + " " + "col: " + lastMove[1]);
 		int currentRow = lastMove[0];
 		int currentColumn = lastMove[1];
 		
-		int startRow = currentRow - 3;
-		if (startRow < 0) startRow = 0;
-		int endRow = currentRow + 3;
-		if (endRow > NUM_ROWS - 1) endRow = NUM_ROWS - 1;
-		
+		//The range of columns to check
 		int startColumn = currentColumn - 3;
 		if (startColumn < 0) startColumn = 0;
 		int endColumn = currentColumn + 3;
@@ -172,8 +166,14 @@ public class Board{
 			if (count >= 4) return true;
 		}
 		
+		//The range of rows to check
+		int startRow = currentRow - 3;
+		if (startRow < 0) startRow = 0;
+		int endRow = currentRow + 3;
+		if (endRow > NUM_ROWS - 1) endRow = NUM_ROWS - 1;
+		
 		//Check vertical
-		for (int i = startRow, count = 0; i <= currentRow; i++) {
+		for (int i = startRow, count = 0; i <= endRow; i++) {
 			if (board[i][currentColumn] == player) {
 				count++;
 			} else {
@@ -183,11 +183,28 @@ public class Board{
 		}
 		
 		//Check diagonal with positive gradient
+		startColumn = currentColumn;
+		endColumn = currentColumn;
+		startRow = currentRow;
+		endRow = currentRow;
+		
+		//Get the starting coordinate of the diagonal
+		int displacement = 0;
+		while (startRow != 0 && startColumn != 0 && displacement < 3) {
+			startRow--;
+			startColumn--;
+			displacement++;
+		}
+		//Get the ending coordinate of the diagonal
+		displacement = 0;
+		while (endRow != NUM_ROWS - 1 && endColumn != NUM_COLS - 1 && displacement < 3) {
+			endRow++;
+			endColumn++;
+			displacement++;
+		}
+		
+		//Check along this diagonal for 4 in a row
 		for (int i = startRow, j = startColumn, count = 0; i <= endRow; i++, j++) {
-			//diagonal checking seemed to pull up errors without this line added
-			//only breaks when the column number j goes beyond the size of the board
-			//so diagonal checking should be unaffected
-			if (j > Board.NUM_COLS - 1) break; 
 			if (board[i][j] == player) {
 				count++;
 			} else {
@@ -197,8 +214,28 @@ public class Board{
 		}
 		
 		//Check diagonal with negative gradient
-		for (int i = endRow, j = startColumn, count = 0; i >= startRow; i--, j++) {
-			if (j > Board.NUM_COLS - 1) break;
+		startColumn = currentColumn;
+		endColumn = currentColumn;
+		startRow = currentRow;
+		endRow = currentRow;
+		
+		//Starting coordinate
+		displacement = 0;
+		while (startColumn != 0 && endRow != NUM_ROWS - 1 && displacement < 3) {
+			startColumn--;
+			endRow++;
+			displacement++;
+		}	
+		//Ending coordinate
+		displacement = 0;
+		while (startRow != 0 && endColumn != NUM_COLS - 1 && displacement < 3) {
+			startRow--;
+			endColumn++;
+			displacement++;
+		}
+		
+		//Check along the diagonal
+		for (int i = startRow, j = endColumn, count = 0; i <= endRow; i++, j--) {
 			if (board[i][j] == player) {
 				count++;
 			} else {
