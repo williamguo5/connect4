@@ -12,14 +12,14 @@ public class Board{
 	private boolean gameOver;
 	private Connect4Board connect4Board;
 	private Player ai1;
-	
+    private boolean isSimulation;
 	
 	// initialise board to be EMPTY
 	public Board(Connect4Board connect4Board){
 		this.connect4Board = connect4Board;
 		//ai1 = null;
-		ai1 = new ExpertAI();
-//		ai1 = new IntermediateAI();
+//		ai1 = new ExpertAI();
+		ai1 = new IntermediateAI();
 //		ai1 = new NoviceAI();
 		resetBoard();
 	}
@@ -38,8 +38,9 @@ public class Board{
 		lastMove = new int[2];
 		lastMove[0] = Board.EMPTY;
 		lastMove[1] = Board.EMPTY;
-		
-		board = new int[NUM_ROWS][NUM_COLS];
+        isSimulation = false;
+
+        board = new int[NUM_ROWS][NUM_COLS];
 		for(int i = 0; i < NUM_ROWS; i++) {
 			for(int j = 0; j < NUM_COLS; j++) {
 				board[i][j] = EMPTY;
@@ -277,7 +278,9 @@ public class Board{
 		}
 		previousPlayer = currentPlayer;
 		currentPlayer = turnNumber % 2;
-		aiMove();
+        if (!isSimulation) {
+            aiMove();
+        }
 	}
 	
 	public void setAI(Player ai) {
@@ -287,7 +290,10 @@ public class Board{
 	public void aiMove(){
 		if(currentPlayer == 1 && ai1 != null){
 			System.out.println(turnNumber);
-			int col = ai1.getMove(this.clone());
+            isSimulation = true;
+            int col = ai1.getMove(this.clone());
+            isSimulation = false;
+
 //			updateLast(getColumnSize(col), col);
 			dropToken(col);
 //			nextTurn();
@@ -304,7 +310,8 @@ public class Board{
 	public int getCurrentPlayer(){
 		return currentPlayer;
 	}
-	
+
+    public int getPreviousPlayer() { return previousPlayer; }
 	/**
 	 * Allows AIs to see more of the board, ensure this is called on a cloned Board class, not the original
 	 * @return the board with player tokens on it
@@ -344,6 +351,7 @@ public class Board{
 		boardClone.previousPlayer = this.previousPlayer;
 		boardClone.turnNumber = this.turnNumber;
 		boardClone.gameOver = this.gameOver;
+        boardClone.isSimulation = this.isSimulation;
 		return boardClone;
 	}
 }
