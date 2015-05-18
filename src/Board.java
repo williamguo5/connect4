@@ -326,7 +326,17 @@ public class Board{
 	 * Should only be called when there is a valid move to undo
 	 */
 	public void undoPreviousMove() {
-		this.board[lastMove[0]][lastMove[1]] = Board.EMPTY;
+		this.board[lastMove[0]][lastMove[1]] = Board.EMPTY; 
+		lastMove[0] = Board.EMPTY; //only most recent move is stored
+		lastMove[1] = Board.EMPTY;
+		turnNumber--; //go back a turn
+		if (currentPlayer == 0) { //reset current player to correct player
+			currentPlayer = 1;
+			previousPlayer = 0;
+		} else {
+			currentPlayer = 0;
+			previousPlayer = 1;
+		}
 	}
 	
 	/**

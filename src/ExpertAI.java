@@ -162,9 +162,11 @@ public class ExpertAI implements Player {
 				if (state.isGameOver() && j != aiMove) { 
 					System.out.println("Winning move found here");
 					preventWin = j;
+					state.undoPreviousMove();
 					return preventWin;
+				} else {
+					state.undoPreviousMove();
 				}
-				state.undoPreviousMove();
 			}
 		}
 		System.out.println("end");
