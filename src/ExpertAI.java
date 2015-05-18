@@ -21,14 +21,15 @@ public class ExpertAI implements Player {
 		int me = state.getCurrentPlayer();
 		for (int i = 0; i < Board.NUM_COLS; i++) {
 			if (!state.isColumnFull(i)) {
-				Board test = state.clone();
-				test.setAI(null); //prevents an ai move from being called when simulating game states
-				test.simDropToken(i);
-				if (test.isGameOver()) {
+				//Board test = state.clone();
+				state.setAI(null); //prevents an ai move from being called when simulating game states
+				state.simDropToken(i);
+				if (state.isGameOver()) {
 					move = i; //instantly place the token that will win the game
+					state.undoPreviousMove();
 					break;
 				} else {
-					move = opponentWin(test, i); //this code not yet working
+					move = opponentWin(state, i); //this code not yet working
 					if (move == -1) {
 						move = 0;
 					} else {
@@ -153,16 +154,17 @@ public class ExpertAI implements Player {
 			return preventWin; 
 		}
 		for (int j = 0; j < Board.NUM_COLS; j++) {
-			Board opponentMove = state.clone();
-			opponentMove.setAI(null);
-			if (!opponentMove.isColumnFull(j)) {
-				opponentMove.simDropToken(j);
+			//Board opponentMove = state.clone();
+			state.setAI(null);
+			if (!state.isColumnFull(j)) {
+				state.simDropToken(j);
 				//only give a blocking move if the move passed in does not allow the winning move in the first place
-				if (opponentMove.isGameOver() && j != aiMove) { 
+				if (state.isGameOver() && j != aiMove) { 
 					System.out.println("Winning move found here");
 					preventWin = j;
 					return preventWin;
 				}
+				state.undoPreviousMove();
 			}
 		}
 		System.out.println("end");

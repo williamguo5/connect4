@@ -312,12 +312,21 @@ public class Board{
 	}
 
     public int getPreviousPlayer() { return previousPlayer; }
+    
 	/**
 	 * Allows AIs to see more of the board, ensure this is called on a cloned Board class, not the original
 	 * @return the board with player tokens on it
 	 */
 	public int[][] getBoard() {
 		return this.board;
+	}
+	
+	/**
+	 * Undoes the most recent move made, only used by AI when running simulations
+	 * Should only be called when there is a valid move to undo
+	 */
+	public void undoPreviousMove() {
+		this.board[lastMove[0]][lastMove[1]] = Board.EMPTY;
 	}
 	
 	/**
