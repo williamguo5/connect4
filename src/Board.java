@@ -17,9 +17,9 @@ public class Board{
 	// initialise board to be EMPTY
 	public Board(Connect4Board connect4Board){
 		this.connect4Board = connect4Board;
-		//ai1 = null;
-//		ai1 = new ExpertAI();
-		ai1 = new IntermediateAI();
+//		ai1 = null;
+		ai1 = new ExpertAI();
+//		ai1 = new IntermediateAI();
 //		ai1 = new NoviceAI();
 		resetBoard();
 	}

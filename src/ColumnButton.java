@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,27 +9,26 @@ import javax.swing.*;
 
 public class ColumnButton extends JLayeredPane{
 	private Image backgroundImage;
-	private ImageIcon player1;
-	private ImageIcon player2;
-	private ImageIcon player0;
-	private ArrayList<JLabel> tokens;
+	private Image player1;
+	private Image player2;
+	private Image player0;
+	private ArrayList<Token> tokens;
 	
 	
-	public ColumnButton(){
+	public ColumnButton() throws IOException{
         setBorder(BorderFactory.createLineBorder(Color.black));
-        setLayout(new GridLayout(6,1));
+        setLayout(new GridLayout(Board.NUM_ROWS,1));
         
-        tokens = new ArrayList<JLabel>();
+        tokens = new ArrayList<Token>();
         
-        for(int i = 0; i < 6; i++){
-        	JLabel t = new JLabel();
+        for(int i = 0; i < Board.NUM_ROWS; i++){
+        	Token t = new Token();
         	tokens.add(t);
         }
-        
        
-        player1 = new ImageIcon("token1.png");
-        player2 = new ImageIcon("token2.png");
-        player0 = new ImageIcon("tokenBlank.png");
+        player1 = ImageIO.read(new File("token1.png"));
+        player2 = ImageIO.read(new File("token2.png"));
+        player0 = ImageIO.read(new File("tokenBlank.png"));        
         
         generateTokens();
 //		repaint();
@@ -38,9 +38,10 @@ public class ColumnButton extends JLayeredPane{
 	 * Adds and sets the initial states of all tokens
 	 */
 	public void generateTokens(){
-		for(JLabel t : tokens){
+		for(Token t : tokens){
 			add(t, 1);
-			t.setIcon(player0);
+			t.setBackgroundImg(player0);
+			t.repaint();
 		}
 	}
 	/**
@@ -52,18 +53,19 @@ public class ColumnButton extends JLayeredPane{
 		rowNum++;
 		if(rowNum == 6) rowNum = 0;
 		if(playerID == 1){
-			tokens.get(rowNum).setIcon(player1);
+			tokens.get(rowNum).setBackgroundImg(player1);
 		}else{
-			tokens.get(rowNum).setIcon(player2);
+			tokens.get(rowNum).setBackgroundImg(player2);
 		}
+		repaint();
 	}
 	
 	/**
 	 * Resets all tokens
 	 */
 	public void resetTokens(){
-		for(JLabel t : tokens){
-			t.setIcon(player0);
+		for(Token t : tokens){
+			t.setBackgroundImg(player0);
 			repaint();
 		}
 //		for(int i = 0; i < 6; i ++){
@@ -78,7 +80,7 @@ public class ColumnButton extends JLayeredPane{
 	public void paintComponent(Graphics g) {
 //        super.paintComponent(g);       
         
-    	g.drawImage(backgroundImage, 0, 0, null);
+		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }
 	
 	public void setBackgroundImg(String fileName) throws IOException {

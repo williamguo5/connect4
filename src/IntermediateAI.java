@@ -13,15 +13,44 @@ public class IntermediateAI implements Player {
         int move = 0;
         int bestCol = 0;
         if (state.isGameOver()) {
-            return 1;
-        }
-        for (int col = 0; col < Board.NUM_COLS; col++) {
-            if (!state.isColumnFull(col)) {
-                state.dropToken(col);
-                move = minMove(state);
-                if (move > bestMove) {
-                    bestMove = move;
-                    bestCol = col;
+            return -4;
+        } else {
+            int[] lastMove = state.getLastMove();
+            if (lastMove[1] > 0 && lastMove[1] + 1 < state.getColumnSize(lastMove[1])) {
+                if (state.getBoard()[lastMove[0]][lastMove[1]] == state.getPreviousPlayer()) {
+                    move += 1;
+                }
+                if (lastMove[0] > 0 && lastMove[0] < Board.NUM_ROWS - 1) {
+                    if (state.getBoard()[lastMove[0] - 1][lastMove[1]] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] + 1][lastMove[1]] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+
+                    if (state.getBoard()[lastMove[0] - 1][lastMove[1] + 1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] + 1][lastMove[1] + 1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] - 1][lastMove[1] -1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] + 1][lastMove[1] - 1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                }
+
+            }
+            for (int col = 0; col < Board.NUM_COLS; col++) {
+                if (!state.isColumnFull(col)) {
+                    state.dropToken(col);
+                    move = minMove(state);
+                    if (move > bestMove) {
+                        bestMove = move;
+                        bestCol = col;
+                    }
                 }
             }
         }
@@ -33,8 +62,36 @@ public class IntermediateAI implements Player {
         int move = 0;
         int bestCol = 0;
         if (state.isGameOver()) {
-            return -1;
+            return 4;
         } else {
+            int[] lastMove = state.getLastMove();
+            if (lastMove[1] > 0 && lastMove[1] + 1 < state.getColumnSize(lastMove[1])) {
+                if (state.getBoard()[lastMove[0]][lastMove[1]] == state.getPreviousPlayer()) {
+                    move += 1;
+                }
+                if (lastMove[0] > 0 && lastMove[0] < Board.NUM_ROWS - 1) {
+                    if (state.getBoard()[lastMove[0] - 1][lastMove[1]] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] + 1][lastMove[1]] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+
+                    if (state.getBoard()[lastMove[0] - 1][lastMove[1] + 1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] + 1][lastMove[1] + 1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] - 1][lastMove[1] -1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                    if (state.getBoard()[lastMove[0] + 1][lastMove[1] - 1] == state.getPreviousPlayer()) {
+                        move += 1;
+                    }
+                }
+
+            }
             for (int col = 0; col < Board.NUM_COLS; col++) {
                 if (!state.isColumnFull(col)) {
                     state.dropToken(col);

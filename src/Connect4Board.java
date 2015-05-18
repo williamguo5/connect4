@@ -16,7 +16,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	private String colMouseOver;
 	private String colClick;
 	private ArrayList<ColumnButton> columnButtons;
-
 	private Board board;
 	
 	/**
@@ -31,10 +30,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         colMouseOver = "colMouseOver.png";
         colClick = "colClick.png";
         setBackgroundImg("background2.png");
-		setLayout(new GridLayout(1, 7));
+		setLayout(new GridLayout(1, Board.NUM_COLS));
 		
 		columnButtons = new ArrayList<ColumnButton>();
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < Board.NUM_COLS; i++){
 			columnButtons.add(new ColumnButton());
 		}
 		generateBoard();
@@ -46,7 +45,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	 * @throws IOException 
 	 */
     public void generateBoard() throws IOException {    	
-    	for(int i = 0; i < 7; i++){
+    	for(int i = 0; i < Board.NUM_COLS; i++){
     		add(columnButtons.get(i));
     		columnButtons.get(i).setBackgroundImg(colBlank);
     		final int colNum = i;
@@ -127,7 +126,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);       
         
-    	g.drawImage(backgroundImage, 0, 0, null);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }
     
     public void setBackgroundImg(String fileName) throws IOException {
@@ -139,5 +138,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		board.resetBoard();
 		clearBoard();
+//		e.getSource()
 	}
 }

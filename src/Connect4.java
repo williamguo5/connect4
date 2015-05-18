@@ -27,9 +27,10 @@ public class Connect4 {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 //		board = new Board();
-		connect4Board = new Connect4Board();
 		
-		sideBar = new SideBar();
+		connect4Board = new Connect4Board();
+		sideBar = new SideBar(connect4Board);
+		
 		
 		newGameButton = new JButton("New Game");
 		newGameButton.addActionListener(connect4Board);
