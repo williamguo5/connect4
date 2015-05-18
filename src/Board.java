@@ -18,8 +18,8 @@ public class Board{
 	public Board(Connect4Board connect4Board){
 		this.connect4Board = connect4Board;
 //		ai1 = null;
-		ai1 = new ExpertAI();
-//		ai1 = new IntermediateAI();
+//		ai1 = new ExpertAI();
+		ai1 = new IntermediateAI();
 //		ai1 = new NoviceAI();
 		resetBoard();
 	}
@@ -112,7 +112,7 @@ public class Board{
 		//won't update GUI
 		if(gameOver) return;
 		if(isColumnFull(colNum)){
-			System.out.println("COL FULL");
+//			System.out.println("COL FULL");
 			return;
 		}
 		int pos = getColumnSize(colNum);
@@ -120,9 +120,9 @@ public class Board{
 		updateLast(pos, colNum);
 		if(checkFour(lastMove, currentPlayer)){
 			gameOver = true;
-			System.out.println("GAME OVER");
+//			System.out.println("GAME OVER");
 		}
-		printBoard();
+		//printBoard();
 		nextTurn();
 	}
 	
@@ -293,7 +293,7 @@ public class Board{
             isSimulation = true;
             int col = ai1.getMove(this.clone());
             isSimulation = false;
-
+            System.out.println("AI MOVE " + col);
 //			updateLast(getColumnSize(col), col);
 			dropToken(col);
 //			nextTurn();
