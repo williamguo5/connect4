@@ -54,7 +54,7 @@ public class NoviceAI implements Player {
 		}
 		for (int col = 0; col < Board.NUM_COLS; col++) {
 			if (!state.isColumnFull(col)) {
-				state.setAI(null); //prevents an ai move from being called when simulating game states
+				state.setAI(0); //prevents an ai move from being called when simulating game states
 				state.simDropToken(col);
 				if (state.isGameOver()) {
 					move = col; //instantly place the token that will win the game

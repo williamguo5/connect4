@@ -39,7 +39,7 @@ public class ColumnButton extends JLayeredPane{
 	 */
 	public void generateTokens(){
 		for(Token t : tokens){
-			add(t, 1);
+			add(t, 0);
 			t.setBackgroundImg(player0);
 			t.repaint();
 		}
@@ -50,8 +50,6 @@ public class ColumnButton extends JLayeredPane{
 	 * @param rowNum
 	 */
 	public void displayToken(int playerID, int rowNum){
-		rowNum++;
-		if(rowNum == 6) rowNum = 0;
 		if(playerID == 1){
 			tokens.get(rowNum).setBackgroundImg(player1);
 		}else{
@@ -68,9 +66,6 @@ public class ColumnButton extends JLayeredPane{
 			t.setBackgroundImg(player0);
 			repaint();
 		}
-//		for(int i = 0; i < 6; i ++){
-//			tokens.get(i).setIcon(player0);
-//		}
 	}
 	
 	public Dimension getPreferredSize() {

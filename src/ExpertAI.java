@@ -22,7 +22,7 @@ public class ExpertAI implements Player {
 		for (int i = 0; i < Board.NUM_COLS; i++) {
 			if (!state.isColumnFull(i)) {
 				//Board test = state.clone();
-				state.setAI(null); //prevents an ai move from being called when simulating game states
+				state.setAI(0); //prevents an ai move from being called when simulating game states
 				state.simDropToken(i);
 				if (state.isGameOver()) {
 					move = i; //instantly place the token that will win the game
@@ -155,7 +155,7 @@ public class ExpertAI implements Player {
 		}
 		for (int j = 0; j < Board.NUM_COLS; j++) {
 			//Board opponentMove = state.clone();
-			state.setAI(null);
+			state.setAI(0);
 			if (!state.isColumnFull(j)) {
 				state.simDropToken(j);
 				//only give a blocking move if the move passed in does not allow the winning move in the first place

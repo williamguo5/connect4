@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
-public class SideBar extends JPanel {
+public class SideBar extends JPanel implements ActionListener {
 	
 	private Image backgroundImage;
 	private ImageIcon title;
@@ -20,6 +20,9 @@ public class SideBar extends JPanel {
 	private JButton newGame;
 	private StatusBar gameStatus;
 	private JLabel header;
+	
+	private JComboBox player1;
+	private JComboBox player2;
 	
 	private Connect4Board connect4Board;
 	
@@ -50,12 +53,18 @@ public class SideBar extends JPanel {
 		header.setIcon(title);
 		header.setPreferredSize(new Dimension(250, 110));
 		
+		String[] players = {"Human", "Novice AI", "Intermediate AI", "Expert AI"};		
+		player1 = new JComboBox(players);
+		player1.disable();
+		
+		player2 = new JComboBox(players);
+		
 		newGame = new JButton(newGameLabel);
 		newGame.setPreferredSize(new Dimension(250,110));
 		newGame.setBorderPainted(false);
 		newGame.setBackground(backgroundShade);
 		newGame.setOpaque(true);
-		//newGame.addActionListener(this);	// ISSUE HERE
+		newGame.addActionListener(this);
 		
 		gameStatus = new StatusBar();
 		//gameStatus.setPreferredSize(new Dimension(250,330));
@@ -64,6 +73,8 @@ public class SideBar extends JPanel {
 		
 		add(header);
 		add(gameStatus);
+		add(player1);
+		add(player2);
 		add(newGame);
 	}
 	
@@ -118,4 +129,13 @@ public class SideBar extends JPanel {
     public void setBackgroundImg(String fileName) throws IOException {
         backgroundImage = ImageIO.read(new File(fileName));
       }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == newGame){
+			int aiSetting = player2.getSelectedIndex();
+			connect4Board.clearBoard();
+			connect4Board.setBoardSettings(aiSetting);
+		}
+	}
 }

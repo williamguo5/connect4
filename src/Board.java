@@ -1,3 +1,8 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
 
 public class Board{
 	public static final int NUM_ROWS = 6;
@@ -11,16 +16,17 @@ public class Board{
 	private int turnNumber;
 	private boolean gameOver;
 	private Connect4Board connect4Board;
-	private Player ai1;
+	private Player ai;
     private boolean isSimulation;
 	
 	// initialise board to be EMPTY
 	public Board(Connect4Board connect4Board){
 		this.connect4Board = connect4Board;
-//		ai1 = null;
-//		ai1 = new ExpertAI();
-		ai1 = new IntermediateAI();
-//		ai1 = new NoviceAI();
+		
+		ai = null;
+//		ai = new ExpertAI();
+//		ai = new IntermediateAI();
+//		ai = new NoviceAI();
 		resetBoard();
 	}
 	
@@ -100,7 +106,10 @@ public class Board{
 		updateLast(pos, colNum);
 		if(checkFour(lastMove, currentPlayer)){
 			gameOver = true;
-			System.out.println("GAME OVER");
+			System.out.println("GAME OVER, " + currentPlayer + " wins");
+		}else if(isFull()){
+			gameOver = true;
+			System.out.println("GAME OVER, DRAW");
 		}
 		connect4Board.displayToken(currentPlayer, lastMove);
 		printBoard();
@@ -278,26 +287,53 @@ public class Board{
 		}
 		previousPlayer = currentPlayer;
 		currentPlayer = turnNumber % 2;
-        if (!isSimulation) {
-            aiMove();
-        }
+//        if (!isSimulation) {
+//            aiMove();
+//        }
 	}
 	
-	public void setAI(Player ai) {
-		ai1 = ai;
+	public void setAI(int index) {
+		if(index == 0){
+			ai = null;
+		}else if(index == 1){
+			ai = new NoviceAI();
+		}else if(index == 2){
+			ai = new IntermediateAI();
+		}else if(index == 3){
+			ai = new ExpertAI();
+		}
 	}
 	
 	public void aiMove(){
-		if(currentPlayer == 1 && ai1 != null){
+		if(currentPlayer == 1 && ai != null){
+			
 			System.out.println(turnNumber);
             isSimulation = true;
-            int col = ai1.getMove(this.clone());
+//            Board boardClone = this.clon
+            final int col = ai.getMove(this.clone());
             isSimulation = false;
             System.out.println("AI MOVE " + col);
 //			updateLast(getColumnSize(col), col);
-			dropToken(col);
+            
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                	try {
+						delayDisplay();
+						dropToken(col);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+            });	
+			
 //			nextTurn();
 		}
+	}
+	
+	public void delayDisplay() throws InterruptedException{      
+
+		Thread.sleep(300);
 	}
 	
 	public int[] getLastMove(){
@@ -325,6 +361,7 @@ public class Board{
 	 * Undoes the most recent move made, only used by AI when running simulations
 	 * Should only be called when there is a valid move to undo
 	 */
+	// TODO some bugs.
 	public void undoPreviousMove() {
 		this.board[lastMove[0]][lastMove[1]] = Board.EMPTY; 
 		lastMove[0] = Board.EMPTY; //only most recent move is stored

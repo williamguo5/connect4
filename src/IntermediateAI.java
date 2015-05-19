@@ -1,6 +1,7 @@
 import java.util.Random;
 
 
+
 public class IntermediateAI implements Player {
     static int MAX_DEPTH = 8;
 
