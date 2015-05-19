@@ -29,9 +29,11 @@ public class NoviceAI implements Player {
 					System.out.print("Bye");
 				}
 				if (count == 3 && i < Board.NUM_COLS && !state.isColumnFull(i+1)) {
-					return i+1; //block horizontal win
+					move = i+1; //block horizontal win
 				} else if (count == 3 && i == Board.NUM_COLS && state.isColumnFull(i-3)) {
-					return i-3; //|_|_|_|here|x|x|x|
+					move = i-3; //|_|_|_|here|x|x|x|
+				} else {
+					move = -1;
 				}
 			}
 
@@ -43,12 +45,24 @@ public class NoviceAI implements Player {
 				} else {
 					count = 0;
 				}
-				if (count == 3) return lastMove[1]; //block off the vertical win
+				if (count == 3)  {
+					move = lastMove[1]; //block off the vertical win
+				} else {
+					move = -1;
+				}
 			}
 		}
 		for (int col = 0; col < Board.NUM_COLS; col++) {
 			if (!state.isColumnFull(col)) {
-				return col;
+				state.setAI(null); //prevents an ai move from being called when simulating game states
+				state.simDropToken(col);
+				if (state.isGameOver()) {
+					move = col; //instantly place the token that will win the game
+					state.undoPreviousMove();
+					return move;
+				} else if (move == -1) {
+					return col;
+				}
 			}
 		}
         return move;
