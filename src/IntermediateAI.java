@@ -3,7 +3,7 @@ import java.util.Random;
 
 
 public class IntermediateAI implements Player {
-    static int MAX_DEPTH = 8;
+    static int MAX_DEPTH = 6;
 
     //Remember to pass in a clone of the state
     public int getMove(Board state) {
@@ -52,16 +52,20 @@ public class IntermediateAI implements Player {
         if (depth == 0 || state.isGameOver()) {
             double score = 0;
             if (maximisingPlayer) {
-                score = -100000;
+                if (state.isGameOver()) return -100000/(MAX_DEPTH - depth + 1);
+                score = -calculateScore(state);
+
             } else if (!maximisingPlayer) {
-                score = 100000;
+                if (state.isGameOver()) return 100000/(MAX_DEPTH - depth + 1);
+                score = calculateScore(state);
+
             }
-            return score/(MAX_DEPTH - depth + 1);
+            return score/(MAX_DEPTH - depth + 1); // The deeper you traverse, the lower your score is
         }
 
-        if (depth <= 3) {
-            return calculateScore(state);
-        }
+//        if (depth <= 3) {
+//            return calculateScore(state);
+//        }
 
         if (maximisingPlayer) { //AI's turn
             for (int col = 0; col < Board.NUM_COLS; col++) {
@@ -157,6 +161,34 @@ public class IntermediateAI implements Player {
 
                 if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
                         state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 250;
+
+                //Checking three in a row for previous player
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 500;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
+
+                //Checking 3 in horizontal row current player
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 500;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
 
             }
 
