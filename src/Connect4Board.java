@@ -192,6 +192,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	if(!generatedBoard){
     		generateBoard();
     	}else{
+    		if(board.isGameOver()){
+    			remove(overlay);
+				repaint();
+    		}
 	    	for(int i = 0; i < Board.NUM_COLS; i++){
 	    		columnButtons.get(i).resetTokens();
 	    	}
