@@ -28,7 +28,7 @@ public class NoviceAI implements Player {
 					for (int i = 0; i < Board.NUM_COLS; i++) {
 						Board opponentTurn = myMove.clone();
 						opponentTurn.simDropToken(i);
-						if (opponentTurn.isGameOver()) {
+						if (opponentTurn.isGameOver() && col != i) {
 							return i;
 						}
 					}
