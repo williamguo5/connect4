@@ -1,175 +1,202 @@
+import java.util.Random;
+
+
 
 public class ExpertAI implements Player {
-	public int getMove(Board state) {
-		int move = 0;
-		if (state.isGameOver()) {
-			return 1;
-		}
-        if (state.getTurnNumber() == 0 || state.getTurnNumber() == 1) {
-        	if (state.getColumnSize(3) != 0) {
-        		return 4;
-        	}
-        	return 3;
+    static int MAX_DEPTH = 6;
+
+    //Remember to pass in a clone of the state
+    public int getMove(Board state) {
+        System.out.println("SIMULATION");
+//        System.out.println(1f);
+//        return 0;
+        if (state.getTurnNumber() == 1) {
+            Random randomGenerator = new Random();
+            int randomNumber = randomGenerator.nextInt(3);
+            if (randomNumber == 0) {
+                return 2;
+            } else if (randomNumber == 1){
+                return 3;
+            } else{
+                return 4;
+            }
         }
-        move = testBestMove(state);
+        return calculateMove(state.clone());
+    }
+
+    public int calculateMove(Board state) {
+        double maxScore = Integer.MIN_VALUE;
+        int move = 0;
+        for (int col = 0; col < Board.NUM_COLS; col++) {
+            if (!state.isColumnFull(col)) {
+                Board clone = state.clone();
+                clone.simDropToken(col);
+                double score = alphabeta(clone, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+                System.out.println("SCORE " + score);
+                if (score > maxScore) {
+                    maxScore = score;
+                    move = col;
+                    if (score == 1) break;
+                }
+            }
+        }
+//        if (move == 0) {
+//            Random randomGenerator = new Random();
+//            int randomNumber = randomGenerator.nextInt(3);
+//            move = randomNumber;
+//        }
         return move;
     }
-	
-	//TODO decision making beyond if/else
-	private int testBestMove(Board state) {
-		int move = 0;
-		int me = state.getCurrentPlayer();
-		for (int i = 0; i < Board.NUM_COLS; i++) {
-			if (!state.isColumnFull(i)) {
-				//Board test = state.clone();
-				state.setAI(0); //prevents an ai move from being called when simulating game states
-				state.simDropToken(i);
-				if (state.isGameOver()) {
-					move = i; //instantly place the token that will win the game
-					state.undoPreviousMove();
-					break;
-				} else {
-					move = opponentWin(state, i); //this code not yet working
-					if (move == -1) {
-						move = 0;
-					} else {
-						break;
-					}
-					int[][] tempBoard = state.getBoard();
-					int size = state.getColumnSize(i);
-					if (i == Board.NUM_COLS - 1) {			
-						if (size != 0) {
-							if (state.getColumnSize(i-1) == size || state.getColumnSize(i-1) == size + 1) { 
-								//check diagonally down if columns are same size, otherwise checks across
-								if (tempBoard[state.getColumnSize(i-1)-1][i-1] == me) {
-									move = i;
-									break;
-								}						
-							} else if (state.getColumnSize(i-1) == size + 2) {
-								//check diagonally upwards
-								if (tempBoard[state.getColumnSize(i-1)-1][i-1] == me) {
-									move = i;
-									break;
-								}	
-							}
-							if (tempBoard[size - 1][i] == me) { //check below
-								move = i;
-								break;
-							}
-						} else {
-							if (tempBoard[0][i-1] == me) {
-								move = i;
-								break;
-							} else if (tempBoard[1][i-1] == me) {
-								move = i;
-								break;
-							}
-						}
-					} else if (i == 0) {
-						if (size != 0) {
-							if (state.getColumnSize(i+1) == size || state.getColumnSize(i+1) == size + 1) { 
-								//check diagonally down if columns are same size, otherwise checks across
-								if (tempBoard[state.getColumnSize(i+1)-1][i+1] == me) {
-									move = i;
-									break;
-								}						
-							} else if (state.getColumnSize(i+1) == size + 2) {
-								//check diagonally upwards
-								if (tempBoard[state.getColumnSize(i+1)-1][i+1] == me) {
-									move = i;
-									break;
-								}	
-							}
-							if (tempBoard[size - 1][i] == me) { //check below
-								move = i;
-								break;
-							}
-						} else {
-							if (tempBoard[0][i+1] == me) {
-								move = i;
-								break;
-							} else if (tempBoard[1][i+1] == me) {
-								move = i;
-								break;
-							}
-						}
-					} else {
-						if (size != 0) {
-							if (state.getColumnSize(i-1) == size || state.getColumnSize(i-1) == size + 1) { 
-								//left side
-								//check diagonally down if columns are same size, otherwise checks across
-								if (tempBoard[state.getColumnSize(i-1)-1][i-1] == me) {
-									move = i;
-									break;
-								}						
-							} else if (state.getColumnSize(i-1) == size + 2) {
-								//check diagonally upwards
-								if (tempBoard[state.getColumnSize(i-1)-1][i-1] == me) {
-									move = i;
-									break;
-								}	
-							} else if (state.getColumnSize(i+1) == size || state.getColumnSize(i+1) == size + 1) { 
-								//right side
-								//check diagonally down if columns are same size, otherwise checks across
-								if (tempBoard[state.getColumnSize(i+1)-1][i+1] == me) {
-									move = i;
-									break;
-								}						
-							} else if (state.getColumnSize(i+1) == size + 2) {
-								//check diagonally upwards
-								if (tempBoard[state.getColumnSize(i+1)-1][i+1] == me) {
-									move = i;
-									break;
-								}	
-							}
-							if (tempBoard[size - 1][i] == me) { //check below
-								move = i;
-								break;
-							}
-						} else {
-							if (tempBoard[0][i-1] == me) {
-								move = i;
-								break;
-							} else if (tempBoard[1][i-1] == me) {
-								move = i;
-								break;
-							} else if (tempBoard[0][i+1] == me) {
-								move = i;
-								break;
-							} else if (tempBoard[1][i+1] == me) {
-								move = i;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		return move;
-	}
-	
-	private int opponentWin(Board state, int aiMove) {
-		int preventWin = -1; //if it is possible to block a win this move will be updated to that block
-		if (state.getTurnNumber() < 6) { //win not possible yet
-			return preventWin; 
-		}
-		for (int j = 0; j < Board.NUM_COLS; j++) {
-			//Board opponentMove = state.clone();
-			state.setAI(0);
-			if (!state.isColumnFull(j)) {
-				state.simDropToken(j);
-				//only give a blocking move if the move passed in does not allow the winning move in the first place
-				if (state.isGameOver() && j != aiMove) { 
-					System.out.println("Winning move found here");
-					preventWin = j;
-					state.undoPreviousMove();
-					return preventWin;
-				} else {
-					state.undoPreviousMove();
-				}
-			}
-		}
-		System.out.println("end");
-		return preventWin;
-	}
+
+    public double alphabeta(Board state, int depth, double alpha, double beta, boolean maximisingPlayer) {
+        if (depth == 0 || state.isGameOver()) {
+            double score = 0;
+            if (maximisingPlayer) {
+                if (state.isGameOver()) return -100000/(MAX_DEPTH - depth + 1);
+                score = -calculateScore(state);
+
+            } else if (!maximisingPlayer) {
+                if (state.isGameOver()) return 100000/(MAX_DEPTH - depth + 1);
+                score = calculateScore(state);
+
+            }
+            return score/(MAX_DEPTH - depth + 1); // The deeper you traverse, the lower your score is
+        }
+
+//        if (depth <= 3) {
+//            return calculateScore(state);
+//        }
+
+        if (maximisingPlayer) { //AI's turn
+            for (int col = 0; col < Board.NUM_COLS; col++) {
+                if (!state.isColumnFull(col)) {
+                    Board clone = state.clone();
+                    clone.simDropToken(col);
+                    alpha = Math.max(alpha,
+                                    alphabeta(clone, depth - 1, alpha, beta, false));
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+            return alpha;
+        } else { //The human player's turn
+            for (int col = 0; col < Board.NUM_COLS; col++) {
+                if (!state.isColumnFull(col)) {
+                    Board clone = state.clone();
+                    clone.simDropToken(col);
+                    beta = Math.min(beta,
+                                    alphabeta(clone, depth - 1, alpha, beta, true));
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+            return beta;
+        }
+    }
+
+    public double calculateScore(Board state) {
+        int score = 0;
+
+        for (int col = 0; col <= 3; col++) {
+            for (int row = 0; row < Board.NUM_ROWS; row++) {
+
+                //Previous player single horizontal counter checks
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 100;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 100;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 100;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 100;
+
+                //Current player(player has to yet to make a move) single horizontal counter checks
+//                System.out.println(">>>>>>>>>>>>>>>>");
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 100;
+
+                //Previous player 2 horizontal counter check
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 250;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 250;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 250;
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 250;
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 250;
+
+                //Current player(new has yet to made) 2 horizontal counter check
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 250;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 250;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 250;
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 250;
+
+                //Checking three in a row for previous player
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 500;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
+
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
+
+                //Checking 3 in horizontal row current player
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 500;
+
+                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
+
+                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
+
+            }
+
+        }
+        return score;
+
+    }
+
+
+    //Insert heuristic function
 }

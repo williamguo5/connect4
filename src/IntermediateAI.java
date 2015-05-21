@@ -1,25 +1,23 @@
 import java.util.Random;
 
 
-
+//attempt to lower difficulty of AI to intermediate level
+//depth of future state computations decreased and simplified cost calculations of boards in future states
+//changed costs to make AI less aggressive to win and block slightly more often
 public class IntermediateAI implements Player {
     static int MAX_DEPTH = 6;
 
     //Remember to pass in a clone of the state
     public int getMove(Board state) {
         System.out.println("SIMULATION");
-//        System.out.println(1f);
-//        return 0;
         if (state.getTurnNumber() == 1) {
             Random randomGenerator = new Random();
-            int randomNumber = randomGenerator.nextInt(3);
+            int randomNumber = randomGenerator.nextInt(2);
             if (randomNumber == 0) {
                 return 2;
             } else if (randomNumber == 1){
-                return 3;
-            } else{
                 return 4;
-            }
+            } 
         }
         return calculateMove(state.clone());
     }
@@ -33,18 +31,13 @@ public class IntermediateAI implements Player {
                 clone.simDropToken(col);
                 double score = alphabeta(clone, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
                 System.out.println("SCORE " + score);
-                if (score > maxScore) {
+                if (score >= maxScore) {
                     maxScore = score;
                     move = col;
                     if (score == 1) break;
                 }
             }
         }
-//        if (move == 0) {
-//            Random randomGenerator = new Random();
-//            int randomNumber = randomGenerator.nextInt(3);
-//            move = randomNumber;
-//        }
         return move;
     }
 
@@ -52,20 +45,16 @@ public class IntermediateAI implements Player {
         if (depth == 0 || state.isGameOver()) {
             double score = 0;
             if (maximisingPlayer) {
-                if (state.isGameOver()) return -100000/(MAX_DEPTH - depth + 1);
-                score = -calculateScore(state);
-
+                score = -100000;
             } else if (!maximisingPlayer) {
-                if (state.isGameOver()) return 100000/(MAX_DEPTH - depth + 1);
-                score = calculateScore(state);
-
+                score = 100000;
             }
-            return score/(MAX_DEPTH - depth + 1); // The deeper you traverse, the lower your score is
+            return score/(MAX_DEPTH - depth + 1);
         }
 
-//        if (depth <= 3) {
-//            return calculateScore(state);
-//        }
+        if (depth <= 3) {
+            return calculateScore(state);
+        }
 
         if (maximisingPlayer) { //AI's turn
             for (int col = 0; col < Board.NUM_COLS; col++) {
@@ -104,99 +93,35 @@ public class IntermediateAI implements Player {
 
                 //Previous player single horizontal counter checks
 
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 100;
+               if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 200;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 100;
+                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 200;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 100;
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 200;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 100;
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 200;
 
                 //Current player(player has to yet to make a move) single horizontal counter checks
-//                System.out.println(">>>>>>>>>>>>>>>>");
 
                 if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 50;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 50;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 50;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 100;
-
-                //Previous player 2 horizontal counter check
-
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 250;
-
-                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 250;
-
-                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 250;
-
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 250;
-
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 250;
-
-                //Current player(new has yet to made) 2 horizontal counter check
-
-                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 250;
-
-                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 250;
-
-                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 250;
-
-                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 250;
-
-                //Checking three in a row for previous player
-
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 500;
-
-                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
-
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
-
-                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 500;
-
-                //Checking 3 in horizontal row current player
-
-                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 500;
-
-                if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
-
-                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
-
-                if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 500;
-
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 50;
             }
 
         }
-        return score;
+        return 0;
 
     }
-
-
-    //Insert heuristic function
 }
