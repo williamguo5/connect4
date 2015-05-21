@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-
-
-//import java.util.Timer;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -34,6 +33,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	private Image overlayImage;
 	private boolean generatedBoard;
 	private SideBar sidebar;
+	private JFrame overlayFrame;
 	
 	/**
 	 * Constructor for a connect4 GUI
@@ -48,18 +48,17 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         colClick = "colClick.png";
         setBackgroundImg("board3.png");
         
-        
+        overlayFrame = new JFrame();
+//    	overlayFrame.setBackground(Color.red);
+    	overlayFrame.setUndecorated(true);
+    	overlayFrame.setAlwaysOnTop(true);
+    	
+    	overlayFrame.setLocation(350, 140);
+    	overlayFrame.setPreferredSize(new Dimension(450,360));
+    	overlayFrame.pack();
+    	
         closeOverlay = new JButton("Close");
 //        overlayImage = ImageIO.read(new File("background2.png"));
-        landingScreen = new JPanel(){
-			@Override
-			public void paintComponent(Graphics g) {
-//		        super.paintComponent(g);       
-		        
-				g.drawImage(overlayImage, 0, 0, getWidth(), getHeight(), null);
-		    }
-		};
-		landingScreen.setBackground(Color.red);
 		
 		overlay = new JPanel(){
 			@Override
@@ -70,19 +69,12 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 		    }
 		};
 		overlay.setBackground(Color.lightGray);
-		
+//		
 		overlay.setLayout(new BorderLayout());
     	overlay.add(closeOverlay, BorderLayout.SOUTH);
     	closeOverlay.addActionListener(this);
+    	overlayFrame.add(overlay);
 
-//    	overlay.setSize(this.getWidth(), this.getHeight());
-//    	closeOverlay.setLocation(this.getWidth()/2, this.getHeight()*9/10);
-    	closeOverlay.setLocation(325, 500);
-//    	overlay.add(closeOverlay, BorderLayout.SOUTH);
-    	
-    	
-    	
-    	
     	
     	setLayout(new GridLayout(1, Board.NUM_COLS));
 		columnButtons = new ArrayList<ColumnButton>();
@@ -192,15 +184,13 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	if(!generatedBoard){
     		generateBoard();
     	}else{
-    		if(board.isGameOver()){
-    			remove(overlay);
-				repaint();
-    		}
+    		
 	    	for(int i = 0; i < Board.NUM_COLS; i++){
 	    		columnButtons.get(i).resetTokens();
 	    	}
 	    	freezeBoard(false);
 	    	board.resetBoard();
+	    	overlayFrame.setVisible(false);
     	}
     }
 
@@ -222,13 +212,6 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     
     public void setBackgroundImg(String fileName) throws IOException {
         backgroundImage = ImageIO.read(new File(fileName));
-      }
-    
-    public void displayLandingScreen(){
-    	landingScreen.setSize(this.getWidth(), this.getHeight());
-    	landingScreen.setLocation(0, 0);
-
-    	add(landingScreen, 0);
     }
     
     public void displayWinner(int currentPlayer){
@@ -249,13 +232,9 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 
 			}
     	}
+ 
+    	overlayFrame.setVisible(true);
     	
-    	overlay.setSize(this.getWidth(), this.getHeight()/2);
-    	overlay.setLocation(0, this.getHeight()/4);
-    	closeOverlay.setLocation(this.getWidth()/2, this.getHeight()*9/10);
-    	closeOverlay.setLocation(0, 0);
-    	overlay.add(closeOverlay, BorderLayout.SOUTH);
-    	add(overlay, 0);
     }
     
     public void delayOverlay() throws InterruptedException{    
@@ -300,7 +279,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == closeOverlay){
-			remove(overlay);
+			overlayFrame.setVisible(false);
 			repaint();
 		}
 	}
