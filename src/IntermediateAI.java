@@ -121,7 +121,7 @@ public class IntermediateAI implements Player {
             }
 
         }
-        return 0;
+        return score;
 
     }
 }
