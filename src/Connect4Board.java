@@ -4,15 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+
+
+//import java.util.Timer;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+
 
 
 public class Connect4Board extends JLayeredPane implements ActionListener{
@@ -26,7 +30,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	private Board board;
 	private boolean boardFrozen;
 	private JPanel overlay;
+	private JPanel landingScreen;
 	private Image overlayImage;
+	private boolean generatedBoard;
+	private SideBar sidebar;
 	
 	/**
 	 * Constructor for a connect4 GUI
@@ -39,12 +46,21 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         colBlank = "colBlank.png";
         colMouseOver = "colMouseOver.png";
         colClick = "colClick.png";
-        setBackgroundImg("background2.png");
+        setBackgroundImg("board3.png");
         
         
         closeOverlay = new JButton("Close");
 //        overlayImage = ImageIO.read(new File("background2.png"));
-        
+        landingScreen = new JPanel(){
+			@Override
+			public void paintComponent(Graphics g) {
+//		        super.paintComponent(g);       
+		        
+				g.drawImage(overlayImage, 0, 0, getWidth(), getHeight(), null);
+		    }
+		};
+		landingScreen.setBackground(Color.red);
+		
 		overlay = new JPanel(){
 			@Override
 			public void paintComponent(Graphics g) {
@@ -73,7 +89,8 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 		for(int i = 0; i < Board.NUM_COLS; i++){
 			columnButtons.add(new ColumnButton());
 		}
-		generateBoard();
+		generatedBoard = false;
+//		generateBoard();
     }
 
 	/**
@@ -81,7 +98,9 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 
 	 * @throws IOException 
 	 */
-    public void generateBoard() throws IOException {    	
+    public void generateBoard() throws IOException { 
+    	generatedBoard = true;
+    	setBackgroundImg("board3.png");
     	for(int i = 0; i < Board.NUM_COLS; i++){
     		add(columnButtons.get(i));
     		columnButtons.get(i).setBackgroundImg(colBlank);
@@ -94,10 +113,24 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	    	      		columnButtons.get(colNum).setBackgroundImg(colMouseOver);
 	    	      		columnButtons.get(colNum).repaint();
 	    	      		board.aiMove();
+	    	      		System.out.println(board.isGameOver());
 	    	      		if(board.isGameOver()){
 	    	      			columnButtons.get(colNum).setBackgroundImg(colBlank);
-	    	    	  		displayWinner(board.getPreviousPlayer());
+	    	      			try {
+								delayOverlay();
+							} catch (InterruptedException e2) {
+
+							}
 	    	    	  	}
+	    	      		if(board.isAi()){
+	    	      			try {
+								delayOverlay();
+							} catch (InterruptedException e2) {
+
+							}
+	    	      		}
+	    	      		System.out.println("return from AI");
+
 	    			} catch (IOException e1){
 	    				e1.printStackTrace();
 	    			}
@@ -109,6 +142,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 		    		try {
 		    			columnButtons.get(colNum).setBackgroundImg(colClick);
 		    			columnButtons.get(colNum).repaint();
+		    			
 		    		} catch (IOException e1) {
 		    			e1.printStackTrace();
 		    		}
@@ -152,13 +186,18 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     
     /**
      * Clears the board
+     * @throws IOException 
      */
-    public void clearBoard(){
-    	for(int i = 0; i < 7; i++){
-    		columnButtons.get(i).resetTokens();
+    public void clearBoard() throws IOException{
+    	if(!generatedBoard){
+    		generateBoard();
+    	}else{
+	    	for(int i = 0; i < Board.NUM_COLS; i++){
+	    		columnButtons.get(i).resetTokens();
+	    	}
+	    	freezeBoard(false);
+	    	board.resetBoard();
     	}
-    	freezeBoard(false);
-    	board.resetBoard();
     }
 
     /**
@@ -181,7 +220,15 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         backgroundImage = ImageIO.read(new File(fileName));
       }
     
+    public void displayLandingScreen(){
+    	landingScreen.setSize(this.getWidth(), this.getHeight());
+    	landingScreen.setLocation(0, 0);
+
+    	add(landingScreen, 0);
+    }
+    
     public void displayWinner(int currentPlayer){
+    	
     	freezeBoard(true);
     	System.out.print("Winner is: ");
     	if(currentPlayer == 0){
@@ -191,29 +238,32 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	}
     	System.out.println();
     	
+    	for(int i = 0; i < Board.NUM_COLS; i++){
+    		try {
+				columnButtons.get(i).setBackgroundImg(colBlank);
+			} catch (IOException e) {
+
+			}
+    	}
     	
     	overlay.setSize(this.getWidth(), this.getHeight()/2);
     	overlay.setLocation(0, this.getHeight()/4);
     	closeOverlay.setLocation(this.getWidth()/2, this.getHeight()*9/10);
     	closeOverlay.setLocation(0, 0);
     	overlay.add(closeOverlay, BorderLayout.SOUTH);
-    	
-    	SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-            	try {
-					delayOverlay();
-					add(overlay, 0);
-				} catch (InterruptedException e) {
-					
-				}
-            }
-        });	
+    	add(overlay, 0);
     }
     
-    public void delayOverlay() throws InterruptedException{      
-		Thread.sleep(350);
-	}
-  
+    public void delayOverlay() throws InterruptedException{    
+    	Timer timer = new Timer(500, new ActionListener() {
+	       public void actionPerformed(ActionEvent evt) {
+	    	   if(!board.isGameOver()) return;
+	    	   displayWinner(board.getPreviousPlayer());
+	       }
+	     });
+	     timer.setRepeats(false);
+	     timer.start();
+    }
     
     public void freezeBoard(boolean canResize){
     	JFrame frame = (JFrame)this.getRootPane().getParent();
@@ -227,8 +277,20 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	System.out.println(this.getWidth() + " " + this.getHeight());
     }
     
-    public void setBoardSettings(int aiSetting){
+    public void setBoardSettings(int aiSetting, String theme){
     	board.setAI(aiSetting);
+    }
+    
+    public void setStatus(int currentPlayer){
+    	int type = 0;
+    	if(board.isAi()){
+    		type = 1;
+    	}
+    	sidebar.getStatus().setPlayer(currentPlayer, type);
+    }
+    
+    public void setSidebar(SideBar sidebar){
+    	this.sidebar = sidebar;
     }
 
 	@Override

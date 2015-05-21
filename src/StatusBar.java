@@ -1,130 +1,102 @@
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 
-public class StatusBar extends JPanel {
+public class StatusBar extends JPanel{
+	private JLabel turn;
+	private JLabel turnAnswer;
+	private ImageIcon player1Icon;
+	private ImageIcon player2Icon;
+	private Color backgroundShade;
+	private Color text;
+	
 	
 	/**
-	 * R: 233
-	 * G: 232
-	 * B: 207
 	 * 
-	 * Text RGB: 122, 160, 170
-	 * Text RGB: 10, 121, 133
+	 * @param isTwoPlayer
+	 * @throws IOException
 	 */
-	
-	private JLabel turnAnswer;
-	private JLabel scoreAnswer;
-	private JLabel movesAnswer;
-	
-	private ImageIcon yellow;
-	private ImageIcon red;
-	private Font style;
-	private Color textGreen;
-	private Color textBlue;
-	
-	private int player;	//PLAYER RED = 0?, PLAYER YELLOW = 1?
-	private int numMoves;
-	private int yellowScore;
-	private int redScore;
-	
 	public StatusBar() throws IOException {
-		setLayout(new GridLayout(3, 2));
-		style = new Font("Myriad Pro", Font.PLAIN, 30);
-		textGreen = new Color(10, 121, 133);
-		textBlue = new Color(122, 160, 170);
+		super();
+		setLayout(new GridLayout(1,2));
+		backgroundShade = new Color(233,232,207);
+		text = new Color(122, 160, 170);
 		
-		// initialize the fields
-		yellow = new ImageIcon("token2.png");	
-		red = new ImageIcon("token1.png");
-		yellowScore = 0;
-		redScore = 0;
-		numMoves = 0;
-		player = 0;
+		setOpaque(true);
+		setBackground(text);
 		
-		// Initialize and add the panels
-		initialize();
-    }
-	
-	private void initialize() {		 
-		
-		// create the status labels
-		JLabel currentTurn = new JLabel("Turn", SwingConstants.CENTER);
-		JLabel moves = new JLabel("Moves", SwingConstants.CENTER);
-		JLabel score = new JLabel("Score", SwingConstants.CENTER);
+		turn = new JLabel();
+		turn.setFont(new Font("Myriad Pro", Font.BOLD, 15));
+		turn.setPreferredSize(new Dimension(125,110));
+		turn.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		turnAnswer = new JLabel();
 		turnAnswer.setHorizontalAlignment(SwingConstants.CENTER);
-		movesAnswer = new JLabel("", SwingConstants.CENTER);
-		scoreAnswer = new JLabel("", SwingConstants.CENTER);
+		turnAnswer.setPreferredSize(new Dimension(125,110));
 		
-		// set style for labels
-		currentTurn.setFont(style);
-		currentTurn.setForeground(textGreen);
-		moves.setFont(style);
-		moves.setForeground(textGreen);
-		score.setFont(style);
-		score.setForeground(textGreen);
-		movesAnswer.setFont(style);
-		movesAnswer.setForeground(textBlue);
-		scoreAnswer.setFont(style);
-		scoreAnswer.setForeground(textBlue);
+		player1Icon = new ImageIcon("token1.png");
+		player2Icon = new ImageIcon("token2.png");
+		Image image = player2Icon.getImage().getScaledInstance(90, 90, 0);
+		player2Icon = new ImageIcon(image);
 		
-		//turnAnswer.setIcon(red);
-		//movesAnswer.setText(Integer.toString(numMoves));
-		newTurn();
-		newRound(3); 
-		scoreAnswer.setText(Integer.toString(yellowScore) + " : " + Integer.toString(redScore));
 		
-		// adds on the labels to statusMenu
-		add(currentTurn);
+		hideStatus();
+		add(turn);
 		add(turnAnswer);
-		add(moves);
-		add(movesAnswer);
-		add(score);
-		add(scoreAnswer);
+//		revealStatus();
+		
 	}
 	
 	/**
-	 * Check which player is which
-	 * After a player has won the game
-	 * moves = 0
-	 * reset player 0
+	 * Do not use this function. Use Next Player in SideBar
+	 * @precondition Values should be according to the below when
+	 * passed in
+	 * PLAYER 1 IS ONE
+	 * PLAYER 2 IS TWO
 	 * @param player
 	 */
-	public void newRound(int winner) {
-		if(winner == 0) {
-			yellowScore++;
-		} else if (winner == 1) {
-			redScore++;
+	public void setPlayer(int player, int type) {
+		if(type == 0) {
+			if(player == 1) {
+				
+				turn.setText("<html>Player 2<br> Turn</html>");
+				turnAnswer.setIcon(player1Icon);
+			} else {
+				turn.setText("<html>Player 1<br>Turn</html>");
+				turnAnswer.setIcon(player2Icon);
+			}
+		} else {
+			if(player == 1) {
+				turn.setText("<html>Opponent's<br> Turn</html>");
+				
+				turnAnswer.setIcon(player1Icon);
+			} else {
+				turn.setText("Your Turn");
+				turnAnswer.setIcon(player2Icon);
+			}
 		}
-		scoreAnswer.setText(Integer.toString(yellowScore) + " : " + Integer.toString(redScore));
 	}
 	
-	/**
-	 * 
-	 */
-	private void newTurn() {
-		player++;
-		player%=2; // CHECK THIS
-		if(player == 1) {
-			turnAnswer.setIcon(red);
-		} else {
-			turnAnswer.setIcon(yellow);
-		}
-		movesAnswer.setText(Integer.toString(numMoves));
-		numMoves++;
+	
+	public void revealStatus() {
+		setBackground(text);
+		turn.setForeground(backgroundShade);
+		turnAnswer.setIcon(player1Icon);
 	}
-	/**
-	 * public UPDATE STATUS BAR
-	 * player++ % 2
-	 * moves++
-	 */
+	
+	public void hideStatus() {
+		setBackground(backgroundShade);
+		turnAnswer.setIcon(null);
+	}
 	
 }

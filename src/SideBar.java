@@ -1,141 +1,163 @@
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-
+/**
+ * When a NEW GAME is created (After New Game Button):
+ * 		Call gameSettings.revealStatus();
+ * 		Call this.nextPlayer(0);
+ * 
+ * When a game ends:
+ * 		Call gameSettings.hideStatus();
+ * 
+ * To Find out the Opponent Type for NEW GAME:
+ * 		Call gameSettings.getOpponent();
+ * 		Will give 0 - 3. 
+ * 		0 meaning human
+ * 		[1->3] meaning [easy->hard]
+ * 
+ * To Find out the Theme Chosen for NEW GAME:
+ * 		Call gameSettings.getTheme()
+ * @author angelayang
+ *
+ */
 public class SideBar extends JPanel implements ActionListener {
 	
-	private Image backgroundImage;
-	private ImageIcon title;
-	private Color backgroundShade;
-	private boolean reset;
-	
-	private JButton newGame;
-	private StatusBar gameStatus;
 	private JLabel header;
-	
-	private JComboBox player1;
-	private JComboBox player2;
-	
+	private StatusBar gameStatus;
+	private JButton newGameButton;
+	private ImageIcon headerImage;
+	private JLabel padding;
+	private Settings gameSettings;
 	private Connect4Board connect4Board;
 	
+	
+	private Font fontStyle;
+	private Color background;
+	private Color text;
+	
 	/**
-	 * Contains 
-	 * 	CONNECT FOUR HEADER
-	 * 	NEW GAME BUTTON
-	 * 	STATUS BAR
-	 * 
+	 * Constructor for sideBar
 	 */
-	public SideBar(Connect4Board connect4Board) throws IOException{
+	public SideBar(Connect4Board connect4Board) throws IOException {
+		super();
 		this.connect4Board = connect4Board;
-		setBorder(BorderFactory.createLineBorder(Color.white));
-		title = new ImageIcon("header.png");
-		reset = false;
-		setupSideBar();
+		//setLayout(new GridLayout(4, 1, 10, 10));		; make it scalablish 
+		fontStyle = new Font("Myriad Pro", Font.BOLD, 20);
+//		text = new Color(122, 160, 170);
+		text = new Color(78, 128, 166);
+		background = new Color(233,232,207);
+		setBackground(background);
+		this.setOpaque(true);
+		
+		headerImage = new ImageIcon("header.png");
+		gameStatus = new StatusBar();
+		padding = new JLabel();
+		gameSettings = new Settings();
+		newGameButton = new JButton("NEW GAME");
+		newGameButton.setPreferredSize(new Dimension(250, 40));
+		newGameButton.addActionListener(this);
+		initialisePanels();
 	}
 	
 	/**
-	 * setupSideBar()
-	 * @throws IOException 
+	 * Helper function for constructor
+	 * Adds all the necessary panels
 	 */
-	private void setupSideBar() throws IOException {
-		ImageIcon newGameLabel = new ImageIcon("newGame.png");
-		backgroundShade = new Color(233,232,207);
+	private void initialisePanels() {
+		
 		
 		header = new JLabel();
-		header.setIcon(title);
-		header.setPreferredSize(new Dimension(250, 110));
+		header.setIcon(headerImage);
+		header.setPreferredSize(new Dimension(250,110));
 		
-		String[] players = {"Human", "Novice AI", "Intermediate AI", "Expert AI"};		
-		player1 = new JComboBox(players);
-		player1.disable();
+		newGameButton.setFont(fontStyle);
+		newGameButton.setForeground(text);
+		newGameButton.setBackground(background);
+		newGameButton.setOpaque(true);
 		
-		player2 = new JComboBox(players);
 		
-		newGame = new JButton(newGameLabel);
-		newGame.setPreferredSize(new Dimension(250,110));
-		newGame.setBorderPainted(false);
-		newGame.setBackground(backgroundShade);
-		newGame.setOpaque(true);
-		newGame.addActionListener(this);
-		
-		gameStatus = new StatusBar();
-		//gameStatus.setPreferredSize(new Dimension(250,330));
-		gameStatus.setPreferredSize(new Dimension(250,250));
-		gameStatus.setBackground(backgroundShade);
+		padding.setPreferredSize(new Dimension(250, 100));
 		
 		add(header);
 		add(gameStatus);
-		add(player1);
-		add(player2);
-		add(newGame);
-	}
-	
-	
-	/**
-	 * Action for when newGAme occurs
-	 */
-	
-	public void setNewGame() {
+		add(padding);
+		add(gameSettings);
+		add(newGameButton);
 		
-		try {
-			gameStatus = new StatusBar();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		reset = true;
 	}
 	
-	/**
-	 * Gives access to the game's newGame button
-	 */
-     public JButton getNewGameButton() {
-    	 return newGame;
-     }
-      
-	/**
-	 * Gives access to the game's status bar
-	 * 
-	 */
-     public StatusBar getStatusBar() {
-    	 return gameStatus;
-     }
-	
-	
+
 	/**
      * Set the size of the panel
      */
 	public Dimension getPreferredSize() {
         return new Dimension(250,550);
     }
-
+	
 	/**
-	 * Method to paint the board on the screen
+	 * Gives access to the newGameButton
+	 * for connect4Board class
+	 * @return
 	 */
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);       
-        
-    	g.drawImage(backgroundImage, 0, 0, null);
-    }
-    
-    public void setBackgroundImg(String fileName) throws IOException {
-        backgroundImage = ImageIO.read(new File(fileName));
-      }
+	public JButton getNewGameButton() {
+		return newGameButton;
+	}
+	
+	/**
+	 * Pass in:
+	 * PLAYER 1 as ZERO
+	 * PLAYER 2 as ONE
+	 */
+	public void nextPlayer(int player) {
+		player += 1;
+		player %= 2;
+		
+		gameStatus.setPlayer(2, gameSettings.getOpponent());
+	}
+	
+	/**
+	 * Gives access to the gameSettings
+	 * for connect4Board class
+	 * @return
+	 */
+	public Settings getSettings() {
+		return gameSettings;
+	}
+	
+	public StatusBar getStatus(){
+		return gameStatus;
+	}
+
+	public void paintCompoent(Graphics g)
+	{
+	   super.paintComponent(g);
+	   setBackground(background);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == newGame){
-			int aiSetting = player2.getSelectedIndex();
-			connect4Board.clearBoard();
-			connect4Board.setBoardSettings(aiSetting);
+		if(e.getSource() == newGameButton){
+			gameStatus.revealStatus();
+			nextPlayer(1);
+			try {
+				connect4Board.clearBoard();
+			} catch (IOException e1) {
+
+			}
+			connect4Board.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
 		}
 	}
 }

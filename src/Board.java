@@ -30,6 +30,11 @@ public class Board{
 		resetBoard();
 	}
 	
+	public boolean isAi(){
+		if(ai == null) return false;
+		else return true;
+	}
+	
 	public int getTurnNumber() {
 		return turnNumber;
 	}
@@ -111,9 +116,11 @@ public class Board{
 			gameOver = true;
 			System.out.println("GAME OVER, DRAW");
 		}
+
 		connect4Board.displayToken(currentPlayer, lastMove);
 		printBoard();
 		nextTurn();
+		connect4Board.setStatus(currentPlayer);
 	}
 	
 	public void simDropToken(int colNum) { 
@@ -287,6 +294,7 @@ public class Board{
 		}
 		previousPlayer = currentPlayer;
 		currentPlayer = turnNumber % 2;
+		
 //        if (!isSimulation) {
 //            aiMove();
 //        }
@@ -314,21 +322,28 @@ public class Board{
             isSimulation = false;
             System.out.println("AI MOVE " + col);
 //			updateLast(getColumnSize(col), col);
-            
+//            dropToken(col);
+//            try {
+//				delayDisplay(col);
+//			} catch (InterruptedException e1) {
+//
+//			}
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                 	try {
 						delayDisplay();
-						dropToken(col);
+						
+						
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+                dropToken(col);
                 }
             });	
 			
 //			nextTurn();
 		}
+		
 	}
 	
 	public void delayDisplay() throws InterruptedException{      
@@ -396,8 +411,8 @@ public class Board{
 	public Board clone(){
 		Board boardClone = new Board(connect4Board);
 		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
-		for(int j = 0; j < 7; j++){
-			for(int i = 0; i < 6; i++){
+		for(int j = 0; j < NUM_COLS; j++){
+			for(int i = 0; i < NUM_ROWS; i++){
 				newBoard[i][j] = board[i][j];
 			}
 		}

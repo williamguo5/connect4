@@ -8,7 +8,7 @@ public class Connect4 {
 	private Connect4Board connect4Board;
 //	private Board board;
 	private JFrame mainFrame;
-	private SideBar sideBar;
+	private SideBar sidebar;
 	
 	 public static void main(String[] args) throws IOException{
     	final Connect4 c4 = new Connect4();
@@ -29,7 +29,9 @@ public class Connect4 {
 //		board = new Board();
 		
 		connect4Board = new Connect4Board();
-		sideBar = new SideBar(connect4Board);
+		sidebar = new SideBar(connect4Board);
+		connect4Board.setSidebar(sidebar);
+//		sideBar = new SideBar();
 		
 		// newgame - resets the board with the input settings		
 		
@@ -40,7 +42,7 @@ public class Connect4 {
 	 */
 	public void display() {
 		mainFrame.getContentPane().add(connect4Board,BorderLayout.CENTER);
-		mainFrame.getContentPane().add(sideBar, BorderLayout.WEST);
+		mainFrame.getContentPane().add(sidebar, BorderLayout.WEST);
 		mainFrame.pack();
         mainFrame.setVisible(true);
 	}
