@@ -4,6 +4,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -42,7 +44,10 @@ public class Connect4 {
 			
 			@Override
 			public void componentResized(ComponentEvent e) {
-				mainFrame.setSize(mainFrame.getWidth(), mainFrame.getWidth()*19/30);
+				int width = mainFrame.getWidth();
+				int height = mainFrame.getWidth()*19/30;
+				if(width < 900) width = 900;
+				mainFrame.setSize(width, height);
 				int overlayWidth = connect4Board.getWidth()*9/13;
 				connect4Board.getOverlay().setSize(overlayWidth, overlayWidth*4/5);
 				System.out.println(mainFrame.getSize());
