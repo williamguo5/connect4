@@ -53,7 +53,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	overlayFrame.setUndecorated(true);
     	overlayFrame.setAlwaysOnTop(true);
     	
-    	overlayFrame.setLocation(350, 140);
+//    	overlayFrame.setLocation(350, 130);
     	overlayFrame.setPreferredSize(new Dimension(450,360));
     	overlayFrame.pack();
     	
@@ -251,7 +251,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     public void freezeBoard(boolean canResize){
     	JFrame frame = (JFrame)this.getRootPane().getParent();
     	if(canResize){
-    		frame.setResizable(false);
+//    		frame.setResizable(false);
     		boardFrozen = true;
     	}else{
     		frame.setResizable(true);
@@ -274,6 +274,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     
     public void setSidebar(SideBar sidebar){
     	this.sidebar = sidebar;
+    }
+    
+    public JFrame getOverlay(){
+    	return overlayFrame;
     }
 
 	@Override
