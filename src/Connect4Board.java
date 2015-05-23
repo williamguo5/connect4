@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -35,6 +36,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	private SideBar sidebar;
 	private JFrame overlayFrame;
 	private String theme;
+	private JLabel display;
 	
 	/**
 	 * Constructor for a connect4 GUI
@@ -49,18 +51,21 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         colClick = "colClick.png";
         setBackgroundImg("land.png");
         theme = "Classic";
-        
+        display = new JLabel();
         overlayFrame = new JFrame();
-//    	overlayFrame.setBackground(Color.red);
+    
     	overlayFrame.setUndecorated(true);
     	overlayFrame.setAlwaysOnTop(true);
     	
 //    	overlayFrame.setLocation(350, 130);
     	overlayFrame.setPreferredSize(new Dimension(450,360));
+    	overlayFrame.setBackground(new Color(233,232,207));
     	overlayFrame.pack();
     	
         closeOverlay = new JButton("Close");
+        closeOverlay.setPreferredSize(new Dimension(50, 50));
 //        overlayImage = ImageIO.read(new File("background2.png"));
+      
 		
 		overlay = new JPanel(){
 			@Override
@@ -70,11 +75,16 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 				g.drawImage(overlayImage, 0, 0, getWidth(), getHeight(), null);
 		    }
 		};
-		overlay.setBackground(Color.lightGray);
-//		
+		//overlay.setBackground(Color.lightGray);
+		//overlay.setBackground(new Color(122, 160, 170));
 		overlay.setLayout(new BorderLayout());
     	overlay.add(closeOverlay, BorderLayout.SOUTH);
+        closeOverlay.setBorder(BorderFactory.createLineBorder(Color.black));
+        closeOverlay.setFont(new Font("Myriad Pro", Font.BOLD, 30));
+    	closeOverlay.setForeground(new Color(233,232,207));
     	closeOverlay.addActionListener(this);
+    	closeOverlay.setBackground(new Color(122, 160, 170));
+    	closeOverlay.setOpaque(true);
     	overlayFrame.add(overlay);
 
     	
@@ -216,19 +226,33 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         backgroundImage = ImageIO.read(new File(fileName));
     }
     
-    public void displayWinner(int currentPlayer){
-    	
-    	freezeBoard(true);
-    	
+    /**
+     * Shows popup menu when gameover
+     * @param currentPlayer
+     * @param isAi
+     */
+    public void displayWinner(int currentPlayer, boolean isAi, JLabel display){
+    	String message = "";
+    
     	sidebar.getStatus().hideStatus();
-    	System.out.print("Winner is: ");
-    	if(currentPlayer == 0){
-    		System.out.print("Yellow");
-    	}else{
-    		System.out.print("Red");
+    	freezeBoard(true);
+    	if(board.isAi()) {
+    		if(currentPlayer == 0){
+        		message = "YOU WIN";
+        	} else {
+        		message = "YOU LOSE";
+        	}
+    	} else if (!board.isAi()) {
+    		if(currentPlayer == 0){
+    			message = "Player 1";
+        	} else {
+        		message = "Player 2";
+        	}
+    		
+    		message += " " + "wins!";
     	}
-    	System.out.println();
     	
+    	System.out.println(message);
     	for(int i = 0; i < Board.NUM_COLS; i++){
     		try {
 				columnButtons.get(i).setBackgroundImg(colBlank);
@@ -236,7 +260,16 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 
 			}
     	}
- 
+    	display.setText(message);
+    	display.setForeground(new Color(122, 160, 170));
+    	display.setBackground(new Color(233,232,207));
+    	display.setFont(new Font("Myriad Pro", Font.BOLD, 30));
+		display.setPreferredSize(new Dimension(125,110));
+		display.setHorizontalAlignment(SwingConstants.CENTER);
+		display.setBorder(BorderFactory.createLineBorder(Color.black));
+    	
+    	overlayFrame.add(display);
+    	
     	overlayFrame.setVisible(true);
     	
     }
@@ -245,7 +278,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	Timer timer = new Timer(500, new ActionListener() {
 	       public void actionPerformed(ActionEvent evt) {
 	    	   if(!board.isGameOver()) return;
-	    	   displayWinner(board.getPreviousPlayer());
+	    	   displayWinner(board.getPreviousPlayer(), board.isAi(), display);
 	       }
 	     });
 	     timer.setRepeats(false);
