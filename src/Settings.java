@@ -46,11 +46,9 @@ public class Settings extends JPanel implements ActionListener{
 		setLayout(new GridLayout(3, 2));
 		background = new Color(233,232,207);
 		setOpaque(false);
-		
-		theme = "Classic";				// add this line
+		theme = "Classic";				
 		
 		standard = new Dimension(125, 70);
-//		text = new Color(122, 160, 170);
 		text = new Color(78, 128, 166);
 		style = new Font("Myriad Pro", Font.BOLD, 17);
 		
@@ -96,6 +94,11 @@ public class Settings extends JPanel implements ActionListener{
 		add(themeDropDown);
 	}
 	
+	/**
+	 * Action for the combo boxes. Sets theme as string.
+	 * Turns opponent choice into a number 0 - 3 inclusive.
+	 * 0 meaning a second person. 1-3 meaning Ai easy - hard.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JComboBox activeBox = (JComboBox) e.getSource();
@@ -117,9 +120,12 @@ public class Settings extends JPanel implements ActionListener{
 		
 	}
 	
+	/**
+	 * Sets the background field according to the theme
+	 * @param theme
+	 */
 	public void setThemeBackground(Color theme) {
 		background = theme;
-		
 	}
 
 	/**

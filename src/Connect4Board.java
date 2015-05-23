@@ -278,6 +278,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 
 			}
     	}
+    	
+    	closeOverlay.setForeground(sidebar.getBackgroundTheme());
+    	overlayFrame.setBackground(sidebar.getBackgroundTheme());
+    	
     	display.setText(message);
     	
     	overlayFrame.add(display);

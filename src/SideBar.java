@@ -79,7 +79,6 @@ public class SideBar extends JPanel implements ActionListener {
 	 */
 	private void initialisePanels() {
 		
-		
 		header = new JLabel();
 		header.setIcon(headerImage);
 		header.setPreferredSize(new Dimension(250,110));
@@ -87,7 +86,6 @@ public class SideBar extends JPanel implements ActionListener {
 		newGameButton.setFont(fontStyle);
 		newGameButton.setForeground(text);
 		newGameButton.setOpaque(true);
-		
 		
 		padding.setPreferredSize(new Dimension(250, 100));
 		
@@ -106,6 +104,13 @@ public class SideBar extends JPanel implements ActionListener {
 	public Dimension getPreferredSize() {
         return new Dimension(250,550);
     }
+	
+
+	public void paintComponent(Graphics g)
+	{
+	   super.paintComponent(g);
+	   setBackground(background);
+	}
 	
 	/**
 	 * Gives access to the newGameButton
@@ -137,38 +142,56 @@ public class SideBar extends JPanel implements ActionListener {
 		return gameSettings;
 	}
 	
+	/**
+	 * Gives access to the game's status bar
+	 * which only appear when game is in progress
+	 * It displays the current player
+	 * @return
+	 */
 	public StatusBar getStatus(){
 		return gameStatus;
 	}
 
-	public void paintCompoent(Graphics g)
-	{
-	   super.paintComponent(g);
-	   setBackground(background);
-	}
 	
+	/**
+	 * Setter which sets the background and text
+	 * color for each theme
+	 * @param theme as a string
+	 */
 	public void setColorTheme(String theme) {
 		if(theme.equals("Classic")) {
 			text = new Color(78, 128, 166);
 			
 			background = new Color(233,232,207);
-			gameStatus.setBackgroundShade(background);
 		} else if (theme.equals("2016 Election")) {
 			background = new Color(230,230,230);
-			gameStatus.setBackgroundShade(background);
 		} else if (theme.equals("Wes Anderson")){
-			//text = new Color(231, 196, 76);
 			background = new Color(231, 196, 76);
-			gameStatus.setBackgroundShade(background);
 		} else {
 			background = new Color(230,219,166);
-			gameStatus.setBackgroundShade(background);
 		}
 		setBackground(background);
-		newGameButton.setForeground(text);
-		
+		gameStatus.setBackgroundShade(background);
+		//newGameButton.setForeground(text);
+	}
+	
+	/**
+	 * Gets the current background Color used 
+	 * @return Color used for the background of the sidebar
+	 */
+	public Color getBackgroundTheme() {
+		return background;
 	}
 
+	/**
+	 * Actions to be taken when New Game button has been pressed
+	 * It changes the icons according to chosen theme
+	 * It reveals the status bar
+	 * It initializes the current player for the sidebar
+	 * It clears the connect 4 board
+	 * It tells connect 4 board to setup the game according to the 
+	 * chosen settings
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == newGameButton){
@@ -183,8 +206,6 @@ public class SideBar extends JPanel implements ActionListener {
 
 			}
 			connect4Board.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
-			//connect4Board.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
-			//getStatus().setThemedIcon(gameSettings.getTheme());
 		}
 	}
 }
