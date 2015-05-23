@@ -54,6 +54,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         display = new JLabel();
         display.setForeground(new Color(122, 160, 170));
     	display.setBackground(new Color(233,232,207));
+    	display.setFont(new Font("Myriad Pro", Font.BOLD, 30));
+		display.setPreferredSize(new Dimension(125,110));
+		display.setHorizontalAlignment(SwingConstants.CENTER);
+		display.setBorder(BorderFactory.createLineBorder(Color.black));
         
         overlayFrame = new JFrame();
     
@@ -235,25 +239,36 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
      * @param isAi
      */
     public void displayWinner(int currentPlayer, boolean isAi, JLabel display){
-    	String message = "";
-    
+    	String message = "<html><em><font color = #4e80a6>";
+    	int moves = board.getTurnNumber()/2;
     	sidebar.getStatus().hideStatus();
     	freezeBoard(true);
-    	if(board.isAi()) {
-    		if(currentPlayer == 0){
-        		message = "YOU WIN";
-        	} else {
-        		message = "YOU LOSE";
-        	}
-    	} else if (!board.isAi()) {
-    		if(currentPlayer == 0){
-    			message = "Player 1";
-        	} else {
-        		message = "Player 2";
-        	}
-    		
-    		message += " " + "wins!";
+    	if(board.isTie()) {
+    		message += "GAME TIED";
+    	} else {
+    		if(board.isAi()) {
+        		if(currentPlayer == 0){
+            		message += "YOU WIN";
+            		moves += 1;
+            	} else {
+            		message += "YOU LOSE";
+            	}
+        	} else if (!board.isAi()) {
+        		if(currentPlayer == 0){
+        			message += "PLAYER 1";
+        			moves += 1;
+            	} else {
+            		message += "PLAYER 2";
+            	}
+        		
+        		message += " " + "WINS!";
+        	}	
     	}
+    	
+    	
+    	message += "<font></em><br><br><font size = 6>";
+    	message += "Moves: " + moves ;
+    	message += "</font></html>";
     	
     	System.out.println(message);
     	for(int i = 0; i < Board.NUM_COLS; i++){
@@ -265,22 +280,20 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	}
     	display.setText(message);
     	
-    	display.setFont(new Font("Myriad Pro", Font.BOLD, 30));
-		display.setPreferredSize(new Dimension(125,110));
-		display.setHorizontalAlignment(SwingConstants.CENTER);
-		display.setBorder(BorderFactory.createLineBorder(Color.black));
-    	
     	overlayFrame.add(display);
-    	
     	overlayFrame.setVisible(true);
     	
     }
     
+    /**
+     * needs to display TIED result and needs to display number of moves 
+     * @throws InterruptedException
+     */
     public void delayOverlay() throws InterruptedException{    
     	Timer timer = new Timer(500, new ActionListener() {
 	       public void actionPerformed(ActionEvent evt) {
 	    	   if(!board.isGameOver()) return;
-	    	   displayWinner(board.getPreviousPlayer(), board.isAi(), display);
+	    		  displayWinner(board.getPreviousPlayer(), board.isAi(), display); 
 	       }
 	     });
 	     timer.setRepeats(false);

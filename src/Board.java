@@ -60,6 +60,18 @@ public class Board{
 	}
 	
 	/**
+	 * checks if game over was a tie
+	 * @return
+	 */
+	public boolean isTie() {
+		if(isFull()) {
+			if(!checkFour(lastMove, currentPlayer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
 	 * Checks if a column is full. If the last element in the column (top of the column) 
 	 * is not empty, then it is full.
 	 * 
