@@ -20,7 +20,6 @@ public class StatusBar extends JPanel{
 	private Color backgroundShade;
 	private Color text;
 	
-	
 	/**
 	 * 
 	 * @param isTwoPlayer
@@ -36,7 +35,7 @@ public class StatusBar extends JPanel{
 		setBackground(text);
 		
 		turn = new JLabel();
-		turn.setFont(new Font("Myriad Pro", Font.BOLD, 15));
+		turn.setFont(new Font("Myriad Pro", Font.BOLD, 17));
 		turn.setPreferredSize(new Dimension(125,110));
 		turn.setHorizontalAlignment(SwingConstants.CENTER);
 		
@@ -57,6 +56,38 @@ public class StatusBar extends JPanel{
 		
 	}
 	
+	public void setThemedIcon(String theme) {
+		
+		ImageIcon token1;
+		ImageIcon token2;
+		Image toAdd;
+		if(theme.equals("Classic")) {
+			token1 = new ImageIcon("token1.png");
+			token2 = new ImageIcon("token2.png");
+			/*player1Icon = new ImageIcon("token1.png");
+			player2Icon = new ImageIcon("token2.png");
+			Image image = player2Icon.getImage().getScaledInstance(90, 90, 0);
+			player2Icon = new ImageIcon(image);*/
+		} else if (theme.equals("2016 Election")) {
+			token1 = new ImageIcon("abbott1.png");
+			token2 = new ImageIcon("shorten2.png");
+		} else if (theme.equals("Wes Anderson")) {
+			token1 = new ImageIcon("lobby1.png");
+			token2 = new ImageIcon("racoon2.png");
+		} else {
+			token1 = new ImageIcon("retro1.png");
+			token2 = new ImageIcon("retro2.png");
+		}
+		toAdd = token1.getImage().getScaledInstance(90, 90, 0);
+		player1Icon = new ImageIcon(toAdd);
+		toAdd = token2.getImage().getScaledInstance(90, 90, 0);
+		player2Icon = new ImageIcon(toAdd);
+	}
+	
+	public void setBackgroundShade(Color newShade) {
+		backgroundShade = newShade;
+	}
+	
 	/**
 	 * Do not use this function. Use Next Player in SideBar
 	 * @precondition Values should be according to the below when
@@ -70,7 +101,7 @@ public class StatusBar extends JPanel{
 			if(player == 1) {
 				
 				turn.setText("<html>Player 2<br> Turn</html>");
-				turnAnswer.setIcon(player1Icon);
+					turnAnswer.setIcon(player1Icon);
 			} else {
 				turn.setText("<html>Player 1<br>Turn</html>");
 				turnAnswer.setIcon(player2Icon);

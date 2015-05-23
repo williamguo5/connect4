@@ -35,6 +35,28 @@ public class ColumnButton extends JLayeredPane{
 	}
 	
 	/**
+	 * Sets the type of token to be dropped in the column
+	 * according to the theme
+	 * @param current theme from the setting (String)
+	 * @throws IOException
+	 */
+	public void setToken(String theme) throws IOException {
+		if(theme.equals("Classic")) {
+			 player1 = ImageIO.read(new File("token1.png"));
+		     player2 = ImageIO.read(new File("token2.png"));
+		} else if (theme.equals("2016 Election")){
+			player1 = ImageIO.read(new File("abbott1.png"));
+	        player2 = ImageIO.read(new File("shorten2.png"));
+		} else if (theme.equals("Wes Anderson")){
+			player1 = ImageIO.read(new File("lobby1.png"));
+	        player2 = ImageIO.read(new File("racoon2.png"));
+		} else if (theme.equals("Retro")){
+			player1 = ImageIO.read(new File("retro1.png"));
+	        player2 = ImageIO.read(new File("retro2.png"));
+		}
+	};
+	
+	/**
 	 * Adds and sets the initial states of all tokens
 	 */
 	public void generateTokens(){

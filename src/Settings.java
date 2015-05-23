@@ -24,7 +24,7 @@ public class Settings extends JPanel implements ActionListener{
 	
 	private String[] opponentChoices = {"Human", "Easy", "Intermediate", "Hard"};
 	private String[] defaultPlayer= {"Human"};
-	private String[] themeChoices = {"Classic", "Marvel"};
+	private String[] themeChoices = {"Classic", "2016 Election", "Wes Anderson", "Retro"};
 	
 	/**
 	 * In player 2 field:
@@ -46,6 +46,8 @@ public class Settings extends JPanel implements ActionListener{
 		setLayout(new GridLayout(3, 2));
 		background = new Color(233,232,207);
 		setOpaque(false);
+		
+		theme = "Classic";				// add this line
 		
 		standard = new Dimension(125, 70);
 //		text = new Color(122, 160, 170);
@@ -112,6 +114,11 @@ public class Settings extends JPanel implements ActionListener{
 		} else if (activeBox == themeDropDown) {
 			theme = choice;	// could be changed to ints like above if easier
 		}
+		
+	}
+	
+	public void setThemeBackground(Color theme) {
+		background = theme;
 		
 	}
 

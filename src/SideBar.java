@@ -54,7 +54,7 @@ public class SideBar extends JPanel implements ActionListener {
 	public SideBar(Connect4Board connect4Board) throws IOException {
 		super();
 		this.connect4Board = connect4Board;
-		//setLayout(new GridLayout(4, 1, 10, 10));		; make it scalablish 
+		//setLayout(new GridLayout(4, 1, 10, 10));		
 		fontStyle = new Font("Myriad Pro", Font.BOLD, 20);
 //		text = new Color(122, 160, 170);
 		text = new Color(78, 128, 166);
@@ -69,6 +69,7 @@ public class SideBar extends JPanel implements ActionListener {
 		newGameButton = new JButton("NEW GAME");
 		newGameButton.setPreferredSize(new Dimension(250, 40));
 		newGameButton.addActionListener(this);
+		newGameButton.setBackground(null);
 		initialisePanels();
 	}
 	
@@ -85,7 +86,6 @@ public class SideBar extends JPanel implements ActionListener {
 		
 		newGameButton.setFont(fontStyle);
 		newGameButton.setForeground(text);
-		newGameButton.setBackground(background);
 		newGameButton.setOpaque(true);
 		
 		
@@ -146,10 +146,35 @@ public class SideBar extends JPanel implements ActionListener {
 	   super.paintComponent(g);
 	   setBackground(background);
 	}
+	
+	public void setColorTheme(String theme) {
+		if(theme.equals("Classic")) {
+			text = new Color(78, 128, 166);
+			
+			background = new Color(233,232,207);
+			gameStatus.setBackgroundShade(background);
+		} else if (theme.equals("2016 Election")) {
+			background = new Color(230,230,230);
+			gameStatus.setBackgroundShade(background);
+		} else if (theme.equals("Wes Anderson")){
+			//text = new Color(231, 196, 76);
+			background = new Color(231, 196, 76);
+			gameStatus.setBackgroundShade(background);
+		} else {
+			background = new Color(230,219,166);
+			gameStatus.setBackgroundShade(background);
+		}
+		setBackground(background);
+		newGameButton.setForeground(text);
+		
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == newGameButton){
+
+			getStatus().setThemedIcon(gameSettings.getTheme());
+			setColorTheme(gameSettings.getTheme());
 			gameStatus.revealStatus();
 			nextPlayer(1);
 			try {
@@ -158,6 +183,8 @@ public class SideBar extends JPanel implements ActionListener {
 
 			}
 			connect4Board.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
+			//connect4Board.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
+			//getStatus().setThemedIcon(gameSettings.getTheme());
 		}
 	}
 }

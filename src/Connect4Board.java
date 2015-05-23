@@ -34,6 +34,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	private boolean generatedBoard;
 	private SideBar sidebar;
 	private JFrame overlayFrame;
+	private String theme;
 	
 	/**
 	 * Constructor for a connect4 GUI
@@ -46,7 +47,8 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         colBlank = "colBlank.png";
         colMouseOver = "colMouseOver.png";
         colClick = "colClick.png";
-        setBackgroundImg("board3.png");
+        setBackgroundImg("land.png");
+        theme = "Classic";
         
         overlayFrame = new JFrame();
 //    	overlayFrame.setBackground(Color.red);
@@ -217,6 +219,8 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     public void displayWinner(int currentPlayer){
     	
     	freezeBoard(true);
+    	
+    	sidebar.getStatus().hideStatus();
     	System.out.print("Winner is: ");
     	if(currentPlayer == 0){
     		System.out.print("Yellow");
@@ -260,8 +264,18 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	System.out.println(this.getWidth() + " " + this.getHeight());
     }
     
-    public void setBoardSettings(int aiSetting, String theme){
+    public void setBoardSettings(int aiSetting, String themeChosen){
     	board.setAI(aiSetting);
+    	//theme = themeChosen;
+    	
+    	for(int i = 0; i < Board.NUM_COLS; i++) {
+    		try {
+				columnButtons.get(i).setToken(themeChosen);
+			} catch (IOException e) {
+				
+			}
+    	}
+    	
     }
     
     public void setStatus(int currentPlayer){
