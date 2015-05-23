@@ -52,6 +52,9 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         setBackgroundImg("land.png");
         theme = "Classic";
         display = new JLabel();
+        display.setForeground(new Color(122, 160, 170));
+    	display.setBackground(new Color(233,232,207));
+        
         overlayFrame = new JFrame();
     
     	overlayFrame.setUndecorated(true);
@@ -261,8 +264,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 			}
     	}
     	display.setText(message);
-    	display.setForeground(new Color(122, 160, 170));
-    	display.setBackground(new Color(233,232,207));
+    	
     	display.setFont(new Font("Myriad Pro", Font.BOLD, 30));
 		display.setPreferredSize(new Dimension(125,110));
 		display.setHorizontalAlignment(SwingConstants.CENTER);
