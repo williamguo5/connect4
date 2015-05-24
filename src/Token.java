@@ -1,13 +1,21 @@
+import java.awt.*;
+import javax.swing.*;
 
-public class Token {
+
+public class Token extends JPanel {
+	private Image backgroundImage;
 	
-    private int playerID;
-
-    public Token(int ID) {
-        playerID = ID;
+	public Dimension getPreferredSize() {
+        return new Dimension(80,80);
     }
-
-    public int getPlayerID() {
-        return playerID;
+	
+	public void paintComponent(Graphics g) {
+//        super.paintComponent(g);       
+        
+		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }
+	
+	public void setBackgroundImg(Image image){
+        backgroundImage = image;
+	}
 }

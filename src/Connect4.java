@@ -1,54 +1,78 @@
-import java.util.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.io.IOException;
+
+import javax.swing.*;
 
 public class Connect4 {
 
-	private int turnNumber;
-	private int player;
+	private Connect4Board connect4Board;
+//	private Board board;
+	private JFrame mainFrame;
+	private SideBar sidebar;
 	
-    private Board board;
-
-    public Connect4() {
-    	board = new Board();
-    }
-
-    public static void main(String[] args) {
+	 public static void main(String[] args) throws IOException{
+    	final Connect4 c4 = new Connect4();
     	
-    	Connect4 c4 = new Connect4();
-    	int i = 0;
-    	while (!c4.gameOver()) {
-    		c4.board.printBoard();
-    		c4.board.getColumn(0).addToken(1);
-    		c4.board.getColumn(1).addToken(1);
-    		c4.board.getColumn(2).addToken(1);
-    		c4.board.getColumn(3).addToken(1);
-    		c4.board.getColumn(4).addToken(1);
-    		c4.board.getColumn(5).addToken(1);
-    		c4.board.getColumn(6).addToken(1);
-    		i++;
-    		//if (i == 2) break;
-    		c4.board.printBoard();
-    		System.out.println(">>>>>>");
-    	}
     	
+		// display the main window in a different thread.
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	c4.display();
+            }
+        });	
     }
-    
-    public int getTurn() {
-    	return turnNumber;
-    }
-    
-    public int getPlayer() {
-    	return player;
-    }
-    
-    public Board getBoard() {
-    	return board;
-    }
-    
-    public boolean gameOver() {
-    	if (board.isFull()) {
-    		
-    		return true;
-    	}
-    	return false;
-    }
+	
+	public Connect4() throws IOException {
+		mainFrame = new JFrame("Connect 4");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+//		board = new Board();
+		
+		connect4Board = new Connect4Board();
+		sidebar = new SideBar(connect4Board);
+		connect4Board.setSidebar(sidebar);
+//		sideBar = new SideBar();
+		mainFrame.setSize(new Dimension(900,570));
+		mainFrame.addComponentListener(new ComponentAdapter() {
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int width = mainFrame.getWidth();
+				int height = mainFrame.getWidth()*19/30;
+				if(width < 900) width = 900;
+				mainFrame.setSize(width, height);
+				int overlayWidth = connect4Board.getWidth()*9/13;
+				connect4Board.getOverlay().setSize(overlayWidth, overlayWidth*4/5);
+				System.out.println(mainFrame.getSize());
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				System.out.println("moved");
+				System.out.println(mainFrame.getLocationOnScreen());
+				int x = mainFrame.getLocation().x;
+				int y = mainFrame.getLocation().y; 
+				connect4Board.getOverlay().setLocation(x + 350, y + 120);
+			}
+		});		
+		// newgame - resets the board with the input settings		
+		
+	}
+	
+	/**
+	 * Method to display the main window
+	 */
+	public void display() {
+		mainFrame.getContentPane().add(connect4Board,BorderLayout.CENTER);
+		mainFrame.getContentPane().add(sidebar, BorderLayout.WEST);
+//		mainFrame.pack();
+        mainFrame.setVisible(true);
+	}
 }

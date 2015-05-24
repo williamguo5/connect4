@@ -4,7 +4,7 @@ import java.util.Random;
 //attempt to lower difficulty of AI to intermediate level
 //depth of future state computations decreased and simplified cost calculations of boards in future states
 //changed costs to make AI less aggressive to win and block slightly more often
-public class IntermediateAI implements Player {
+public class testAI implements Player {
     static int MAX_DEPTH = 6;
 
     //Remember to pass in a clone of the state
@@ -12,12 +12,14 @@ public class IntermediateAI implements Player {
         System.out.println("SIMULATION");
         if (state.getTurnNumber() == 1) {
             Random randomGenerator = new Random();
-            int randomNumber = randomGenerator.nextInt(2);
+            int randomNumber = randomGenerator.nextInt(3);
             if (randomNumber == 0) {
                 return 2;
             } else if (randomNumber == 1){
+                return 3;
+            } else{
                 return 4;
-            } 
+            }
         }
         return calculateMove(state.clone());
     }
@@ -31,7 +33,7 @@ public class IntermediateAI implements Player {
                 clone.simDropToken(col);
                 double score = alphabeta(clone, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
                 System.out.println("SCORE " + score);
-                if (score >= maxScore) {
+                if (score > maxScore) {
                     maxScore = score;
                     move = col;
                     if (score == 1) break;
@@ -93,17 +95,17 @@ public class IntermediateAI implements Player {
 
                 //Previous player single horizontal counter checks
 
-               if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 200;
+                if (state.getBoard()[row][col] == state.getCurrentPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
+                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 150;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getCurrentPlayer() &&
-                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 200;
+                    state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 150;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 200;
+                        state.getBoard()[row][col + 2] == state.getCurrentPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score -= 150;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 200;
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 150;
 
                 //Current player(player has to yet to make a move) single horizontal counter checks
 
@@ -111,10 +113,10 @@ public class IntermediateAI implements Player {
                         state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 50;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == state.getPreviousPlayer() &&
-                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 50;
+                        state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
-                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 50;
+                        state.getBoard()[row][col + 2] == state.getPreviousPlayer() && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
 
                 if (state.getBoard()[row][col] == Board.EMPTY && state.getBoard()[row][col + 1] == Board.EMPTY &&
                         state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getPreviousPlayer()) score += 50;
@@ -124,4 +126,7 @@ public class IntermediateAI implements Player {
         return score;
 
     }
+
+
+    //Insert heuristic function
 }
