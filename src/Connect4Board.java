@@ -70,7 +70,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	overlayFrame.pack();
     	
         closeOverlay = new JButton("Close");
-        closeOverlay.setPreferredSize(new Dimension(50, 50));
+       // closeOverlay.setPreferredSize(new Dimension(50, 50));
 //        overlayImage = ImageIO.read(new File("background2.png"));
       
 		
