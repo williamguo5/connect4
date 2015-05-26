@@ -15,13 +15,13 @@ public class Board{
 	private int previousPlayer;
 	private int turnNumber;
 	private boolean gameOver;
-	private Connect4Board connect4Board;
+	private GUIBoard guiBoard;
 	private Player ai;
     private boolean isSimulation;
 	
 	// initialise board to be EMPTY
-	public Board(Connect4Board connect4Board){
-		this.connect4Board = connect4Board;
+	public Board(GUIBoard guiBoard){
+		this.guiBoard = guiBoard;
 		
 		ai = null;
 //		ai = new ExpertAI();
@@ -129,10 +129,10 @@ public class Board{
 			System.out.println("GAME OVER, DRAW");
 		}
 
-		connect4Board.displayToken(currentPlayer, lastMove);
+		guiBoard.displayToken(currentPlayer, lastMove);
 		printBoard();
 		nextTurn();
-		connect4Board.setStatus(currentPlayer);
+		guiBoard.setStatus(currentPlayer);
 	}
 	
 	public void simDropToken(int colNum) { 
@@ -421,7 +421,7 @@ public class Board{
 	}
 	
 	public Board clone(){
-		Board boardClone = new Board(connect4Board);
+		Board boardClone = new Board(guiBoard);
 		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
 		for(int j = 0; j < NUM_COLS; j++){
 			for(int i = 0; i < NUM_ROWS; i++){

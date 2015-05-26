@@ -2,17 +2,25 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.swing.*;
 
 public class Connect4 {
 
-	private Connect4Board connect4Board;
+	private GUIBoard guiBoard;
 //	private Board board;
 	private JFrame mainFrame;
 	private SideBar sidebar;
@@ -35,33 +43,86 @@ public class Connect4 {
 		
 //		board = new Board();
 		
-		connect4Board = new Connect4Board();
-		sidebar = new SideBar(connect4Board);
-		connect4Board.setSidebar(sidebar);
+		guiBoard = new GUIBoard();
+		sidebar = new SideBar(guiBoard);
+		guiBoard.setSidebar(sidebar);
 //		sideBar = new SideBar();
-		mainFrame.setSize(new Dimension(900,570));
+		mainFrame.setSize(new Dimension(890,570));
 		mainFrame.addComponentListener(new ComponentAdapter() {
-			
+			boolean overlayed = false;
+			JFrame overlayFrame = guiBoard.getOverlayFrame();
+			int boardWidth = guiBoard.getWidth();
 			@Override
 			public void componentResized(ComponentEvent e) {
 				int width = mainFrame.getWidth();
 				int height = mainFrame.getWidth()*19/30;
-				if(width < 900) width = 900;
+				if(width < 890) width = 890;
 				mainFrame.setSize(width, height);
-				int overlayWidth = connect4Board.getWidth()*9/13;
-				connect4Board.getOverlay().setSize(overlayWidth, overlayWidth*4/5);
-				System.out.println(mainFrame.getSize());
+				int boardWidth = guiBoard.getWidth();
+				int overlayWidth = boardWidth*9/13;
+				guiBoard.getOverlay().setSize(overlayWidth, overlayWidth*4/5);
+				int x = mainFrame.getLocation().x;
+				int y = mainFrame.getLocation().y;
+				int overlayHeight = guiBoard.getHeight();
+
+				guiBoard.getOverlayFrame().setLocation(256 + boardWidth/7,140);
+				guiBoard.getOverlayFrame().setLocation(x + 258 + boardWidth/7, y + 117);
 			}
 			
 			@Override
 			public void componentMoved(ComponentEvent e) {
-				System.out.println("moved");
-				System.out.println(mainFrame.getLocationOnScreen());
 				int x = mainFrame.getLocation().x;
 				int y = mainFrame.getLocation().y; 
-				connect4Board.getOverlay().setLocation(x + 350, y + 120);
+				int boardWidth = guiBoard.getWidth();
+				guiBoard.getOverlayFrame().setLocation(x + 258 + boardWidth/7, y + 117);
 			}
-		});		
+		});	
+		mainFrame.addWindowListener(new WindowAdapter() {
+		
+			boolean overlayed = false;
+			JFrame overlayFrame = guiBoard.getOverlayFrame();
+			@Override
+			public void windowIconified(WindowEvent e) {
+				if(overlayFrame.isVisible()){
+					overlayed = true;
+					overlayFrame.setVisible(false);
+				}
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				if(overlayed){
+					overlayFrame.setVisible(true);
+//					overlayFrame.toFront();
+				}
+			}
+		});
+		
+		guiBoard.getOverlayFrame().addWindowFocusListener(new WindowFocusListener() {
+			boolean overlayed = false;
+			JFrame overlayFrame = guiBoard.getOverlayFrame();
+
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				if(overlayed){
+					overlayFrame.setVisible(true);
+//					overlayFrame.setAlwaysOnTop(true);
+				}				
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				if(overlayFrame.isVisible()){
+					overlayed = true;
+					overlayFrame.setVisible(false);
+//					overlayFrame.setAlwaysOnTop(false);
+//					overlayFrame.toBack();
+				}
+				
+			}
+		});
+		
+    	
 		// newgame - resets the board with the input settings		
 		
 	}
@@ -70,7 +131,7 @@ public class Connect4 {
 	 * Method to display the main window
 	 */
 	public void display() {
-		mainFrame.getContentPane().add(connect4Board,BorderLayout.CENTER);
+		mainFrame.getContentPane().add(guiBoard,BorderLayout.CENTER);
 		mainFrame.getContentPane().add(sidebar, BorderLayout.WEST);
 //		mainFrame.pack();
         mainFrame.setVisible(true);

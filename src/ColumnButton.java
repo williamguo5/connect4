@@ -26,9 +26,9 @@ public class ColumnButton extends JLayeredPane{
         	tokens.add(t);
         }
        
-        player1 = ImageIO.read(new File("token1.png"));
-        player2 = ImageIO.read(new File("token2.png"));
-        player0 = ImageIO.read(new File("tokenBlank.png"));        
+        player1 = ImageIO.read(new File("assets/token1.png"));
+        player2 = ImageIO.read(new File("assets/token2.png"));
+        player0 = ImageIO.read(new File("assets/tokenBlank.png"));        
         
         generateTokens();
 //		repaint();
@@ -42,17 +42,17 @@ public class ColumnButton extends JLayeredPane{
 	 */
 	public void setToken(String theme) throws IOException {
 		if(theme.equals("Classic")) {
-			 player1 = ImageIO.read(new File("token1.png"));
-		     player2 = ImageIO.read(new File("token2.png"));
+			 player1 = ImageIO.read(new File("assets/token1.png"));
+		     player2 = ImageIO.read(new File("assets/token2.png"));
 		} else if (theme.equals("2016 Election")){
-			player1 = ImageIO.read(new File("abbott1.png"));
-	        player2 = ImageIO.read(new File("shorten2.png"));
+			player1 = ImageIO.read(new File("assets/abbott1.png"));
+	        player2 = ImageIO.read(new File("assets/shorten2.png"));
 		} else if (theme.equals("Wes Anderson")){
-			player1 = ImageIO.read(new File("lobby1.png"));
-	        player2 = ImageIO.read(new File("racoon2.png"));
+			player1 = ImageIO.read(new File("assets/lobby1.png"));
+	        player2 = ImageIO.read(new File("assets/racoon2.png"));
 		} else if (theme.equals("Retro")){
-			player1 = ImageIO.read(new File("retro1.png"));
-	        player2 = ImageIO.read(new File("retro2.png"));
+			player1 = ImageIO.read(new File("assets/retro1.png"));
+	        player2 = ImageIO.read(new File("assets/retro2.png"));
 		}
 	};
 	
