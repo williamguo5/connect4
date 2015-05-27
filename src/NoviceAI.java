@@ -1,4 +1,7 @@
-
+/**
+ * Novice AI looks at the next possible move for itself and the opponent, as well as the last move made by the opponent
+ * and makes a move based on those factors. 
+ */
 public class NoviceAI implements Player {
 	public int getMove(Board state) {
 		int move = 0;
