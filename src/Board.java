@@ -35,9 +35,14 @@ public class Board{
 		else return true;
 	}
 	
+	/**
+	 * 
+	 * @return the turn number
+	 */
 	public int getTurnNumber() {
 		return turnNumber;
 	}
+	
 	/**
 	 * Resets the board to initial state
 	 */
@@ -71,6 +76,7 @@ public class Board{
 		}
 		return false;
 	}
+	
 	/**
 	 * Checks if a column is full. If the last element in the column (top of the column) 
 	 * is not empty, then it is full.
@@ -135,12 +141,18 @@ public class Board{
 		guiBoard.setStatus(currentPlayer);
 	}
 	
+	/**
+	 * Drops token in the given column for the current player but does not update GUI
+	 * <p>
+	 * Used only by AIs in analysis
+	 * 
+	 * @param colNum 
+	 */
 	public void simDropToken(int colNum) { 
 		//used when AI is simulating game states
 		//won't update GUI
 		if(gameOver) return;
 		if(isColumnFull(colNum)){
-//			System.out.println("COL FULL");
 			return;
 		}
 		int pos = getColumnSize(colNum);
@@ -148,9 +160,7 @@ public class Board{
 		updateLast(pos, colNum);
 		if(checkFour(lastMove, currentPlayer)){
 			gameOver = true;
-//			System.out.println("GAME OVER");
 		}
-		//printBoard();
 		nextTurn();
 	}
 	
@@ -312,6 +322,11 @@ public class Board{
 //        }
 	}
 	
+	/**
+	 * Set the AI difficulty
+	 * 
+	 * @param index
+	 */
 	public void setAI(int index) {
 		if(index == 0){
 			ai = null;
@@ -324,6 +339,10 @@ public class Board{
 		}
 	}
 	
+	/**
+	 * Asks AI for a move
+	 * 
+	 */
 	public void aiMove(){
 		if(currentPlayer == 1 && ai != null){
 			
@@ -363,6 +382,10 @@ public class Board{
 		Thread.sleep(300);
 	}
 	
+	/**
+	 * 
+	 * @return  the most recent move
+	 */
 	public int[] getLastMove(){
 		return lastMove;
 	}
@@ -374,6 +397,10 @@ public class Board{
 		return currentPlayer;
 	}
 
+	/**
+	 * 
+	 * @return the id of the previous player
+	 */
     public int getPreviousPlayer() { return previousPlayer; }
     
 	/**

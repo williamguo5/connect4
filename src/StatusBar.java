@@ -56,6 +56,10 @@ public class StatusBar extends JPanel{
 		
 	}
 	
+	/**
+	 * Changes the current GUI theme
+	 * @param theme
+	 */
 	public void setThemedIcon(String theme) {
 		
 		ImageIcon token1;
