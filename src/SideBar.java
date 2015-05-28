@@ -15,6 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * This is a menu side bar which contains a information
+ * about the game state, drop down menus to alter
+ * settings and a new game button
  * When a NEW GAME is created (After New Game Button):
  * 		Call gameSettings.revealStatus();
  * 		Call this.nextPlayer(0);
@@ -53,10 +56,9 @@ public class SideBar extends JPanel implements ActionListener {
 	 */
 	public SideBar(GUIBoard connect4Board) throws IOException {
 		super();
-		this.guiBoard = connect4Board;
-		//setLayout(new GridLayout(4, 1, 10, 10));		
+		this.guiBoard = connect4Board;	
 		fontStyle = new Font("Myriad Pro", Font.BOLD, 20);
-//		text = new Color(122, 160, 170);
+
 		text = new Color(78, 128, 166);
 		background = new Color(233,232,207);
 		setBackground(background);
@@ -66,15 +68,17 @@ public class SideBar extends JPanel implements ActionListener {
 		gameStatus = new StatusBar();
 		padding = new JLabel();
 		gameSettings = new Settings();
+		
 		newGameButton = new JButton("NEW GAME");
 		newGameButton.setPreferredSize(new Dimension(250, 40));
 		newGameButton.addActionListener(this);
 		newGameButton.setBackground(null);
+		
 		initialisePanels();
 	}
 	
 	/**
-	 * Helper function for constructor
+	 * Helper function to the constructor
 	 * Adds all the necessary panels
 	 */
 	private void initialisePanels() {
@@ -94,18 +98,19 @@ public class SideBar extends JPanel implements ActionListener {
 		add(padding);
 		add(gameSettings);
 		add(newGameButton);
-		
 	}
 	
 
 	/**
-     * Set the size of the panel
+     * Set the size of the side bar panel
      */
 	public Dimension getPreferredSize() {
         return new Dimension(250,550);
     }
 	
-
+	/**
+	 * Set the background color of side bar
+	 */
 	public void paintComponent(Graphics g)
 	{
 	   super.paintComponent(g);
@@ -115,13 +120,16 @@ public class SideBar extends JPanel implements ActionListener {
 	/**
 	 * Gives access to the newGameButton
 	 * for connect4Board class
-	 * @return
+	 * @return newGameButton, JButton
 	 */
 	public JButton getNewGameButton() {
 		return newGameButton;
 	}
 	
 	/**
+	 * Sets the gameStatus bar with the whose turn
+	 * is next.
+	 * 
 	 * Pass in:
 	 * PLAYER 1 as ZERO
 	 * PLAYER 2 as ONE
@@ -136,7 +144,7 @@ public class SideBar extends JPanel implements ActionListener {
 	/**
 	 * Gives access to the gameSettings
 	 * for connect4Board class
-	 * @return
+	 * @return Settings JPanel 
 	 */
 	public Settings getSettings() {
 		return gameSettings;
@@ -144,9 +152,9 @@ public class SideBar extends JPanel implements ActionListener {
 	
 	/**
 	 * Gives access to the game's status bar
-	 * which only appear when game is in progress
+	 * which only appears when game is in progress
 	 * It displays the current player
-	 * @return
+	 * @return StatusBar, JPanel
 	 */
 	public StatusBar getStatus(){
 		return gameStatus;
@@ -155,7 +163,7 @@ public class SideBar extends JPanel implements ActionListener {
 	
 	/**
 	 * Setter which sets the background and text
-	 * color for each theme
+	 * color according to the chosen theme
 	 * @param theme as a string
 	 */
 	public void setColorTheme(String theme) {
@@ -164,7 +172,7 @@ public class SideBar extends JPanel implements ActionListener {
 			
 			background = new Color(233,232,207);
 		} else if (theme.equals("2016 Election")) {
-			background = new Color(230,230,230);
+			background = new Color(216,232,220);
 		} else if (theme.equals("Wes Anderson")){
 			background = new Color(231, 196, 76);
 		} else {
@@ -172,17 +180,20 @@ public class SideBar extends JPanel implements ActionListener {
 		}
 		setBackground(background);
 		gameStatus.setBackgroundShade(background);
-		//newGameButton.setForeground(text);
 	}
 	
 	/**
 	 * Gets the current background Color used 
-	 * @return Color used for the background of the sidebar
+	 * @return Color used for the background of the side bar
 	 */
 	public Color getBackgroundTheme() {
 		return background;
 	}
 	
+	/**
+	 * Updates the entire GUI after new game has been pressed
+	 * according to the settings selected.
+	 */
 	public void newGamePressed(){
 		getStatus().setThemedIcon(gameSettings.getTheme());
 		setColorTheme(gameSettings.getTheme());
@@ -200,7 +211,7 @@ public class SideBar extends JPanel implements ActionListener {
 	 * Actions to be taken when New Game button has been pressed
 	 * It changes the icons according to chosen theme
 	 * It reveals the status bar
-	 * It initializes the current player for the sidebar
+	 * It initializes the current player for the side bar
 	 * It clears the connect 4 board
 	 * It tells connect 4 board to setup the game according to the 
 	 * chosen settings

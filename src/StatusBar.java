@@ -11,7 +11,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-
+/**
+ * The Status bar lets the user know who's 
+ * turn is currently in play. It is hidden before
+ * a game starts and only appears when a game is 
+ * progress.
+ */
 public class StatusBar extends JPanel{
 	private JLabel turn;
 	private JLabel turnAnswer;
@@ -20,8 +25,9 @@ public class StatusBar extends JPanel{
 	private Color backgroundShade;
 	private Color text;
 	
+	
 	/**
-	 * 
+	 * Constructor for the status bar
 	 * @param isTwoPlayer
 	 * @throws IOException
 	 */
@@ -48,17 +54,17 @@ public class StatusBar extends JPanel{
 		Image image = player2Icon.getImage().getScaledInstance(90, 90, 0);
 		player2Icon = new ImageIcon(image);
 		
-		
 		hideStatus();
 		add(turn);
 		add(turnAnswer);
-//		revealStatus();
-		
 	}
 	
 	/**
-	 * Changes the current GUI theme
-	 * @param theme
+	 * Changes the current GUI theme. Colours the 
+	 * status bar background and sets the token
+	 * shown in status bar to correct tokens
+	 * @param theme string. If will set to 
+	 * retro if invalid string given
 	 */
 	public void setThemedIcon(String theme) {
 		
@@ -94,18 +100,17 @@ public class StatusBar extends JPanel{
 	
 	/**
 	 * Do not use this function. Use Next Player in SideBar
-	 * @precondition Values should be according to the below when
-	 * passed in
-	 * PLAYER 1 IS ONE
-	 * PLAYER 2 IS TWO
-	 * @param player
+	 * @param pass in either integer 1 or integer 2 for player 1 or 2
+	 * @param type refers to whether it is a human vs human 
+	 * game or human vs computer game. Type 0 refers to human 
+	 * vs human and Type 1, 2... refer to Ai opponent 
 	 */
 	public void setPlayer(int player, int type) {
 		if(type == 0) {
 			if(player == 1) {
 				
 				turn.setText("<html>Player 2<br> Turn</html>");
-					turnAnswer.setIcon(player1Icon);
+				turnAnswer.setIcon(player1Icon);
 			} else {
 				turn.setText("<html>Player 1<br>Turn</html>");
 				turnAnswer.setIcon(player2Icon);
@@ -123,12 +128,18 @@ public class StatusBar extends JPanel{
 	}
 	
 	
+	/**
+	 * Reveals status bar to player view
+	 */
 	public void revealStatus() {
 		setBackground(text);
 		turn.setForeground(backgroundShade);
 		turnAnswer.setIcon(player1Icon);
 	}
 	
+	/**
+	 * Hides the status bar from player view
+	 */
 	public void hideStatus() {
 		setBackground(backgroundShade);
 		turnAnswer.setIcon(null);
