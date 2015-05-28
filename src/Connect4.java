@@ -57,7 +57,7 @@ public class Connect4 {
 		sidebar = new SideBar(guiBoard);
 		guiBoard.setSidebar(sidebar);
 //		sideBar = new SideBar();
-		mainFrame.setSize(new Dimension(890,570));
+		mainFrame.setSize(new Dimension(940,570));
 		mainFrame.addComponentListener(new ComponentAdapter() {
 			boolean overlayed = false;
 			JFrame overlayFrame = guiBoard.getOverlayFrame();
@@ -65,8 +65,8 @@ public class Connect4 {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				width = mainFrame.getWidth();
-				height = mainFrame.getWidth()*19/30;
-				if(width < 890) width = 890;
+				height = mainFrame.getWidth()*570/940;
+				if(width < 940) width = 940;
 //				if(width)
 				mainFrame.setSize(width, height);
 				int boardWidth = guiBoard.getWidth();
