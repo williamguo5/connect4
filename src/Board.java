@@ -3,7 +3,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-
+/**
+ * Backend that contains the board representation, handles turns while telling GUI to update based on the changed board
+ * Also handles AI moves
+ */
 public class Board{
 	public static final int NUM_ROWS = 6;
 	public static final int NUM_COLS = 7;

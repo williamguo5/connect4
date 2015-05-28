@@ -19,6 +19,9 @@ import java.io.IOException;
 
 import javax.swing.*;
 
+/**
+ * Main system starts GUI and backend
+ */
 public class Connect4 {
 
 	private GUIBoard guiBoard;
@@ -40,6 +43,10 @@ public class Connect4 {
         });	
     }
 	
+	 /**
+	  * GUI setup with backend setup
+	  * @throws IOException
+	  */
 	public Connect4() throws IOException {
 		mainFrame = new JFrame("Connect 4");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
