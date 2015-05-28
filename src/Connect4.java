@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -24,6 +25,8 @@ public class Connect4 {
 //	private Board board;
 	private JFrame mainFrame;
 	private SideBar sidebar;
+	private int width;
+	private int height;
 	
 	 public static void main(String[] args) throws IOException{
     	final Connect4 c4 = new Connect4();
@@ -54,9 +57,10 @@ public class Connect4 {
 			int boardWidth = guiBoard.getWidth();
 			@Override
 			public void componentResized(ComponentEvent e) {
-				int width = mainFrame.getWidth();
-				int height = mainFrame.getWidth()*19/30;
+				width = mainFrame.getWidth();
+				height = mainFrame.getWidth()*19/30;
 				if(width < 890) width = 890;
+//				if(width)
 				mainFrame.setSize(width, height);
 				int boardWidth = guiBoard.getWidth();
 				int overlayWidth = boardWidth*9/13;
@@ -119,6 +123,20 @@ public class Connect4 {
 //					overlayFrame.toBack();
 				}
 				
+			}
+		});
+		guiBoard.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+		        guiBoard.setBorder(BorderFactory.createLineBorder(Color.blue));
+		        guiBoard.repaint();
+			}
+		
+			@Override
+			public void focusLost(FocusEvent e) {
+		        guiBoard.setBorder(BorderFactory.createLineBorder(Color.black));
+		        guiBoard.repaint();
 			}
 		});
 		

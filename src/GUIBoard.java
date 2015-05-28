@@ -131,6 +131,9 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 		        public void mouseReleased(MouseEvent e) {
 	    			if(boardFrozen) return;
 	    			try {
+	    				columnButtons.get(colSelected).setBackgroundImg(colBlank);
+						columnButtons.get(colSelected).repaint();
+						colSelected = colNum;
 	    	      		columnButtons.get(colNum).setBackgroundImg(colMouseOver);
 	    	      		columnButtons.get(colNum).repaint();
 	    	      		board.aiMove();
@@ -478,4 +481,18 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 			repaint();
 		}
 	}
+
+//	@Override
+//	public void focusGained(FocusEvent e) {
+//		System.out.println("focus gained");
+//        setBorder(BorderFactory.createLineBorder(Color.red));
+//        repaint();
+//	}
+//
+//	@Override
+//	public void focusLost(FocusEvent e) {
+//		System.out.println("focus lost");
+//        setBorder(BorderFactory.createLineBorder(Color.black));
+//        repaint();
+//	}
 }
