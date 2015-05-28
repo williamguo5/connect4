@@ -22,7 +22,9 @@ public class IntermediateAI implements Player {
     }
 
     /**
-     * 
+     * Calls the alpha-beta function on consecutive future turns
+     * originating from a single move and returns a score of that
+     * move
      * @param state
      * @return cost found from scanning given board 
      */
@@ -45,6 +47,15 @@ public class IntermediateAI implements Player {
         return move;
     }
 
+    /**
+     * Maximises AI player while minimising score of opponent player on future turns up to the value of depth
+     * @param state 
+     * @param depth
+     * @param alpha value to maximise
+     * @param beta value to minimise
+     * @param maximisingPlayer boolean for whether to maximise (AI's turn) or minimise
+     * @return score of the board state givne
+     */
     public double alphabeta(Board state, int depth, double alpha, double beta, boolean maximisingPlayer) {
         if (depth == 0 || state.isGameOver()) {
             double score = 0;
@@ -89,6 +100,12 @@ public class IntermediateAI implements Player {
         }
     }
 
+    /**
+     * Scans the board and adds or takes away score based on tokens located in given columns and the player which owns the token
+     * Takes away score for opponent turns and adds score for its own tokens
+     * @param state
+     * @return score found scanning the board
+     */
     public double calculateScore(Board state) {
         int score = 0;
 

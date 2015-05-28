@@ -88,8 +88,8 @@ public class Board{
 	 * Checks if a column is full. If the last element in the column (top of the column) 
 	 * is not empty, then it is full.
 	 * 
-	 * @param colNum
-	 * @return
+	 * @param colNum 
+	 * @return 
 	 */
 	public boolean isColumnFull(int colNum) {
 		if (board[NUM_ROWS - 1][colNum] == EMPTY) {
@@ -102,8 +102,8 @@ public class Board{
 	/**
 	 * Returns the size of a column, i.e. the number of tokens it contains
 	 * 
-	 * @param colNum
-	 * @return
+	 * @param colNum 
+	 * @return 
 	 */
 	public int getColumnSize(int colNum) {
 		int size = 0;
@@ -332,7 +332,7 @@ public class Board{
 	/**
 	 * Set the AI difficulty
 	 * 
-	 * @param index
+	 * @param index index of AI 
 	 */
 	public void setAI(int index) {
 		if(index == 0){
@@ -384,6 +384,9 @@ public class Board{
 		
 	}
 	
+	/**
+	 * Delay for displaying AI player's move
+	 */
 	public void delayDisplay() throws InterruptedException{      
 
 		Thread.sleep(300);
@@ -391,7 +394,7 @@ public class Board{
 	
 	/**
 	 * 
-	 * @return  the most recent move
+	 * @return the most recent move
 	 */
 	public int[] getLastMove(){
 		return lastMove;
