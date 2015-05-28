@@ -18,7 +18,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 
-
+/**
+ * Class holds all GUI objects and handles main GUI function
+ * Notifies backend of changes to game state
+ */
 public class GUIBoard extends JLayeredPane implements ActionListener{
 	
 	private Image backgroundImage;
@@ -204,6 +207,10 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	createKeyboardListeners();
 	}
     
+    /**
+     * Listens to keyboard presses when user wishes to use keyboard input to play
+     * @throws IOException
+     */
     public void createKeyboardListeners() throws IOException{
     	setFocusable(true);
 		requestFocusInWindow();
@@ -303,6 +310,10 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 		
     }
     
+    /**
+     * Removes highlight on column
+     * @throws IOException
+     */
     public void deselectColumns() throws IOException{
     	for(int i = 0; i < Board.NUM_COLS; i++){
 			columnButtons.get(i).setBackgroundImg(colBlank);
@@ -353,6 +364,11 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }
     
+    /**
+     * Sets board background
+     * @param fileName
+     * @throws IOException
+     */
     public void setBackgroundImg(String fileName) throws IOException {
         backgroundImage = ImageIO.read(new File(fileName));
     }
@@ -412,6 +428,10 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	
     }
     
+    /**
+     * 
+     * @return JFrame overlay
+     */
     public JFrame getOverlayFrame(){
     	return overlayFrame;
     }
@@ -431,6 +451,10 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 	     timer.start();
     }
     
+    /**
+     * Prevents inputs on the GUI when called
+     * @param canResize
+     */
     public void freezeBoard(boolean canResize){
     	JFrame frame = (JFrame)this.getRootPane().getParent();
     	if(canResize){
@@ -443,6 +467,11 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	System.out.println(this.getWidth() + " " + this.getHeight());
     }
     
+    /**
+     * Sets the theme and AI settings chosen by the user
+     * @param aiSetting
+     * @param themeChosen
+     */
     public void setBoardSettings(int aiSetting, String themeChosen){
     	requestFocusInWindow();
     	board.setAI(aiSetting);
@@ -458,6 +487,10 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	
     }
     
+    /**
+     * Changes setting bar to show current turn
+     * @param currentPlayer
+     */
     public void setStatus(int currentPlayer){
     	int type = 0;
     	if(board.isAi()){
@@ -466,10 +499,18 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	sidebar.getStatus().setPlayer(currentPlayer, type);
     }
     
+    /**
+     * Sets sidebar object
+     * @param sidebar 
+     */
     public void setSidebar(SideBar sidebar){
     	this.sidebar = sidebar;
     }
     
+    /**
+     * 
+     * @return JFrame overlay
+     */
     public JFrame getOverlay(){
     	return overlayFrame;
     }
