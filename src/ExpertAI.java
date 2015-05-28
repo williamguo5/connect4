@@ -5,11 +5,15 @@ import java.util.Random;
 public class ExpertAI implements Player {
     static int MAX_DEPTH = 6;
 
-    //Remember to pass in a clone of the state
+    /**
+     * Gets the optimal move when calling calculateMove functions
+     * @param state Sends in a clone of the board state to perform simulations in calculateMove
+     * @return Returns the a valid column
+     */
     public int getMove(Board state) {
         System.out.println("SIMULATION");
-//        System.out.println(1f);
-//        return 0;
+        //Initially the the calculateMove evaluates all possible moves as the same score,
+        // and the AI selects the first column
         if (state.getTurnNumber() == 1) {
             Random randomGenerator = new Random();
             int randomNumber = randomGenerator.nextInt(3);
@@ -24,30 +28,40 @@ public class ExpertAI implements Player {
         return calculateMove(state.clone());
     }
 
+    /**
+     * Calculates the optimal move for the board based on the opponents move
+     * @param state It is the current state of the cloned board.
+     * @return Returns the optimal column based on the minimax algorithm using alpha-beta pruning
+     */
     public int calculateMove(Board state) {
         double maxScore = Integer.MIN_VALUE;
         int move = 0;
         for (int col = 0; col < Board.NUM_COLS; col++) {
-            if (!state.isColumnFull(col)) {
-                Board clone = state.clone();
+            if (!state.isColumnFull(col)) { //Checks that the column is valid move
+                Board clone = state.clone(); //Clones the board state to simulate a move
                 clone.simDropToken(col);
                 double score = alphabeta(clone, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
                 System.out.println("SCORE " + score);
-                if (score > maxScore) {
+                if (score > maxScore) { //Always gets the max score
                     maxScore = score;
                     move = col;
-                    if (score == 1) break;
                 }
             }
         }
-//        if (move == 0) {
-//            Random randomGenerator = new Random();
-//            int randomNumber = randomGenerator.nextInt(3);
-//            move = randomNumber;
-//        }
         return move;
     }
 
+    /**
+     * Uses the minimax algorithm with alpha-beta pruning to simulate a tree depth of 6 moves. Then,
+     * it calls a heuristic function which evaluates the board state
+     * @param state Current state of the board
+     * @param depth The current move depth of the tree
+     * @param alpha THe max value of two scores for the maximising player
+     * @param beta THe min value of two scores for the minimising player
+     * @param maximisingPlayer A boolean which states if it's the AI's turn
+     * @return Returns a score if the depth reaches 0 or gameOver,
+     * otherwise it tries to prune non-optimal moves
+     */
     public double alphabeta(Board state, int depth, double alpha, double beta, boolean maximisingPlayer) {
         if (depth == 0 || state.isGameOver()) {
             double score = 0;
@@ -62,10 +76,6 @@ public class ExpertAI implements Player {
             }
             return score/(MAX_DEPTH - depth + 1); // The deeper you traverse, the lower your score is
         }
-
-//        if (depth <= 3) {
-//            return calculateScore(state);
-//        }
 
         if (maximisingPlayer) { //AI's turn
             for (int col = 0; col < Board.NUM_COLS; col++) {
@@ -96,6 +106,11 @@ public class ExpertAI implements Player {
         }
     }
 
+    /**
+     * Evaluates the current state of the board
+     * @param state Current state of the board
+     * @return An evaluated score of the curren state of the board
+     */
     public double calculateScore(Board state) {
         int score = 0;
 
@@ -117,7 +132,6 @@ public class ExpertAI implements Player {
                         state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == state.getCurrentPlayer()) score -= 100;
 
                 //Current player(player has to yet to make a move) single horizontal counter checks
-//                System.out.println(">>>>>>>>>>>>>>>>");
 
                 if (state.getBoard()[row][col] == state.getPreviousPlayer() && state.getBoard()[row][col + 1] == Board.EMPTY &&
                         state.getBoard()[row][col + 2] == Board.EMPTY && state.getBoard()[row][col + 3] == Board.EMPTY) score += 100;
@@ -197,6 +211,4 @@ public class ExpertAI implements Player {
 
     }
 
-
-    //Insert heuristic function
 }
