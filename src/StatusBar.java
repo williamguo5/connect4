@@ -74,10 +74,6 @@ public class StatusBar extends JPanel{
 		if(theme.equals("Classic")) {
 			token1 = new ImageIcon("assets/token1.png");
 			token2 = new ImageIcon("assets/token2.png");
-			/*player1Icon = new ImageIcon("token1.png");
-			player2Icon = new ImageIcon("token2.png");
-			Image image = player2Icon.getImage().getScaledInstance(90, 90, 0);
-			player2Icon = new ImageIcon(image);*/
 		} else if (theme.equals("2016 Election")) {
 			token1 = new ImageIcon("assets/abbott1.png");
 			token2 = new ImageIcon("assets/shorten2.png");

@@ -40,7 +40,6 @@ public class ColumnButton extends JLayeredPane{
         
         
         generateTokens();
-//		repaint();
 	}
 	
 	/**
@@ -125,8 +124,7 @@ public class ColumnButton extends JLayeredPane{
 	/**
 	 * Paint background image onto token
 	 */
-	public void paintComponent(Graphics g) {
-//        super.paintComponent(g);       
+	public void paintComponent(Graphics g) {   
         
 		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }

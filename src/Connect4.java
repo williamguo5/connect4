@@ -25,7 +25,6 @@ import javax.swing.*;
 public class Connect4 {
 
 	private GUIBoard guiBoard;
-//	private Board board;
 	private JFrame mainFrame;
 	private SideBar sidebar;
 	private int width;
@@ -51,41 +50,36 @@ public class Connect4 {
 		mainFrame = new JFrame("Connect 4");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-//		board = new Board();
-		
+		mainFrame.setResizable(false);
 		guiBoard = new GUIBoard();
 		sidebar = new SideBar(guiBoard);
 		guiBoard.setSidebar(sidebar);
-//		sideBar = new SideBar();
 		mainFrame.setSize(new Dimension(940,570));
 		mainFrame.addComponentListener(new ComponentAdapter() {
 			boolean overlayed = false;
 			JFrame overlayFrame = guiBoard.getOverlayFrame();
 			int boardWidth = guiBoard.getWidth();
-			@Override
-			public void componentResized(ComponentEvent e) {
-				width = mainFrame.getWidth();
-				height = mainFrame.getWidth()*570/940;
-				if(width < 940) width = 940;
-//				if(width)
-				mainFrame.setSize(width, height);
-				int boardWidth = guiBoard.getWidth();
-				int overlayWidth = boardWidth*9/13;
-				guiBoard.getOverlay().setSize(overlayWidth, overlayWidth*4/5);
-				int x = mainFrame.getLocation().x;
-				int y = mainFrame.getLocation().y;
-				int overlayHeight = guiBoard.getHeight();
-
-				guiBoard.getOverlayFrame().setLocation(256 + boardWidth/7,140);
-				guiBoard.getOverlayFrame().setLocation(x + 258 + boardWidth/7, y + 117);
-			}
+//			@Override
+//			public void componentResized(ComponentEvent e) {
+//				width = mainFrame.getWidth();
+//				height = mainFrame.getWidth()*570/940;
+//				if(width < 940) width = 940;
+//				mainFrame.setSize(width, height);
+//				int boardWidth = guiBoard.getWidth();
+//				int overlayWidth = boardWidth*9/13;
+//				guiBoard.getOverlay().setSize(overlayWidth, overlayWidth*4/5);
+//				int x = mainFrame.getLocation().x;
+//				int y = mainFrame.getLocation().y;
+//				int overlayHeight = guiBoard.getHeight();
+//				guiBoard.getOverlayFrame().setLocation(x + 308 + boardWidth/7, y + 117);
+//			}
 			
 			@Override
 			public void componentMoved(ComponentEvent e) {
 				int x = mainFrame.getLocation().x;
 				int y = mainFrame.getLocation().y; 
 				int boardWidth = guiBoard.getWidth();
-				guiBoard.getOverlayFrame().setLocation(x + 258 + boardWidth/7, y + 117);
+				guiBoard.getOverlayFrame().setLocation(x + 308 + boardWidth/7, y + 117);
 			}
 		});	
 		mainFrame.addWindowListener(new WindowAdapter() {
@@ -104,7 +98,6 @@ public class Connect4 {
 			public void windowDeiconified(WindowEvent e) {
 				if(overlayed){
 					overlayFrame.setVisible(true);
-//					overlayFrame.toFront();
 				}
 			}
 		});
@@ -117,7 +110,6 @@ public class Connect4 {
 			public void windowGainedFocus(WindowEvent e) {
 				if(overlayed){
 					overlayFrame.setVisible(true);
-//					overlayFrame.setAlwaysOnTop(true);
 				}				
 			}
 
@@ -126,8 +118,6 @@ public class Connect4 {
 				if(overlayFrame.isVisible()){
 					overlayed = true;
 					overlayFrame.setVisible(false);
-//					overlayFrame.setAlwaysOnTop(false);
-//					overlayFrame.toBack();
 				}
 				
 			}
@@ -147,8 +137,6 @@ public class Connect4 {
 			}
 		});
 		
-    	
-		// newgame - resets the board with the input settings		
 		
 	}
 	
@@ -158,7 +146,6 @@ public class Connect4 {
 	public void display() {
 		mainFrame.getContentPane().add(guiBoard,BorderLayout.CENTER);
 		mainFrame.getContentPane().add(sidebar, BorderLayout.WEST);
-//		mainFrame.pack();
         mainFrame.setVisible(true);
 	}
 }

@@ -32,9 +32,6 @@ public class Board{
 		this.guiBoard = guiBoard;
 		
 		ai = null;
-//		ai = new ExpertAI();
-//		ai = new IntermediateAI();
-//		ai = new NoviceAI();
 		resetBoard();
 	}
 	
@@ -45,14 +42,6 @@ public class Board{
 	public boolean isAi(){
 		if(ai == null) return false;
 		else return true;
-	}
-	
-	/**
-	 * 
-	 * @return the turn number
-	 */
-	public int getTurnNumber() {
-		return turnNumber;
 	}
 	
 	/**
@@ -82,6 +71,24 @@ public class Board{
 		}
 	}
 	
+	
+	/**
+	 * Set the AI difficulty
+	 * 
+	 * @param index index of AI 
+	 */
+	public void setAI(int index) {
+		if(index == 0){
+			ai = null;
+		}else if(index == 1){
+			ai = new NoviceAI();
+		}else if(index == 2){
+			ai = new IntermediateAI();
+		}else if(index == 3){
+			ai = new ExpertAI();
+		}
+	}
+	
 	/**
 	 * checks if game over was a tie
 	 * @return
@@ -107,25 +114,6 @@ public class Board{
 			return false;
 		}
 		return true;
-	}
-
-	
-	/**
-	 * Returns the size of a column, i.e. the number of tokens it contains
-	 * 
-	 * @param colNum 
-	 * @return 
-	 */
-	public int getColumnSize(int colNum) {
-		int size = 0;
-		for (int i = 0; i < NUM_ROWS; i++) {
-			if (board[i][colNum] == EMPTY) {
-				break;
-			} else {
-				size++;
-			}
-		}
-		return size;
 	}
 	
 	/**
@@ -167,8 +155,6 @@ public class Board{
 	 * @param colNum 
 	 */
 	public void simDropToken(int colNum) { 
-		//used when AI is simulating game states
-		//won't update GUI
 		if(gameOver) return;
 		if(isColumnFull(colNum)){
 			return;
@@ -327,7 +313,7 @@ public class Board{
 			for(int j = 0; j < NUM_COLS; j++) {
 				 if (board[i][j] == EMPTY) {
 					 System.out.print("|_");
-					 //Replace 0 with PlayerID constant field?
+
 				 } else if (board[i][j] == 0){
 					 System.out.print("|O");
 				 } else {
@@ -350,27 +336,6 @@ public class Board{
 		}
 		previousPlayer = currentPlayer;
 		currentPlayer = turnNumber % 2;
-		
-//        if (!isSimulation) {
-//            aiMove();
-//        }
-	}
-	
-	/**
-	 * Set the AI difficulty
-	 * 
-	 * @param index index of AI 
-	 */
-	public void setAI(int index) {
-		if(index == 0){
-			ai = null;
-		}else if(index == 1){
-			ai = new NoviceAI();
-		}else if(index == 2){
-			ai = new IntermediateAI();
-		}else if(index == 3){
-			ai = new ExpertAI();
-		}
 	}
 	
 	/**
@@ -382,17 +347,9 @@ public class Board{
 			
 			System.out.println(turnNumber);
             isSimulation = true;
-//            Board boardClone = this.clon
             final int col = ai.getMove(this.clone());
             isSimulation = false;
             System.out.println("AI MOVE " + col);
-//			updateLast(getColumnSize(col), col);
-//            dropToken(col);
-//            try {
-//				delayDisplay(col);
-//			} catch (InterruptedException e1) {
-//
-//			}
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                 	try {
@@ -405,10 +362,47 @@ public class Board{
                 dropToken(col);
                 }
             });	
-			
-//			nextTurn();
 		}
 		
+	}
+	
+	/**
+	 * Updates the last move made
+	 * @param rowNum row number of new move
+	 * @param colNum col number of new move
+	 */
+	private void updateLast (int rowNum, int colNum) {
+		lastMove[0] = rowNum;
+		lastMove[1] = colNum;
+	}
+	
+	/**
+	 * 
+	 * @return true if either player wins, or is a draw
+	 */
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	
+	/**
+	 * Creates a clone of the board
+	 */
+	public Board clone(){
+		Board boardClone = new Board(guiBoard);
+		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
+		for(int j = 0; j < NUM_COLS; j++){
+			for(int i = 0; i < NUM_ROWS; i++){
+				newBoard[i][j] = board[i][j];
+			}
+		}
+		boardClone.board = newBoard;
+		boardClone.lastMove = this.lastMove;
+		boardClone.currentPlayer = this.currentPlayer;
+		boardClone.previousPlayer = this.previousPlayer;
+		boardClone.turnNumber = this.turnNumber;
+		boardClone.gameOver = this.gameOver;
+        boardClone.isSimulation = this.isSimulation;
+		return boardClone;
 	}
 	
 	/**
@@ -449,39 +443,21 @@ public class Board{
 	}
 	
 	/**
-	 * Undoes the most recent move made, only used by AI when running simulations
-	 * Should only be called when there is a valid move to undo
-	 */
-	// TODO some bugs.
-	public void undoPreviousMove() {
-		this.board[lastMove[0]][lastMove[1]] = Board.EMPTY; 
-		lastMove[0] = Board.EMPTY; //only most recent move is stored
-		lastMove[1] = Board.EMPTY;
-		turnNumber--; //go back a turn
-		if (currentPlayer == 0) { //reset current player to correct player
-			currentPlayer = 1;
-			previousPlayer = 0;
-		} else {
-			currentPlayer = 0;
-			previousPlayer = 1;
-		}
-	}
-	
-	/**
-	 * Updates the last move made
-	 * @param rowNum	row number of new move
-	 * @param colNum	col number of new move
-	 */
-	private void updateLast (int rowNum, int colNum) {
-		lastMove[0] = rowNum;
-		lastMove[1] = colNum;
-	}
-	/**
+	 * Returns the size of a column, i.e. the number of tokens it contains
 	 * 
-	 * @return true if either player wins, or is a draw
+	 * @param colNum 
+	 * @return 
 	 */
-	public boolean isGameOver() {
-		return gameOver;
+	public int getColumnSize(int colNum) {
+		int size = 0;
+		for (int i = 0; i < NUM_ROWS; i++) {
+			if (board[i][colNum] == EMPTY) {
+				break;
+			} else {
+				size++;
+			}
+		}
+		return size;
 	}
 	
 	public int[][] getWinSeq() {
@@ -489,23 +465,10 @@ public class Board{
 	}
 	
 	/**
-	 * Creates a clone of the board
+	 * 
+	 * @return the turn number
 	 */
-	public Board clone(){
-		Board boardClone = new Board(guiBoard);
-		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
-		for(int j = 0; j < NUM_COLS; j++){
-			for(int i = 0; i < NUM_ROWS; i++){
-				newBoard[i][j] = board[i][j];
-			}
-		}
-		boardClone.board = newBoard;
-		boardClone.lastMove = this.lastMove;
-		boardClone.currentPlayer = this.currentPlayer;
-		boardClone.previousPlayer = this.previousPlayer;
-		boardClone.turnNumber = this.turnNumber;
-		boardClone.gameOver = this.gameOver;
-        boardClone.isSimulation = this.isSimulation;
-		return boardClone;
+	public int getTurnNumber() {
+		return turnNumber;
 	}
 }

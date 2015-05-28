@@ -56,8 +56,8 @@ public class ExpertAI implements Player {
      * it calls a heuristic function which evaluates the board state
      * @param state Current state of the board
      * @param depth The current move depth of the tree
-     * @param alpha THe max value of two scores for the maximising player
-     * @param beta THe min value of two scores for the minimising player
+     * @param alpha The max value of two scores for the maximising player
+     * @param beta The min value of two scores for the minimising player
      * @param maximisingPlayer A boolean which states if it's the AI's turn
      * @return Returns a score if the depth reaches 0 or gameOver,
      * otherwise it tries to prune non-optimal moves

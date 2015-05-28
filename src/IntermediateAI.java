@@ -48,13 +48,15 @@ public class IntermediateAI implements Player {
     }
 
     /**
-     * Maximises AI player while minimising score of opponent player on future turns up to the value of depth
-     * @param state 
-     * @param depth
-     * @param alpha value to maximise
-     * @param beta value to minimise
-     * @param maximisingPlayer boolean for whether to maximise (AI's turn) or minimise
-     * @return score of the board state givne
+     * Uses the minimax algorithm with alpha-beta pruning to simulate a tree depth of 6 moves. Then,
+     * it calls a heuristic function which evaluates the board state
+     * @param state Current state of the board
+     * @param depth The current move depth of the tree
+     * @param alpha The max value of two scores for the maximising player
+     * @param beta The min value of two scores for the minimising player
+     * @param maximisingPlayer A boolean which states if it's the AI's turn
+     * @return Returns a score if the depth reaches 0 or gameOver,
+     * otherwise it tries to prune non-optimal moves
      */
     public double alphabeta(Board state, int depth, double alpha, double beta, boolean maximisingPlayer) {
         if (depth == 0 || state.isGameOver()) {

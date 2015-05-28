@@ -50,14 +50,12 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 	public GUIBoard() throws IOException {
         setBorder(BorderFactory.createLineBorder(Color.black));
         board = new Board(this);
-//        this.board = board;
         colBlank = "assets/colBlank.png";
         colMouseOver = "assets/colMouseOver.png";
         colClick = "assets/colClick.png";
         setBackgroundImg("assets/land.png");
         ImageIcon gif = new ImageIcon("assets/giphy.gif");
         icon = new JLabel(gif);
-//        add(icon);
         
         theme = "Classic";
         display = new JLabel();
@@ -71,29 +69,21 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
         overlayFrame = new JFrame();
     
     	overlayFrame.setUndecorated(true);
-//    	overlayFrame.toFront();
     	overlayFrame.setAlwaysOnTop(true);
-    	
-//    	overlayFrame.setLocation(350, 130);
     	overlayFrame.setPreferredSize(new Dimension(450,360));
     	overlayFrame.setBackground(new Color(233,232,207));
     	overlayFrame.pack();
     	
         closeOverlay = new JButton("Close");
-       // closeOverlay.setPreferredSize(new Dimension(50, 50));
-//        overlayImage = ImageIO.read(new File("background2.png"));
       
 		
 		overlay = new JPanel(){
 			@Override
 			public void paintComponent(Graphics g) {
-//		        super.paintComponent(g);       
-		        
+
 				g.drawImage(overlayImage, 0, 0, getWidth(), getHeight(), null);
 		    }
 		};
-		//overlay.setBackground(Color.lightGray);
-		//overlay.setBackground(new Color(122, 160, 170));
 		overlay.setLayout(new BorderLayout());
     	overlay.add(closeOverlay, BorderLayout.SOUTH);
         closeOverlay.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -111,7 +101,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 			columnButtons.add(new ColumnButton());
 		}
 		generatedBoard = false;
-//		generateBoard();
     }
 
 	/**
@@ -155,7 +144,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 
 							}
 	    	      		}
-//	    	      		System.out.println("return from AI");
 
 	    			} catch (IOException e1){
 	    				e1.printStackTrace();
@@ -393,12 +381,10 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	message += "<font></em><br><br><font size = 6>";
     	message += "Moves: " + moves ;
     	message += "</font></html>";
-    	
-//    	System.out.println(message);
+
     	try {
 			deselectColumns();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
@@ -410,7 +396,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	overlay.add(display);
     	overlayFrame.setVisible(true);
     	
-    	// 
+    	if(board.isTie()) return;
     	int [][] winningMove = board.getWinSeq();
     	
     	for(int i = 0; i < 4; i++){
@@ -449,7 +435,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     public void freezeBoard(boolean canResize){
     	JFrame frame = (JFrame)this.getRootPane().getParent();
     	if(canResize){
-//    		frame.setResizable(false);
     		boardFrozen = true;
     	}else{
     		frame.setResizable(true);
@@ -466,7 +451,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     public void setBoardSettings(int aiSetting, String themeChosen){
     	requestFocusInWindow();
     	board.setAI(aiSetting);
-    	//theme = themeChosen;
     	
     	for(int i = 0; i < Board.NUM_COLS; i++) {
     		try {

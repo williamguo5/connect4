@@ -89,14 +89,12 @@ public class SideBar extends JPanel implements ActionListener {
 		header.setPreferredSize(new Dimension(300,110));
 		header.setHorizontalAlignment(HEIGHT);
 		
-	//	header.setPreferredSize(new Dimension(250,110));
 		
 		newGameButton.setFont(fontStyle);
 		newGameButton.setForeground(text);
 		newGameButton.setOpaque(true);
 		
 		padding.setPreferredSize(new Dimension(300, 100));
-	//	padding.setPreferredSize(new Dimension(250, 100));
 		
 		add(header);
 		add(gameStatus);

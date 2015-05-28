@@ -18,8 +18,6 @@ public class Token extends JPanel {
 	 * Paint background image onto token
 	 */
 	public void paintComponent(Graphics g) {
-//        super.paintComponent(g);       
-        
 		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }
 	
