@@ -25,7 +25,7 @@ public class Settings extends JPanel implements ActionListener{
 	private JComboBox<String> playerDropDown;
 	private JComboBox<String> themeDropDown;
 	
-	private String[] opponentChoices = {"Human", "Easy", "Intermediate", "Hard"};
+	private String[] opponentChoices = {"Human", "Easy AI", "Medium AI", "Hard AI"};
 	private String[] defaultPlayer= {"Human"};
 	private String[] themeChoices = {"Classic", "2016 Election", "Wes Anderson", "Retro"};
 	
