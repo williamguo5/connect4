@@ -19,7 +19,10 @@ public class Board{
 	private Player ai;
     private boolean isSimulation;
 	
-	// initialise board to be EMPTY
+	/**
+	 * Creates a new empty board
+	 * @param guiBoard
+	 */
 	public Board(GUIBoard guiBoard){
 		this.guiBoard = guiBoard;
 		
@@ -30,6 +33,10 @@ public class Board{
 		resetBoard();
 	}
 	
+	/**
+	 * 
+	 * @return AI player or null
+	 */
 	public boolean isAi(){
 		if(ai == null) return false;
 		else return true;
@@ -447,6 +454,9 @@ public class Board{
 		return gameOver;
 	}
 	
+	/**
+	 * Creates a clone of the board
+	 */
 	public Board clone(){
 		Board boardClone = new Board(guiBoard);
 		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];

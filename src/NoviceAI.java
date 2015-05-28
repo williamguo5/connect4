@@ -3,6 +3,11 @@
  * and makes a move based on those factors. 
  */
 public class NoviceAI implements Player {
+	
+	/**
+	 * Function calculates possible wins from the next two moves and either wins 
+	 * or if it cannot tries to prevent imminent wins from the opponent
+	 */
 	public int getMove(Board state) {
 		int move = 0;
 		int lastMove[] = state.getLastMove();

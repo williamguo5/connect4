@@ -1,13 +1,12 @@
 import java.util.Random;
 
 
-//attempt to lower difficulty of AI to intermediate level
-//depth of future state computations decreased and simplified cost calculations of boards in future states
-//changed costs to make AI less aggressive to win and block slightly more often
 public class IntermediateAI implements Player {
     static int MAX_DEPTH = 6;
 
-    //Remember to pass in a clone of the state
+    /**
+     * Calls a search function giving costs to all available moves and returns the best move based on cost found
+     */
     public int getMove(Board state) {
         System.out.println("SIMULATION");
         if (state.getTurnNumber() == 1) {
@@ -22,6 +21,11 @@ public class IntermediateAI implements Player {
         return calculateMove(state.clone());
     }
 
+    /**
+     * 
+     * @param state
+     * @return cost found from scanning given board 
+     */
     public int calculateMove(Board state) {
         double maxScore = Integer.MIN_VALUE;
         int move = 0;
