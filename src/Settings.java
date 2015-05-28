@@ -11,7 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-
+/**
+ * Setting takes in the user's choice of theme and opponent 
+ *
+ */
 public class Settings extends JPanel implements ActionListener{
 	
 	private JLabel player1Label;
@@ -26,13 +29,6 @@ public class Settings extends JPanel implements ActionListener{
 	private String[] defaultPlayer= {"Human"};
 	private String[] themeChoices = {"Classic", "2016 Election", "Wes Anderson", "Retro"};
 	
-	/**
-	 * In player 2 field:
-	 * 	0 represent human
-	 * 	1 represents easy AI
-	 * 	2 represents med AI
-	 * 	3 represents hard AI
-	 */
 	private int player2;
 	private String theme;
 	
@@ -41,6 +37,9 @@ public class Settings extends JPanel implements ActionListener{
 	private Color text;
 	private Font style;
 	
+	/**
+	 * Constructor for settings in the side bar
+	 */
 	public Settings() {
 		super();
 		setLayout(new GridLayout(3, 2));
@@ -97,7 +96,8 @@ public class Settings extends JPanel implements ActionListener{
 	/**
 	 * Action for the combo boxes. Sets theme as string.
 	 * Turns opponent choice into a number 0 - 3 inclusive.
-	 * 0 meaning a second person. 1-3 meaning Ai easy - hard.
+	 * 0 meaning play against another person. 
+	 * 1-3 meaning play against an Ai (easy - hard).
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -115,29 +115,34 @@ public class Settings extends JPanel implements ActionListener{
 				break;
 			}
 		} else if (activeBox == themeDropDown) {
-			theme = choice;	// could be changed to ints like above if easier
+			theme = choice;	
 		}
 		
 	}
 	
 	/**
-	 * Sets the background field according to the theme
-	 * @param theme
+	 * Sets the background of the setting bar
+	 * @param theme is a Color type 
 	 */
 	public void setThemeBackground(Color theme) {
 		background = theme;
 	}
 
 	/**
-	 * Gets opponent selected
+	 * Gets opponent selected in drop down box
+	 * 	0 represent human
+	 * 	1 represents easy AI
+	 * 	2 represents med AI
+	 * 	3 represents hard AI
+	 * @return integer for the opponent of player 1
 	 */
 	public int getOpponent() {
 		return player2;
 	}
 	
 	/**
-	 * Gets theme selected for New Game
-	 * @return
+	 * Gets theme selected for the New Game
+	 * @return String theme
 	 */
 	public String getTheme() {
 		return theme;
