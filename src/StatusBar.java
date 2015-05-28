@@ -43,8 +43,8 @@ public class StatusBar extends JPanel{
 		turnAnswer.setHorizontalAlignment(SwingConstants.CENTER);
 		turnAnswer.setPreferredSize(new Dimension(125,110));
 		
-		player1Icon = new ImageIcon("token1.png");
-		player2Icon = new ImageIcon("token2.png");
+		player1Icon = new ImageIcon("assets/token1.png");
+		player2Icon = new ImageIcon("assets/token2.png");
 		Image image = player2Icon.getImage().getScaledInstance(90, 90, 0);
 		player2Icon = new ImageIcon(image);
 		
@@ -56,27 +56,31 @@ public class StatusBar extends JPanel{
 		
 	}
 	
+	/**
+	 * Changes the current GUI theme
+	 * @param theme
+	 */
 	public void setThemedIcon(String theme) {
 		
 		ImageIcon token1;
 		ImageIcon token2;
 		Image toAdd;
 		if(theme.equals("Classic")) {
-			token1 = new ImageIcon("token1.png");
-			token2 = new ImageIcon("token2.png");
+			token1 = new ImageIcon("assets/token1.png");
+			token2 = new ImageIcon("assets/token2.png");
 			/*player1Icon = new ImageIcon("token1.png");
 			player2Icon = new ImageIcon("token2.png");
 			Image image = player2Icon.getImage().getScaledInstance(90, 90, 0);
 			player2Icon = new ImageIcon(image);*/
 		} else if (theme.equals("2016 Election")) {
-			token1 = new ImageIcon("abbott1.png");
-			token2 = new ImageIcon("shorten2.png");
+			token1 = new ImageIcon("assets/abbott1.png");
+			token2 = new ImageIcon("assets/shorten2.png");
 		} else if (theme.equals("Wes Anderson")) {
-			token1 = new ImageIcon("lobby1.png");
-			token2 = new ImageIcon("racoon2.png");
+			token1 = new ImageIcon("assets/lobby1.png");
+			token2 = new ImageIcon("assets/racoon2.png");
 		} else {
-			token1 = new ImageIcon("retro1.png");
-			token2 = new ImageIcon("retro2.png");
+			token1 = new ImageIcon("assets/retro1.png");
+			token2 = new ImageIcon("assets/retro2.png");
 		}
 		toAdd = token1.getImage().getScaledInstance(90, 90, 0);
 		player1Icon = new ImageIcon(toAdd);

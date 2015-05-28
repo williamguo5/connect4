@@ -15,13 +15,13 @@ public class Board{
 	private int previousPlayer;
 	private int turnNumber;
 	private boolean gameOver;
-	private Connect4Board connect4Board;
+	private GUIBoard guiBoard;
 	private Player ai;
     private boolean isSimulation;
 	
 	// initialise board to be EMPTY
-	public Board(Connect4Board connect4Board){
-		this.connect4Board = connect4Board;
+	public Board(GUIBoard guiBoard){
+		this.guiBoard = guiBoard;
 		
 		ai = null;
 //		ai = new ExpertAI();
@@ -35,9 +35,14 @@ public class Board{
 		else return true;
 	}
 	
+	/**
+	 * 
+	 * @return the turn number
+	 */
 	public int getTurnNumber() {
 		return turnNumber;
 	}
+	
 	/**
 	 * Resets the board to initial state
 	 */
@@ -71,6 +76,7 @@ public class Board{
 		}
 		return false;
 	}
+	
 	/**
 	 * Checks if a column is full. If the last element in the column (top of the column) 
 	 * is not empty, then it is full.
@@ -129,18 +135,24 @@ public class Board{
 			System.out.println("GAME OVER, DRAW");
 		}
 
-		connect4Board.displayToken(currentPlayer, lastMove);
+		guiBoard.displayToken(currentPlayer, lastMove);
 		printBoard();
 		nextTurn();
-		connect4Board.setStatus(currentPlayer);
+		guiBoard.setStatus(currentPlayer);
 	}
 	
+	/**
+	 * Drops token in the given column for the current player but does not update GUI
+	 * <p>
+	 * Used only by AIs in analysis
+	 * 
+	 * @param colNum 
+	 */
 	public void simDropToken(int colNum) { 
 		//used when AI is simulating game states
 		//won't update GUI
 		if(gameOver) return;
 		if(isColumnFull(colNum)){
-//			System.out.println("COL FULL");
 			return;
 		}
 		int pos = getColumnSize(colNum);
@@ -148,9 +160,7 @@ public class Board{
 		updateLast(pos, colNum);
 		if(checkFour(lastMove, currentPlayer)){
 			gameOver = true;
-//			System.out.println("GAME OVER");
 		}
-		//printBoard();
 		nextTurn();
 	}
 	
@@ -312,6 +322,11 @@ public class Board{
 //        }
 	}
 	
+	/**
+	 * Set the AI difficulty
+	 * 
+	 * @param index
+	 */
 	public void setAI(int index) {
 		if(index == 0){
 			ai = null;
@@ -324,6 +339,10 @@ public class Board{
 		}
 	}
 	
+	/**
+	 * Asks AI for a move
+	 * 
+	 */
 	public void aiMove(){
 		if(currentPlayer == 1 && ai != null){
 			
@@ -363,6 +382,10 @@ public class Board{
 		Thread.sleep(300);
 	}
 	
+	/**
+	 * 
+	 * @return  the most recent move
+	 */
 	public int[] getLastMove(){
 		return lastMove;
 	}
@@ -374,6 +397,10 @@ public class Board{
 		return currentPlayer;
 	}
 
+	/**
+	 * 
+	 * @return the id of the previous player
+	 */
     public int getPreviousPlayer() { return previousPlayer; }
     
 	/**
@@ -421,7 +448,7 @@ public class Board{
 	}
 	
 	public Board clone(){
-		Board boardClone = new Board(connect4Board);
+		Board boardClone = new Board(guiBoard);
 		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
 		for(int j = 0; j < NUM_COLS; j++){
 			for(int i = 0; i < NUM_ROWS; i++){

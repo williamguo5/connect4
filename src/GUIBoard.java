@@ -19,7 +19,7 @@ import javax.swing.Timer;
 
 
 
-public class Connect4Board extends JLayeredPane implements ActionListener{
+public class GUIBoard extends JLayeredPane implements ActionListener{
 	
 	private Image backgroundImage;
 	private String colBlank;
@@ -37,19 +37,26 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	private JFrame overlayFrame;
 	private String theme;
 	private JLabel display;
+	private JLabel icon;
+	private int colSelected;
+	private boolean spacePressed;
 	
 	/**
 	 * Constructor for a connect4 GUI
 	 * @throws IOException 
 	 */
-	public Connect4Board() throws IOException {
+	public GUIBoard() throws IOException {
         setBorder(BorderFactory.createLineBorder(Color.black));
         board = new Board(this);
 //        this.board = board;
-        colBlank = "colBlank.png";
-        colMouseOver = "colMouseOver.png";
-        colClick = "colClick.png";
-        setBackgroundImg("land.png");
+        colBlank = "assets/colBlank.png";
+        colMouseOver = "assets/colMouseOver.png";
+        colClick = "assets/colClick.png";
+        setBackgroundImg("assets/land.png");
+        ImageIcon gif = new ImageIcon("assets/giphy.gif");
+        icon = new JLabel(gif);
+//        add(icon);
+        
         theme = "Classic";
         display = new JLabel();
         display.setForeground(new Color(122, 160, 170));
@@ -62,6 +69,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
         overlayFrame = new JFrame();
     
     	overlayFrame.setUndecorated(true);
+//    	overlayFrame.toFront();
     	overlayFrame.setAlwaysOnTop(true);
     	
 //    	overlayFrame.setLocation(350, 130);
@@ -110,8 +118,10 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 	 * @throws IOException 
 	 */
     public void generateBoard() throws IOException { 
+    	colSelected = Board.NUM_COLS/2;
+    	remove(icon);
     	generatedBoard = true;
-    	setBackgroundImg("board3.png");
+    	setBackgroundImg("assets/board3.png");
     	for(int i = 0; i < Board.NUM_COLS; i++){
     		add(columnButtons.get(i));
     		columnButtons.get(i).setBackgroundImg(colBlank);
@@ -121,6 +131,9 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 		        public void mouseReleased(MouseEvent e) {
 	    			if(boardFrozen) return;
 	    			try {
+	    				columnButtons.get(colSelected).setBackgroundImg(colBlank);
+						columnButtons.get(colSelected).repaint();
+						colSelected = colNum;
 	    	      		columnButtons.get(colNum).setBackgroundImg(colMouseOver);
 	    	      		columnButtons.get(colNum).repaint();
 	    	      		board.aiMove();
@@ -140,7 +153,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 
 							}
 	    	      		}
-	    	      		System.out.println("return from AI");
+//	    	      		System.out.println("return from AI");
 
 	    			} catch (IOException e1){
 	    				e1.printStackTrace();
@@ -166,6 +179,9 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 				public void mouseEntered(MouseEvent e) {
 					if(boardFrozen) return;
 					try {
+						columnButtons.get(colSelected).setBackgroundImg(colBlank);
+						columnButtons.get(colSelected).repaint();
+						colSelected = colNum;
 						columnButtons.get(colNum).setBackgroundImg(colMouseOver);
 						columnButtons.get(colNum).repaint();
 					} catch (IOException e1) {
@@ -174,17 +190,125 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 				}
 				@Override
 				public void mouseExited(MouseEvent e) {
-					if(boardFrozen) return;
-					try {
-						columnButtons.get(colNum).setBackgroundImg(colBlank);
-						columnButtons.get(colNum).repaint();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+//					if(boardFrozen) return;
+//					try {
+//						deselectColumns();
+////						columnButtons.get(colNum).setBackgroundImg(colBlank);
+////						columnButtons.get(colNum).repaint();
+//					} catch (IOException e1) {
+//						e1.printStackTrace();
+//					}
 				}
 			});
     	}
+    	createKeyboardListeners();
 	}
+    
+    public void createKeyboardListeners() throws IOException{
+    	setFocusable(true);
+		requestFocusInWindow();
+		columnButtons.get(colSelected).setBackgroundImg(colMouseOver);
+		columnButtons.get(colSelected).repaint();
+		spacePressed = false;
+    	addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_ENTER){
+					spacePressed = false;
+					if(boardFrozen){
+						sidebar.newGamePressed();
+						colSelected = Board.NUM_COLS/2;
+						return;
+					}
+					board.dropToken(colSelected);
+					try {
+						columnButtons.get(colSelected).setBackgroundImg(colMouseOver);
+						columnButtons.get(colSelected).repaint();
+					} catch (IOException e3) {
+					}
+					
+					board.aiMove();
+    	      		System.out.println(board.isGameOver());
+    	      		if(board.isGameOver()){
+    	      			try {
+							columnButtons.get(colSelected).setBackgroundImg(colBlank);
+						} catch (IOException e1) {
+						}
+    	      			try {
+							delayOverlay();
+						} catch (InterruptedException e2) {
+
+						}
+    	    	  	}
+    	      		if(board.isAi()){
+    	      			try {
+							delayOverlay();
+						} catch (InterruptedException e2) {
+
+						}
+    	      		}
+
+				}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
+					if(boardFrozen) return;
+					try {
+						deselectColumns();
+						columnButtons.get(colSelected).setBackgroundImg(colBlank);
+						columnButtons.get(colSelected).repaint();
+						colSelected--;
+						if(colSelected == -1) colSelected = Board.NUM_COLS - 1;
+						if(spacePressed){
+							columnButtons.get(colSelected).setBackgroundImg(colClick);
+							columnButtons.get(colSelected).repaint();
+						}else{
+							columnButtons.get(colSelected).setBackgroundImg(colMouseOver);
+							columnButtons.get(colSelected).repaint();
+						}
+
+					} catch (IOException e1) {
+
+					}
+				}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					if(boardFrozen) return;
+					try {
+						deselectColumns();
+						columnButtons.get(colSelected).setBackgroundImg(colBlank);
+						columnButtons.get(colSelected).repaint();
+						colSelected++;
+						if(colSelected == Board.NUM_COLS) colSelected = 0;
+						if(spacePressed){
+							columnButtons.get(colSelected).setBackgroundImg(colClick);
+							columnButtons.get(colSelected).repaint();
+						}else{
+							columnButtons.get(colSelected).setBackgroundImg(colMouseOver);
+							columnButtons.get(colSelected).repaint();
+						}
+
+					} catch (IOException e1) {
+					}
+				}
+			}
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_ENTER){
+					spacePressed = true;
+					if(boardFrozen) return;
+					try {
+						columnButtons.get(colSelected).setBackgroundImg(colClick);
+						columnButtons.get(colSelected).repaint();
+					} catch (IOException e1) {
+					}
+						
+				}
+			}
+		});
+		
+    }
+    
+    public void deselectColumns() throws IOException{
+    	for(int i = 0; i < Board.NUM_COLS; i++){
+			columnButtons.get(i).setBackgroundImg(colBlank);
+			columnButtons.get(i).repaint();
+		}
+    }
     
     /**
      * Displays the given move onto the GUI board
@@ -217,7 +341,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
      * Set the size of the panel
      */
 	public Dimension getPreferredSize() {
-        return new Dimension(650,550);
+        return new Dimension(630,550);
     }
 
 	/**
@@ -270,23 +394,26 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     	message += "Moves: " + moves ;
     	message += "</font></html>";
     	
-    	System.out.println(message);
-    	for(int i = 0; i < Board.NUM_COLS; i++){
-    		try {
-				columnButtons.get(i).setBackgroundImg(colBlank);
-			} catch (IOException e) {
-
-			}
-    	}
+//    	System.out.println(message);
+    	try {
+			deselectColumns();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
     	closeOverlay.setForeground(sidebar.getBackgroundTheme());
     	overlayFrame.setBackground(sidebar.getBackgroundTheme());
     	
     	display.setText(message);
     	
-    	overlayFrame.add(display);
+    	overlay.add(display);
     	overlayFrame.setVisible(true);
     	
+    }
+    
+    public JFrame getOverlayFrame(){
+    	return overlayFrame;
     }
     
     /**
@@ -317,6 +444,7 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
     }
     
     public void setBoardSettings(int aiSetting, String themeChosen){
+    	requestFocusInWindow();
     	board.setAI(aiSetting);
     	//theme = themeChosen;
     	
@@ -353,4 +481,18 @@ public class Connect4Board extends JLayeredPane implements ActionListener{
 			repaint();
 		}
 	}
+
+//	@Override
+//	public void focusGained(FocusEvent e) {
+//		System.out.println("focus gained");
+//        setBorder(BorderFactory.createLineBorder(Color.red));
+//        repaint();
+//	}
+//
+//	@Override
+//	public void focusLost(FocusEvent e) {
+//		System.out.println("focus lost");
+//        setBorder(BorderFactory.createLineBorder(Color.black));
+//        repaint();
+//	}
 }

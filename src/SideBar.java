@@ -41,7 +41,7 @@ public class SideBar extends JPanel implements ActionListener {
 	private ImageIcon headerImage;
 	private JLabel padding;
 	private Settings gameSettings;
-	private Connect4Board connect4Board;
+	private GUIBoard guiBoard;
 	
 	
 	private Font fontStyle;
@@ -51,9 +51,9 @@ public class SideBar extends JPanel implements ActionListener {
 	/**
 	 * Constructor for sideBar
 	 */
-	public SideBar(Connect4Board connect4Board) throws IOException {
+	public SideBar(GUIBoard connect4Board) throws IOException {
 		super();
-		this.connect4Board = connect4Board;
+		this.guiBoard = connect4Board;
 		//setLayout(new GridLayout(4, 1, 10, 10));		
 		fontStyle = new Font("Myriad Pro", Font.BOLD, 20);
 //		text = new Color(122, 160, 170);
@@ -62,7 +62,7 @@ public class SideBar extends JPanel implements ActionListener {
 		setBackground(background);
 		this.setOpaque(true);
 		
-		headerImage = new ImageIcon("header.png");
+		headerImage = new ImageIcon("assets/header.png");
 		gameStatus = new StatusBar();
 		padding = new JLabel();
 		gameSettings = new Settings();
@@ -182,6 +182,19 @@ public class SideBar extends JPanel implements ActionListener {
 	public Color getBackgroundTheme() {
 		return background;
 	}
+	
+	public void newGamePressed(){
+		getStatus().setThemedIcon(gameSettings.getTheme());
+		setColorTheme(gameSettings.getTheme());
+		gameStatus.revealStatus();
+		nextPlayer(1);
+		try {
+			guiBoard.clearBoard();
+		} catch (IOException e1) {
+
+		}
+		guiBoard.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
+	}
 
 	/**
 	 * Actions to be taken when New Game button has been pressed
@@ -194,18 +207,8 @@ public class SideBar extends JPanel implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == newGameButton){
-
-			getStatus().setThemedIcon(gameSettings.getTheme());
-			setColorTheme(gameSettings.getTheme());
-			gameStatus.revealStatus();
-			nextPlayer(1);
-			try {
-				connect4Board.clearBoard();
-			} catch (IOException e1) {
-
-			}
-			connect4Board.setBoardSettings(gameSettings.getOpponent(), gameSettings.getTheme());
+		if(e.getSource() == newGameButton){	
+			newGamePressed();
 		}
 	}
 }
