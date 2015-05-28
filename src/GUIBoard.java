@@ -33,14 +33,13 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 	private Board board;
 	private boolean boardFrozen;
 	private JPanel overlay;
-	private JPanel landingScreen;
 	private Image overlayImage;
 	private boolean generatedBoard;
 	private SideBar sidebar;
 	private JFrame overlayFrame;
-	private String theme;
 	private JLabel display;
 	private JLabel icon;
+	private String theme;
 	private int colSelected;
 	private boolean spacePressed;
 	
@@ -129,7 +128,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     		add(columnButtons.get(i));
     		columnButtons.get(i).setBackgroundImg(colBlank);
     		final int colNum = i;
-	    	columnButtons.get(i).addMouseListener(new MouseListener() {
+	    	columnButtons.get(i).addMouseListener(new MouseAdapter() {
 	    		@Override
 		        public void mouseReleased(MouseEvent e) {
 	    			if(boardFrozen) return;
@@ -174,10 +173,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 		    			e1.printStackTrace();
 		    		}
 		        }
-		        @Override
-		        public void mouseClicked(MouseEvent e) {
-		        	
-		        }
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					if(boardFrozen) return;
@@ -190,17 +185,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-//					if(boardFrozen) return;
-//					try {
-//						deselectColumns();
-////						columnButtons.get(colNum).setBackgroundImg(colBlank);
-////						columnButtons.get(colNum).repaint();
-//					} catch (IOException e1) {
-//						e1.printStackTrace();
-//					}
 				}
 			});
     	}
@@ -426,6 +410,13 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	overlay.add(display);
     	overlayFrame.setVisible(true);
     	
+    	// 
+    	int [][] winningMove = board.getWinSeq();
+    	
+    	for(int i = 0; i < 4; i++){
+    		columnButtons.get(winningMove[i][1]).highlightToken(currentPlayer, winningMove[i][0]);
+    	}
+    	
     }
     
     /**
@@ -522,18 +513,4 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 			repaint();
 		}
 	}
-
-//	@Override
-//	public void focusGained(FocusEvent e) {
-//		System.out.println("focus gained");
-//        setBorder(BorderFactory.createLineBorder(Color.red));
-//        repaint();
-//	}
-//
-//	@Override
-//	public void focusLost(FocusEvent e) {
-//		System.out.println("focus lost");
-//        setBorder(BorderFactory.createLineBorder(Color.black));
-//        repaint();
-//	}
 }

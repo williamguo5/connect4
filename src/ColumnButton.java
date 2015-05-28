@@ -15,6 +15,8 @@ public class ColumnButton extends JLayeredPane{
 	private Image player1;
 	private Image player2;
 	private Image player0;
+	private Image winner1;
+	private Image winner2;
 	private ArrayList<Token> tokens;
 	
 	/**
@@ -34,7 +36,8 @@ public class ColumnButton extends JLayeredPane{
        
         player1 = ImageIO.read(new File("assets/token1.png"));
         player2 = ImageIO.read(new File("assets/token2.png"));
-        player0 = ImageIO.read(new File("assets/tokenBlank.png"));        
+        player0 = ImageIO.read(new File("assets/tokenBlank.png"));      
+        
         
         generateTokens();
 //		repaint();
@@ -50,15 +53,23 @@ public class ColumnButton extends JLayeredPane{
 		if(theme.equals("Classic")) {
 			 player1 = ImageIO.read(new File("assets/token1.png"));
 		     player2 = ImageIO.read(new File("assets/token2.png"));
+		     winner2 = ImageIO.read(new File("assets/token1Highlight.png"));
+		     winner1 = ImageIO.read(new File("assets/token2Highlight.png"));
 		} else if (theme.equals("2016 Election")){
 			player1 = ImageIO.read(new File("assets/abbott1.png"));
 	        player2 = ImageIO.read(new File("assets/shorten2.png"));
+	        winner2 = ImageIO.read(new File("assets/abbott1Highlight.png"));
+		    winner1 = ImageIO.read(new File("assets/shorten2Highlight.png"));
 		} else if (theme.equals("Wes Anderson")){
 			player1 = ImageIO.read(new File("assets/lobby1.png"));
 	        player2 = ImageIO.read(new File("assets/racoon2.png"));
+	        winner2 = ImageIO.read(new File("assets/lobby1Highlight.png"));
+		    winner1 = ImageIO.read(new File("assets/racoon2Highlight.png"));
 		} else if (theme.equals("Retro")){
 			player1 = ImageIO.read(new File("assets/retro1.png"));
 	        player2 = ImageIO.read(new File("assets/retro2.png"));
+	        winner2 = ImageIO.read(new File("assets/retro1Highlight.png"));
+		    winner1 = ImageIO.read(new File("assets/retro2Highlight.png"));
 		}
 	};
 	
@@ -84,6 +95,14 @@ public class ColumnButton extends JLayeredPane{
 			tokens.get(rowNum).setBackgroundImg(player2);
 		}
 		repaint();
+	}
+	
+	public void highlightToken(int currentPlayer, int rowNum){		
+		if(currentPlayer == 0){
+			tokens.get(rowNum).setBackgroundImg(winner1);
+		}else{
+			tokens.get(rowNum).setBackgroundImg(winner2);
+		}
 	}
 	
 	/**

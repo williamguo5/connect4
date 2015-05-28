@@ -20,7 +20,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 /**
- * Main system starts GUI and backend
+ * Main system starts GUI
  */
 public class Connect4 {
 
@@ -44,7 +44,7 @@ public class Connect4 {
     }
 	
 	 /**
-	  * GUI setup with backend setup
+	  * Sets up GUI and frame resizing and moving.
 	  * @throws IOException
 	  */
 	public Connect4() throws IOException {

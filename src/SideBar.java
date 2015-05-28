@@ -64,7 +64,7 @@ public class SideBar extends JPanel implements ActionListener {
 		setBackground(background);
 		this.setOpaque(true);
 		
-		headerImage = new ImageIcon("assets/header.png");
+		headerImage = new ImageIcon("assets/header2.png");
 		gameStatus = new StatusBar();
 		padding = new JLabel();
 		gameSettings = new Settings();

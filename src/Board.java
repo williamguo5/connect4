@@ -8,6 +8,7 @@ import javax.swing.*;
  * Also handles AI moves
  */
 public class Board{
+	public static final int NUM_TO_WIN = 4;
 	public static final int NUM_ROWS = 6;
 	public static final int NUM_COLS = 7;
 	public static final int EMPTY = -1;
@@ -21,6 +22,7 @@ public class Board{
 	private GUIBoard guiBoard;
 	private Player ai;
     private boolean isSimulation;
+    private int[][] winSeq;
 	
 	/**
 	 * Creates a new empty board
@@ -70,6 +72,12 @@ public class Board{
 		for(int i = 0; i < NUM_ROWS; i++) {
 			for(int j = 0; j < NUM_COLS; j++) {
 				board[i][j] = EMPTY;
+			}
+		}
+		winSeq = new int[NUM_TO_WIN][2];
+		for (int i = 0; i < NUM_TO_WIN; i++) {
+			for (int j = 0; j < 2; j++) {
+				winSeq[i][j] = EMPTY;
 			}
 		}
 	}
@@ -208,11 +216,15 @@ public class Board{
 		//Check horizontal
 		for (int i = startColumn, count = 0; i <= endColumn; i++) {
 			if (board[currentRow][i] == player) {
+				winSeq[count][0] = currentRow;
+				winSeq[count][1] = i;
 				count++;
 			} else {
 				count = 0;
+				winSeq[count][0] = EMPTY;
+				winSeq[count][1] = EMPTY;
 			}
-			if (count >= 4) return true;
+			if (count >= NUM_TO_WIN) return true;
 		}
 		
 		//The range of rows to check
@@ -224,11 +236,15 @@ public class Board{
 		//Check vertical
 		for (int i = startRow, count = 0; i <= endRow; i++) {
 			if (board[i][currentColumn] == player) {
+				winSeq[count][0] = i;
+				winSeq[count][1] = currentColumn;
 				count++;
 			} else {
 				count = 0;
+				winSeq[count][0] = EMPTY;
+				winSeq[count][1] = EMPTY;
 			}
-			if (count >= 4) return true;
+			if (count >= NUM_TO_WIN) return true;
 		}
 		
 		//Check diagonal with positive gradient
@@ -255,11 +271,15 @@ public class Board{
 		//Check along this diagonal for 4 in a row
 		for (int i = startRow, j = startColumn, count = 0; i <= endRow; i++, j++) {
 			if (board[i][j] == player) {
+				winSeq[count][0] = i;
+				winSeq[count][1] = j;
 				count++;
 			} else {
 				count = 0;
+				winSeq[count][0] = EMPTY;
+				winSeq[count][1] = EMPTY;
 			}
-			if (count >= 4) return true;
+			if (count >= NUM_TO_WIN) return true;
 		}
 		
 		//Check diagonal with negative gradient
@@ -286,11 +306,15 @@ public class Board{
 		//Check along the diagonal
 		for (int i = startRow, j = endColumn, count = 0; i <= endRow; i++, j--) {
 			if (board[i][j] == player) {
+				winSeq[count][0] = i;
+				winSeq[count][1] = j;
 				count++;
 			} else {
 				count = 0;
+				winSeq[count][0] = EMPTY;
+				winSeq[count][1] = EMPTY;
 			}
-			if (count >= 4) return true;
+			if (count >= NUM_TO_WIN) return true;
 		}
 		return false;
 	}
@@ -458,6 +482,10 @@ public class Board{
 	 */
 	public boolean isGameOver() {
 		return gameOver;
+	}
+	
+	public int[][] getWinSeq() {
+		return winSeq;
 	}
 	
 	/**
