@@ -1,7 +1,10 @@
 import java.util.Random;
 
 
-
+/**
+ * Expert AI with extensive analysis on future turns described further in methods
+ *
+ */
 public class ExpertAI implements Player {
     static int MAX_DEPTH = 6;
 

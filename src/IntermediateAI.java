@@ -1,6 +1,9 @@
 import java.util.Random;
 
-
+/**
+ * Intermediate AI class which is a simplified version of the Expert AI
+ *
+ */
 public class IntermediateAI implements Player {
     static int MAX_DEPTH = 6;
 

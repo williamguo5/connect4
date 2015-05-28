@@ -295,7 +295,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Displays the given move onto the GUI board
-     * @param currentPlayer
+     * @param currentPlayer the current player
      * @param move Move to show on board
      */
     public void displayToken(int currentPlayer, int[] move){
@@ -338,7 +338,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Sets board background
-     * @param fileName
+     * @param fileName name of file
      * @throws IOException
      */
     public void setBackgroundImg(String fileName) throws IOException {
@@ -347,8 +347,8 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Shows popup menu when gameover
-     * @param currentPlayer
-     * @param isAi
+     * @param currentPlayer the current player
+     * @param isAi boolean for whether the AI won or human won
      */
     public void displayWinner(int currentPlayer, boolean isAi, JLabel display){
     	String message = "<html><em><font color = #4e80a6>";
@@ -430,7 +430,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Prevents inputs on the GUI when called
-     * @param canResize
+     * @param canResize whether the board can be resized at this moment
      */
     public void freezeBoard(boolean canResize){
     	JFrame frame = (JFrame)this.getRootPane().getParent();
@@ -445,8 +445,8 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Sets the theme and AI settings chosen by the user
-     * @param aiSetting
-     * @param themeChosen
+     * @param aiSetting the AI difficulty setting
+     * @param themeChosen current theme chosen
      */
     public void setBoardSettings(int aiSetting, String themeChosen){
     	requestFocusInWindow();
@@ -464,7 +464,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Changes setting bar to show current turn
-     * @param currentPlayer
+     * @param currentPlayer the current player
      */
     public void setStatus(int currentPlayer){
     	int type = 0;
@@ -476,7 +476,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     
     /**
      * Sets sidebar object
-     * @param sidebar 
+     * @param sidebar sidebar of the GUI
      */
     public void setSidebar(SideBar sidebar){
     	this.sidebar = sidebar;

@@ -28,7 +28,6 @@ public class StatusBar extends JPanel{
 	
 	/**
 	 * Constructor for the status bar
-	 * @param isTwoPlayer
 	 * @throws IOException
 	 */
 	public StatusBar() throws IOException {
@@ -63,7 +62,7 @@ public class StatusBar extends JPanel{
 	 * Changes the current GUI theme. Colours the 
 	 * status bar background and sets the token
 	 * shown in status bar to correct tokens
-	 * @param theme string. If will set to 
+	 * @param theme string.Will set to 
 	 * retro if invalid string given
 	 */
 	public void setThemedIcon(String theme) {

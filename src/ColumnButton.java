@@ -84,8 +84,8 @@ public class ColumnButton extends JLayeredPane{
 	}
 	/**
 	 * Display the token at the given row, with the token of playerID
-	 * @param playerID	ID of current player
-	 * @param rowNum
+	 * @param playerID ID of current player
+	 * @param rowNum number of the row
 	 */
 	public void displayToken(int playerID, int rowNum){
 		if(playerID == 1){
@@ -96,6 +96,11 @@ public class ColumnButton extends JLayeredPane{
 		repaint();
 	}
 	
+	/**
+	 * Highlights the winning sequence of tokens
+	 * @param currentPlayer player who won
+	 * @param rowNum row where token is located
+	 */
 	public void highlightToken(int currentPlayer, int rowNum){		
 		if(currentPlayer == 0){
 			tokens.get(rowNum).setBackgroundImg(winner1);
@@ -131,7 +136,7 @@ public class ColumnButton extends JLayeredPane{
 	
 	/**
 	 * Sets column background
-	 * @param fileName
+	 * @param fileName name of file
 	 * @throws IOException
 	 */
 	public void setBackgroundImg(String fileName) throws IOException {

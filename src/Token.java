@@ -23,7 +23,7 @@ public class Token extends JPanel {
 	
 	/**
 	 * Sets token image
-	 * @param image
+	 * @param image image on the token
 	 */
 	public void setBackgroundImg(Image image){
         backgroundImage = image;

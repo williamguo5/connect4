@@ -26,7 +26,7 @@ public class Board{
 	
 	/**
 	 * Creates a new empty board
-	 * @param guiBoard
+	 * @param guiBoard GUI board class
 	 */
 	public Board(GUIBoard guiBoard){
 		this.guiBoard = guiBoard;
@@ -90,8 +90,8 @@ public class Board{
 	}
 	
 	/**
-	 * checks if game over was a tie
-	 * @return
+	 * 
+	 * @return boolean for if game is tied or not
 	 */
 	public boolean isTie() {
 		if(isFull()) {
@@ -107,7 +107,7 @@ public class Board{
 	 * is not empty, then it is full.
 	 * 
 	 * @param colNum 
-	 * @return 
+	 * @return true for column full and false otherwise
 	 */
 	public boolean isColumnFull(int colNum) {
 		if (board[NUM_ROWS - 1][colNum] == EMPTY) {
@@ -121,8 +121,7 @@ public class Board{
      * <p>
      * Breaks early and does not add token to board if the column is full, or when the game is over.
      * 
-     * @param columnNumber
-     * @param currPlayer
+     * @param colNum column number
      */
 	public void dropToken(int colNum) {
 		if(gameOver) return;
@@ -152,7 +151,7 @@ public class Board{
 	 * <p>
 	 * Used only by AIs in analysis
 	 * 
-	 * @param colNum 
+	 * @param colNum columnm number
 	 */
 	public void simDropToken(int colNum) { 
 		if(gameOver) return;
@@ -169,9 +168,8 @@ public class Board{
 	}
 	
 	/**
-	 * Checks if the board is full
 	 * 
-	 * @return
+	 * @return whether board is full
 	 */
 	public boolean isFull() {
 		for (int i= 0; i < NUM_COLS; i++) {
@@ -185,9 +183,9 @@ public class Board{
    /**
 	 * Checks for if a player has won the game
 	 * 
-	 * @param lastMove
-	 * @param player
-	 * @return
+	 * @param lastMove the most recent move made by a player
+	 * @param player the player who made that move
+	 * @return whether a player has won or not
 	 */	
 	public boolean checkFour(int[] lastMove, int player) {
 		int currentRow = lastMove[0];
@@ -369,7 +367,7 @@ public class Board{
 	/**
 	 * Updates the last move made
 	 * @param rowNum row number of new move
-	 * @param colNum col number of new move
+	 * @param colNum column number of new move
 	 */
 	private void updateLast (int rowNum, int colNum) {
 		lastMove[0] = rowNum;
@@ -443,10 +441,10 @@ public class Board{
 	}
 	
 	/**
-	 * Returns the size of a column, i.e. the number of tokens it contains
+	 * Returns the size of a column
 	 * 
-	 * @param colNum 
-	 * @return 
+	 * @param colNum column number
+	 * @return the number of tokens in a column
 	 */
 	public int getColumnSize(int colNum) {
 		int size = 0;
@@ -460,6 +458,10 @@ public class Board{
 		return size;
 	}
 	
+	/**
+	 * 
+	 * @return integer array containing the sequence (coordinates) that won the game
+	 */
 	public int[][] getWinSeq() {
 		return winSeq;
 	}
