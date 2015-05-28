@@ -324,7 +324,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     /**
      * Displays the given move onto the GUI board
      * @param currentPlayer
-     * @param move
+     * @param move Move to show on board
      */
     public void displayToken(int currentPlayer, int[] move){
 	  	columnButtons.get(move[1]).displayToken(currentPlayer, move[0]);
