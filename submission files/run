@@ -1,0 +1,4 @@
+#! /bin/sh
+
+java -cp "$CLASSPATH:./src/" Connect4
+echo $classpath
