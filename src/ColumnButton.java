@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+/**
+ * Class handles each column of the connect 4 board 
+ */
 public class ColumnButton extends JLayeredPane{
 	private Image backgroundImage;
 	private Image player1;
@@ -14,7 +17,10 @@ public class ColumnButton extends JLayeredPane{
 	private Image player0;
 	private ArrayList<Token> tokens;
 	
-	
+	/**
+	 * Constructor sets border of columns and initialises other fields of ColumnButton
+	 * @throws IOException
+	 */
 	public ColumnButton() throws IOException{
         setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new GridLayout(Board.NUM_ROWS,1));
@@ -90,16 +96,27 @@ public class ColumnButton extends JLayeredPane{
 		}
 	}
 	
+	/**
+	 * @return Dimension of column button
+	 */
 	public Dimension getPreferredSize() {
         return new Dimension(90,480);
     }
 	
+	/**
+	 * Paint background image onto token
+	 */
 	public void paintComponent(Graphics g) {
 //        super.paintComponent(g);       
         
 		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
     }
 	
+	/**
+	 * Sets column background
+	 * @param fileName
+	 * @throws IOException
+	 */
 	public void setBackgroundImg(String fileName) throws IOException {
         backgroundImage = ImageIO.read(new File(fileName));
 	}
