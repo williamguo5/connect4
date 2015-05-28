@@ -42,12 +42,12 @@ public class StatusBar extends JPanel{
 		
 		turn = new JLabel();
 		turn.setFont(new Font("Myriad Pro", Font.BOLD, 17));
-		turn.setPreferredSize(new Dimension(125,110));
+		turn.setPreferredSize(new Dimension(150,110));
 		turn.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		turnAnswer = new JLabel();
 		turnAnswer.setHorizontalAlignment(SwingConstants.CENTER);
-		turnAnswer.setPreferredSize(new Dimension(125,110));
+		turnAnswer.setPreferredSize(new Dimension(150,110));
 		
 		player1Icon = new ImageIcon("assets/token1.png");
 		player2Icon = new ImageIcon("assets/token2.png");

@@ -70,7 +70,7 @@ public class SideBar extends JPanel implements ActionListener {
 		gameSettings = new Settings();
 		
 		newGameButton = new JButton("NEW GAME");
-		newGameButton.setPreferredSize(new Dimension(250, 40));
+		newGameButton.setPreferredSize(new Dimension(300, 40));
 		newGameButton.addActionListener(this);
 		newGameButton.setBackground(null);
 		
@@ -85,13 +85,18 @@ public class SideBar extends JPanel implements ActionListener {
 		
 		header = new JLabel();
 		header.setIcon(headerImage);
-		header.setPreferredSize(new Dimension(250,110));
+		
+		header.setPreferredSize(new Dimension(300,110));
+		header.setHorizontalAlignment(HEIGHT);
+		
+	//	header.setPreferredSize(new Dimension(250,110));
 		
 		newGameButton.setFont(fontStyle);
 		newGameButton.setForeground(text);
 		newGameButton.setOpaque(true);
 		
-		padding.setPreferredSize(new Dimension(250, 100));
+		padding.setPreferredSize(new Dimension(300, 100));
+	//	padding.setPreferredSize(new Dimension(250, 100));
 		
 		add(header);
 		add(gameStatus);
@@ -105,7 +110,7 @@ public class SideBar extends JPanel implements ActionListener {
      * Set the size of the side bar panel
      */
 	public Dimension getPreferredSize() {
-        return new Dimension(250,550);
+        return new Dimension(300,550);
     }
 	
 	/**

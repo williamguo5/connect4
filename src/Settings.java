@@ -47,7 +47,7 @@ public class Settings extends JPanel implements ActionListener{
 		setOpaque(false);
 		theme = "Classic";				
 		
-		standard = new Dimension(125, 70);
+		standard = new Dimension(150, 70);
 		text = new Color(78, 128, 166);
 		style = new Font("Myriad Pro", Font.BOLD, 17);
 		
@@ -152,7 +152,7 @@ public class Settings extends JPanel implements ActionListener{
      * Set the size of the panel
      */
 	public Dimension getPreferredSize() {
-        return new Dimension(250,150);
+        return new Dimension(300,150);
     }
 	
 }
