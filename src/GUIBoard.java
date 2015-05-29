@@ -382,7 +382,11 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	Timer timer = new Timer(500, new ActionListener() {
 	       public void actionPerformed(ActionEvent evt) {
 	    	   if(!board.isGameOver()) return;
-	    		  displayWinner(board.getPreviousPlayer(), board.isAi(), display); 
+	    	   if(board.isFull()){
+	    		   displayWinner(board.getCurrentPlayer(), board.isAi(), display); 
+	    	   }else{
+	    		   displayWinner(board.getPreviousPlayer(), board.isAi(), display);
+	    	   }
 	       }
 	     });
 	     timer.setRepeats(false);
