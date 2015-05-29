@@ -1,6 +1,3 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 /**
@@ -36,15 +33,6 @@ public class Board{
 	}
 	
 	/**
-	 * 
-	 * @return AI player or null
-	 */
-	public boolean isAi(){
-		if(ai == null) return false;
-		else return true;
-	}
-	
-	/**
 	 * Resets the board to initial state
 	 */
 	public void resetBoard(){
@@ -71,7 +59,6 @@ public class Board{
 		}
 	}
 	
-	
 	/**
 	 * Set the AI difficulty
 	 * 
@@ -87,33 +74,6 @@ public class Board{
 		}else if(index == 3){
 			ai = new ExpertAI();
 		}
-	}
-	
-	/**
-	 * 
-	 * @return boolean for if game is tied or not
-	 */
-	public boolean isTie() {
-		if(isFull()) {
-			if(!checkFour(lastMove, currentPlayer)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * Checks if a column is full. If the last element in the column (top of the column) 
-	 * is not empty, then it is full.
-	 * 
-	 * @param colNum 
-	 * @return true for column full and false otherwise
-	 */
-	public boolean isColumnFull(int colNum) {
-		if (board[NUM_ROWS - 1][colNum] == EMPTY) {
-			return false;
-		}
-		return true;
 	}
 	
 	/**
@@ -165,19 +125,6 @@ public class Board{
 			gameOver = true;
 		}
 		nextTurn();
-	}
-	
-	/**
-	 * 
-	 * @return whether board is full
-	 */
-	public boolean isFull() {
-		for (int i= 0; i < NUM_COLS; i++) {
-			if (!isColumnFull(i)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
    /**
@@ -342,7 +289,6 @@ public class Board{
 	 */
 	public void aiMove(){
 		if(currentPlayer == 1 && ai != null){
-			
 			System.out.println(turnNumber);
             isSimulation = true;
             final int col = ai.getMove(this.clone());
@@ -352,16 +298,11 @@ public class Board{
                 public void run() {
                 	try {
 						delayDisplay();
-						
-						
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					} catch (InterruptedException e) {}
                 dropToken(col);
                 }
             });	
 		}
-		
 	}
 	
 	/**
@@ -375,40 +316,79 @@ public class Board{
 	}
 	
 	/**
-	 * 
-	 * @return true if either player wins, or is a draw
-	 */
-	public boolean isGameOver() {
-		return gameOver;
-	}
-	
-	/**
-	 * Creates a clone of the board
-	 */
-	public Board clone(){
-		Board boardClone = new Board(guiBoard);
-		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
-		for(int j = 0; j < NUM_COLS; j++){
-			for(int i = 0; i < NUM_ROWS; i++){
-				newBoard[i][j] = board[i][j];
-			}
-		}
-		boardClone.board = newBoard;
-		boardClone.lastMove = this.lastMove;
-		boardClone.currentPlayer = this.currentPlayer;
-		boardClone.previousPlayer = this.previousPlayer;
-		boardClone.turnNumber = this.turnNumber;
-		boardClone.gameOver = this.gameOver;
-        boardClone.isSimulation = this.isSimulation;
-		return boardClone;
-	}
-	
-	/**
 	 * Delay for displaying AI player's move
 	 */
 	public void delayDisplay() throws InterruptedException{      
 
 		Thread.sleep(300);
+	}
+	
+
+	/**
+	 * Returns the size of a column
+	 * 
+	 * @param colNum column number
+	 * @return the number of tokens in a column
+	 */
+	public int getColumnSize(int colNum) {
+		int size = 0;
+		for (int i = 0; i < NUM_ROWS; i++) {
+			if (board[i][colNum] == EMPTY) {
+				break;
+			} else {
+				size++;
+			}
+		}
+		return size;
+	}
+
+	/**
+	 * 
+	 * @return boolean for if game is tied or not
+	 */
+	public boolean isTie() {
+		if(isFull()) {
+			if(!checkFour(lastMove, currentPlayer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if a column is full. If the last element in the column (top of the column) 
+	 * is not empty, then it is full.
+	 * 
+	 * @param colNum 
+	 * @return true for column full and false otherwise
+	 */
+	public boolean isColumnFull(int colNum) {
+		if (board[NUM_ROWS - 1][colNum] == EMPTY) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @return whether board is full
+	 */
+	public boolean isFull() {
+		for (int i= 0; i < NUM_COLS; i++) {
+			if (!isColumnFull(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 
+	 * @return AI player or null
+	 */
+	public boolean isAi(){
+		if(ai == null) return false;
+		else return true;
 	}
 	
 	/**
@@ -440,23 +420,6 @@ public class Board{
 		return this.board;
 	}
 	
-	/**
-	 * Returns the size of a column
-	 * 
-	 * @param colNum column number
-	 * @return the number of tokens in a column
-	 */
-	public int getColumnSize(int colNum) {
-		int size = 0;
-		for (int i = 0; i < NUM_ROWS; i++) {
-			if (board[i][colNum] == EMPTY) {
-				break;
-			} else {
-				size++;
-			}
-		}
-		return size;
-	}
 	
 	/**
 	 * 
@@ -472,5 +435,35 @@ public class Board{
 	 */
 	public int getTurnNumber() {
 		return turnNumber;
+	}
+	
+
+	/**
+	 * 
+	 * @return true if either player wins, or is a draw
+	 */
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	
+	/**
+	 * Creates a clone of the board
+	 */
+	public Board clone(){
+		Board boardClone = new Board(guiBoard);
+		int newBoard[][] = new int[NUM_ROWS][NUM_COLS];
+		for(int j = 0; j < NUM_COLS; j++){
+			for(int i = 0; i < NUM_ROWS; i++){
+				newBoard[i][j] = board[i][j];
+			}
+		}
+		boardClone.board = newBoard;
+		boardClone.lastMove = this.lastMove;
+		boardClone.currentPlayer = this.currentPlayer;
+		boardClone.previousPlayer = this.previousPlayer;
+		boardClone.turnNumber = this.turnNumber;
+		boardClone.gameOver = this.gameOver;
+        boardClone.isSimulation = this.isSimulation;
+		return boardClone;
 	}
 }

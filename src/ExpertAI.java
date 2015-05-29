@@ -14,7 +14,6 @@ public class ExpertAI implements Player {
      * @return Returns the a valid column
      */
     public int getMove(Board state) {
-        System.out.println("SIMULATION");
         //Initially the the calculateMove evaluates all possible moves as the same score,
         // and the AI selects the first column
         if (state.getTurnNumber() == 1) {
@@ -44,7 +43,6 @@ public class ExpertAI implements Player {
                 Board clone = state.clone(); //Clones the board state to simulate a move
                 clone.simDropToken(col);
                 double score = alphabeta(clone, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-                System.out.println("SCORE " + score);
                 if (score > maxScore) { //Always gets the max score
                     maxScore = score;
                     move = col;

@@ -1,20 +1,11 @@
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -79,7 +70,7 @@ public class Connect4 {
 				int x = mainFrame.getLocation().x;
 				int y = mainFrame.getLocation().y; 
 				int boardWidth = guiBoard.getWidth();
-				guiBoard.getOverlayFrame().setLocation(x + 308 + boardWidth/7, y + 117);
+				guiBoard.getOverlayFrame().setLocation(x + 304 + boardWidth/7, y + 117);
 			}
 		});	
 		mainFrame.addWindowListener(new WindowAdapter() {

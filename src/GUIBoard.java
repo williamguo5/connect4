@@ -6,15 +6,12 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 
@@ -38,7 +35,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 	private SideBar sidebar;
 	private JFrame overlayFrame;
 	private JLabel display;
-	private JLabel icon;
 	private String theme;
 	private int colSelected;
 	private boolean spacePressed;
@@ -54,8 +50,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
         colMouseOver = "assets/colMouseOver.png";
         colClick = "assets/colClick.png";
         setBackgroundImg("assets/land.png");
-        ImageIcon gif = new ImageIcon("assets/giphy.gif");
-        icon = new JLabel(gif);
         
         theme = "Classic";
         display = new JLabel();
@@ -75,8 +69,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	overlayFrame.pack();
     	
         closeOverlay = new JButton("Close");
-      
-		
+
 		overlay = new JPanel(){
 			@Override
 			public void paintComponent(Graphics g) {
@@ -93,7 +86,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	closeOverlay.setBackground(new Color(122, 160, 170));
     	closeOverlay.setOpaque(true);
     	overlayFrame.add(overlay);
-
     	
     	setLayout(new GridLayout(1, Board.NUM_COLS));
 		columnButtons = new ArrayList<ColumnButton>();
@@ -110,7 +102,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 	 */
     public void generateBoard() throws IOException { 
     	colSelected = Board.NUM_COLS/2;
-    	remove(icon);
     	generatedBoard = true;
     	setBackgroundImg("assets/board3.png");
     	for(int i = 0; i < Board.NUM_COLS; i++){
@@ -128,26 +119,18 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 	    	      		columnButtons.get(colNum).setBackgroundImg(colMouseOver);
 	    	      		columnButtons.get(colNum).repaint();
 	    	      		board.aiMove();
-	    	      		System.out.println(board.isGameOver());
 	    	      		if(board.isGameOver()){
 	    	      			columnButtons.get(colNum).setBackgroundImg(colBlank);
 	    	      			try {
 								delayOverlay();
-							} catch (InterruptedException e2) {
-
-							}
+							} catch (InterruptedException e2) {}
 	    	    	  	}
 	    	      		if(board.isAi()){
 	    	      			try {
 								delayOverlay();
-							} catch (InterruptedException e2) {
-
-							}
+							} catch (InterruptedException e2) {}
 	    	      		}
-
-	    			} catch (IOException e1){
-	    				e1.printStackTrace();
-	    			}
+	    			} catch (IOException e1){}
 		        }
 		        @Override
 		        public void mousePressed(MouseEvent e) {
@@ -157,9 +140,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 		    			columnButtons.get(colNum).setBackgroundImg(colClick);
 		    			columnButtons.get(colNum).repaint();
 		    			
-		    		} catch (IOException e1) {
-		    			e1.printStackTrace();
-		    		}
+		    		} catch (IOException e1) {}
 		        }
 				@Override
 				public void mouseEntered(MouseEvent e) {
@@ -170,9 +151,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 						colSelected = colNum;
 						columnButtons.get(colNum).setBackgroundImg(colMouseOver);
 						columnButtons.get(colNum).repaint();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					} catch (IOException e1) {}
 				}
 			});
     	}
@@ -203,11 +182,8 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 					try {
 						columnButtons.get(colSelected).setBackgroundImg(colMouseOver);
 						columnButtons.get(colSelected).repaint();
-					} catch (IOException e3) {
-					}
-					
+					} catch (IOException e3) {}
 					board.aiMove();
-    	      		System.out.println(board.isGameOver());
     	      		if(board.isGameOver()){
     	      			try {
 							columnButtons.get(colSelected).setBackgroundImg(colBlank);
@@ -215,18 +191,13 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 						}
     	      			try {
 							delayOverlay();
-						} catch (InterruptedException e2) {
-
-						}
+						} catch (InterruptedException e2) {}
     	    	  	}
     	      		if(board.isAi()){
     	      			try {
 							delayOverlay();
-						} catch (InterruptedException e2) {
-
-						}
+						} catch (InterruptedException e2) {}
     	      		}
-
 				}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
 					if(boardFrozen) return;
 					try {
@@ -242,10 +213,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 							columnButtons.get(colSelected).setBackgroundImg(colMouseOver);
 							columnButtons.get(colSelected).repaint();
 						}
-
-					} catch (IOException e1) {
-
-					}
+					} catch (IOException e1) {}
 				}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
 					if(boardFrozen) return;
 					try {
@@ -262,8 +230,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 							columnButtons.get(colSelected).repaint();
 						}
 
-					} catch (IOException e1) {
-					}
+					} catch (IOException e1) {}
 				}
 			}
 			public void keyPressed(KeyEvent e) {
@@ -273,9 +240,7 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
 					try {
 						columnButtons.get(colSelected).setBackgroundImg(colClick);
 						columnButtons.get(colSelected).repaint();
-					} catch (IOException e1) {
-					}
-						
+					} catch (IOException e1) {}	
 				}
 			}
 		});
@@ -376,17 +341,14 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
         		message += " " + "WINS!";
         	}	
     	}
-    	
-    	
+
     	message += "<font></em><br><br><font size = 6>";
     	message += "Moves: " + moves ;
     	message += "</font></html>";
 
     	try {
 			deselectColumns();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
     	
     	closeOverlay.setForeground(sidebar.getBackgroundTheme());
     	overlayFrame.setBackground(sidebar.getBackgroundTheme());
@@ -402,7 +364,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	for(int i = 0; i < 4; i++){
     		columnButtons.get(winningMove[i][1]).highlightToken(currentPlayer, winningMove[i][0]);
     	}
-    	
     }
     
     /**
@@ -440,7 +401,6 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     		frame.setResizable(true);
     		boardFrozen = false;
     	}
-    	System.out.println(this.getWidth() + " " + this.getHeight());
     }
     
     /**
@@ -455,11 +415,8 @@ public class GUIBoard extends JLayeredPane implements ActionListener{
     	for(int i = 0; i < Board.NUM_COLS; i++) {
     		try {
 				columnButtons.get(i).setToken(themeChosen);
-			} catch (IOException e) {
-				
-			}
+			} catch (IOException e) {}
     	}
-    	
     }
     
     /**

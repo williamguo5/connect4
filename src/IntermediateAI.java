@@ -11,7 +11,6 @@ public class IntermediateAI implements Player {
      * Calls a search function giving costs to all available moves and returns the best move based on cost found
      */
     public int getMove(Board state) {
-        System.out.println("SIMULATION");
         if (state.getTurnNumber() == 1) {
             Random randomGenerator = new Random();
             int randomNumber = randomGenerator.nextInt(2);
@@ -39,7 +38,6 @@ public class IntermediateAI implements Player {
                 Board clone = state.clone();
                 clone.simDropToken(col);
                 double score = alphabeta(clone, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-                System.out.println("SCORE " + score);
                 if (score >= maxScore) {
                     maxScore = score;
                     move = col;

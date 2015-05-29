@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -103,15 +102,15 @@ public class Settings extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		JComboBox activeBox = (JComboBox) e.getSource();
 		String choice = (String)activeBox.getSelectedItem();
-		if(activeBox == opponentDropDown) {	//check this equals method
+		if(activeBox == opponentDropDown) {
 			switch(choice) {
 			case "Human": player2 = 0;
 				break;
-			case "Easy": player2 = 1;
+			case "Easy AI": player2 = 1;
 				break;
-			case "Intermediate": player2 = 2;
+			case "Medium AI": player2 = 2;
 				break;
-			case "Hard": player2 = 3;
+			case "Hard AI": player2 = 3;
 				break;
 			}
 		} else if (activeBox == themeDropDown) {
